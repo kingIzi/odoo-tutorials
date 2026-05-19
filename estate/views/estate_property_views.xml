@@ -7,12 +7,6 @@
         <field name="view_mode">list,form</field>
     </record>
 
-    <record id="test_property_type_action" model="ir.actions.act_window">
-            <field name="name">Property types</field>
-            <field name="res_model">estate.property.type</field>
-            <field name="view_mode">list,form</field>
-        </record>
-
     <record id="estate_property_view_list" model="ir.ui.view">
         <field name="name">estate.property.list</field>
         <field name="model">estate.property</field>
@@ -58,6 +52,11 @@
                         <div>
                             <h1 class="oe_title"><field name="name"/></h1>
                             <div class="container">
+                                <div class="row">
+                                    <div class="col">
+                                        <field name="tag_ids" widget="many2many_tags"/>
+                                    </div>
+                                </div>
                                 <div class="row">
                                     <div class="col">
                                         <div class="d-inline">
@@ -162,6 +161,35 @@
                                     </div>
                                     <div class="col-sm-10">
                                         <field name="description"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </page>
+                        <page string="Offers">
+                            <field name="offer_ids">
+                                <list string="Offers">
+                                    <field name="price"/>
+                                    <field name="partner_id"/>
+                                    <field name="status"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Other info">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-sm-2">
+                                        <p class="fw-semibold">Salesperson</p>
+                                    </div>
+                                    <div class="col-sm-10">
+                                        <field name="salesperson"/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-2">
+                                        <p class="fw-semibold">Buyer</p>
+                                    </div>
+                                    <div class="col-sm-10">
+                                        <field name="buyer"/>
                                     </div>
                                 </div>
                             </div>
