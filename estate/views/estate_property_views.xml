@@ -117,6 +117,14 @@
                    <notebook>
                         <page string="Description">
                             <div class="container">
+                            <div class="row">
+                                <div class="col-sm-2">
+                                    <p class="fw-semibold">Status</p>
+                                </div>
+                                <div class="col-sm-10">
+                                    <field name="status"/>
+                                </div>
+                            </div>
                                 <div class="row">
                                     <div class="col-sm-2">
                                         <p class="fw-semibold">Bedrooms</p>
@@ -197,6 +205,8 @@
                                     <field name="price"/>
                                     <field name="partner_id"/>
                                     <field name="status"/>
+                                    <button name="offer_confirmed" string="Confirm" type="object" icon="fa-check" invisible="status != 'pending'"/>
+                                    <button name="offer_rejected" string="Reject" type="object" icon="fa-cancel" invisible="status != 'pending'"/>
                                 </list>
                             </field>
                         </page>
@@ -222,11 +232,8 @@
                         </page>
                     </notebook>
                     <div class="d-flex justify-content-end pt-4 gap-2">
-                        <button class="btn btn-warning" name="cancel_property" type="object" string="Cancel"/>
-                        <button class="btn btn-success" name="sell_property" type="object" string="Sell"/>
-                    </div>
-                    <div class="position-absolute top-0 end-0 p-4 bg-primary">
-                        <p>12345</p>
+                        <button class="btn btn-warning" name="cancel_property" type="object" string="Cancel" invisible="status != 'pending'"/>
+                        <button class="btn btn-success" name="sell_property" type="object" string="Sell" invisible="status != 'pending'"/>
                     </div>
                </sheet>
             </form>

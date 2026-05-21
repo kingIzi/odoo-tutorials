@@ -1,4 +1,8 @@
 from odoo import api, fields, models
+from odoo.exceptions import ValidationError
+from statemachine import State, StateChart
+
+from ..utils.app_utils import show_display_notification
 
 
 class EstateProperty(models.Model):
@@ -6,6 +10,7 @@ class EstateProperty(models.Model):
     _description = "Real Estate Property"
     _order = "id"
 
+    # state_machine = EstatePropertyStateChart()
     name = fields.Char(required=True)
     description = fields.Text()
     postcode = fields.Char()
@@ -28,6 +33,15 @@ class EstateProperty(models.Model):
     total_area = fields.Float(compute="_compute_total_area")
     best_price = fields.Float(compute="_compute_best_price")
     validity = fields.Integer(default=1)
+    status = fields.Selection(
+        [
+            ("pending", "Pending"),
+            ("sold", "Sold"),
+            ("cancel", "Cancel"),
+        ],
+        default="pending",
+        copy=False,
+    )
     property_status = fields.Selection(
         [
             ("sold", "Sell"),
@@ -105,8 +119,64 @@ class EstateProperty(models.Model):
             self.garden_area = None
             self.garden_orientation = None
 
+    @api.constrains("expected_price")
+    def _check_expected_price(self):
+        for record in self:
+            if record.expected_price <= 0:
+                raise ValidationError("The expected price must be greater than 0.")
+
+    @api.constrains("selling_price")
+    def _check_selling_price(self):
+        for record in self:
+            if not record.selling_price >= 0:
+                raise ValidationError("The selling price must be greater than 0.")
+
     def sell_property(self):
-        return True
+        for record in self:
+            if record.status == "sold":
+                return show_display_notification(
+                    title="Sold",
+                    message="Cannot sell a property that has already been sold.",
+                    type="warning",
+                    sticky=False,
+                )
+            elif record.status == "cancel":
+                return show_display_notification(
+                    title="",
+                    message="The property has already been canceled.",
+                    type="warning",
+                    sticky=False,
+                )
+            else:
+                record.status = "sold"
+                return show_display_notification(
+                    title="",
+                    message="Your property has been sold successfully!",
+                    type="success",
+                    sticky=False,
+                )
 
     def cancel_property(self):
-        return True
+        for record in self:
+            if record.status == "cancel":
+                return show_display_notification(
+                    title="",
+                    message="Cannot cancel a property that has already been canceled.",
+                    type="warning",
+                    sticky=False,
+                )
+            elif record.status == "sold":
+                return show_display_notification(
+                    title="",
+                    message="The property has already been canceled.",
+                    type="warning",
+                    sticky=False,
+                )
+            else:
+                record.status = "cancel"
+                return show_display_notification(
+                    title="",
+                    message="Your property has been cancelled successfully!",
+                    type="success",
+                    sticky=False,
+                )
