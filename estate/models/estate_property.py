@@ -1,5 +1,5 @@
 from odoo import api, fields, models
-from odoo.exceptions import ValidationError
+from odoo.exceptions import UserError, ValidationError
 from statemachine import State, StateChart
 
 from ..utils.app_utils import show_display_notification
@@ -8,7 +8,7 @@ from ..utils.app_utils import show_display_notification
 class EstateProperty(models.Model):
     _name = "estate.property"
     _description = "Real Estate Property"
-    _order = "id"
+    _order = "id desc"
 
     # state_machine = EstatePropertyStateChart()
     name = fields.Char(required=True)
@@ -28,6 +28,7 @@ class EstateProperty(models.Model):
     garden_area = fields.Integer()
     active = fields.Boolean(default=True)
     buyer = fields.Many2one("res.partner", copy=False)
+    property_type_id = fields.Many2one("estate.property.type", string="Property Type")
     tag_ids = fields.Many2many("estate.property.tag", string="Tags")
     offer_ids = fields.One2many("estate.property.offer", "property_id", string="Offers")
     total_area = fields.Float(compute="_compute_total_area")
@@ -131,6 +132,12 @@ class EstateProperty(models.Model):
             if not record.selling_price >= 0:
                 raise ValidationError("The selling price must be greater than 0.")
 
+    @api.ondelete(at_uninstall=False)
+    def _unlink_if_user_inactive(self):
+        for record in self:
+            if record.state == "new":
+                raise UserError("Cannot delete a property that is in New state.")
+
     def sell_property(self):
         for record in self:
             if record.status == "sold":
@@ -180,3 +187,7 @@ class EstateProperty(models.Model):
                     type="success",
                     sticky=False,
                 )
+
+    def delete_property(self):
+        super().unlink()
+        return True
