@@ -1,14 +1,15 @@
 """Dynamic module linking — generic relationship layer.
 
 When Strat creates a ``strat.module.link`` record, this module automatically
-injects a notebook page into the form views of both linked models showing
-linked records inline, plus a "Links" smart button with a count.
+injects a notebook page into the form views of both linked models.
 
-Strat uses the wrapper through standard MCP CRUD calls:
+Each link creates per-link many2many fields on both models, so users can
+link specific records directly from the form view via the standard
+"Add a line" Odoo UI.
 
-* ``create_record("strat.module.link", ...)``  — define a link type
-* ``create_record("strat.module.link.line", ...)``  — link specific records
-* ``search_records("strat.module.link.line", ...)``  — query linked records
+Strat creates links through MCP CRUD:
+* ``create_record("strat.module.link", ...)`` — define a link type (triggers
+  field creation + view injection on both models)
 """
 
 import logging
@@ -16,11 +17,6 @@ import logging
 from odoo import api, fields, models
 
 _logger = logging.getLogger(__name__)
-
-
-# =====================================================================
-# Link definition
-# =====================================================================
 
 
 class StratModuleLink(models.Model):
@@ -45,19 +41,6 @@ class StratModuleLink(models.Model):
         help="Label shown on the form tab (auto-generated if empty)",
     )
     active = fields.Boolean(default=True)
-    line_ids = fields.One2many(
-        "strat.module.link.line",
-        "link_id",
-        string="Linked Records",
-    )
-    line_count = fields.Integer(compute="_compute_line_count")
-
-    # -- computed ------------------------------------------------------------
-
-    @api.depends("line_ids")
-    def _compute_line_count(self):
-        for rec in self:
-            rec.line_count = len(rec.line_ids)
 
     # -- create hook ---------------------------------------------------------
 
@@ -76,7 +59,7 @@ class StratModuleLink(models.Model):
     # -- view injection ------------------------------------------------------
 
     def _inject_views(self, model_name):
-        """Create fields + server action + smart button + notebook page."""
+        """Create many2many field + notebook page on the target model."""
         form_view = self.env["ir.ui.view"].search(
             [
                 ("model", "=", model_name),
@@ -94,82 +77,65 @@ class StratModuleLink(models.Model):
         if not ir_model:
             return
 
-        has_button_box = "button_box" in (form_view.arch or "")
         has_notebook = "<notebook" in (form_view.arch or "")
 
-        # 1) Fields — idempotent (skip if already created)
-        self._ensure_count_field(ir_model)
-        self._ensure_link_lines_field(ir_model)
+        # Determine the other model (the one we point to)
+        if model_name == self.model_a:
+            comodel_name = self.model_b
+            page_label = self.page_name or self._model_label(self.model_b)
+        else:
+            comodel_name = self.model_a
+            page_label = self._model_label(self.model_a)
 
-        # 2) Smart button — once per model
-        if not self.env["ir.ui.view"].search(
-            [("model", "=", model_name), ("name", "=", f"Strat Links [{model_name}]")],
-            limit=1,
-        ):
-            sa = self._create_server_action(ir_model, model_name)
-            self._create_inherited_view(model_name, form_view.id, sa.id, has_button_box)
+        # 1) Create per-link many2many field (idempotent)
+        field_name = f"x_strat_link_{self.id}"
+        self._ensure_many2many_field(ir_model, field_name, comodel_name)
 
-        # 3) Notebook page — once per link type per model
+        # 2) Inject notebook page (once per link per model)
         page_view_name = f"Strat Link Page [{model_name}] ({self.name})"
         if not self.env["ir.ui.view"].search(
             [("model", "=", model_name), ("name", "=", page_view_name)],
             limit=1,
         ):
-            self._create_notebook_page(model_name, form_view.id, has_notebook)
+            self._create_notebook_page(
+                model_name, form_view.id, field_name, page_label, has_notebook
+            )
 
         _logger.info(
-            "Strat: injected links into %s (button_box=%s, notebook=%s)",
+            "Strat: injected link %s into %s (field=%s, notebook=%s)",
+            self.name,
             model_name,
-            has_button_box,
+            field_name,
             has_notebook,
         )
 
     # -- helpers (field creation) --------------------------------------------
 
-    def _ensure_count_field(self, ir_model):
-        """Create ``x_strat_link_count`` on the target model if missing."""
+    def _ensure_many2many_field(self, ir_model, field_name, comodel_name):
+        """Create a per-link many2many field on the target model."""
         if self.env["ir.model.fields"].search(
-            [("model_id", "=", ir_model.id), ("name", "=", "x_strat_link_count")],
-            limit=1,
-        ):
-            return
-        self.env["ir.model.fields"].create(
-            {
-                "model_id": ir_model.id,
-                "name": "x_strat_link_count",
-                "field_description": "Links",
-                "ttype": "integer",
-                "store": True,
-            }
-        )
-
-    def _ensure_link_lines_field(self, ir_model):
-        """Create ``x_strat_link_lines`` many2many on the target model if missing.
-
-        Uses a stored many2many (no compute) — the field is synced manually
-        when link lines are created/deleted, same pattern as x_strat_link_count.
-        """
-        if self.env["ir.model.fields"].search(
-            [("model_id", "=", ir_model.id), ("name", "=", "x_strat_link_lines")],
+            [("model_id", "=", ir_model.id), ("name", "=", field_name)],
             limit=1,
         ):
             return
 
-        model_name = ir_model.model
-        comodel = "strat.module.link.line"
-        # Generate standard many2many relation table/column names
-        rel_name = f"{model_name.replace('.', '_')}_strat_link_lines_rel"
-        col1 = f"{model_name.replace('.', '_')}_id"
-        col2 = "strat_module_link_line_id"
+        model_table = ir_model.model.replace(".", "_")
+        comodel_table = comodel_name.replace(".", "_")
+        rel_table = f"x_strat_link_{self.id}_rel"
+        col1 = f"x_{model_table}_id"
+        col2 = f"x_{comodel_table}_id"
+
+        comodel_ir = self.env["ir.model"]._get(comodel_name)
+        comodel_label = comodel_ir.name if comodel_ir else comodel_name
 
         self.env["ir.model.fields"].create(
             {
                 "model_id": ir_model.id,
-                "name": "x_strat_link_lines",
-                "field_description": "Linked Records",
+                "name": field_name,
+                "field_description": comodel_label,
                 "ttype": "many2many",
-                "relation": comodel,
-                "relation_table": rel_name,
+                "relation": comodel_name,
+                "relation_table": rel_table,
                 "column1": col1,
                 "column2": col2,
             }
@@ -177,98 +143,45 @@ class StratModuleLink(models.Model):
 
     # -- helpers (view injection) --------------------------------------------
 
-    def _create_server_action(self, ir_model, model_name):
-        code = (
-            f"model_name = '{model_name}'\n"
-            "res_id = records[:1].id\n"
-            "if res_id:\n"
-            "    links = env['strat.module.link.line'].search([\n"
-            "        '|',\n"
-            "        '&', ('link_id.model_a', '=', model_name), ('res_id_a', '=', res_id),\n"
-            "        '&', ('link_id.model_b', '=', model_name), ('res_id_b', '=', res_id),\n"
-            "    ])\n"
-            "    action = {\n"
-            "        'type': 'ir.actions.act_window',\n"
-            "        'name': 'Linked Records',\n"
-            "        'res_model': 'strat.module.link.line',\n"
-            "        'view_mode': 'list',\n"
-            "        'domain': [('id', 'in', links.ids)],\n"
-            "    }\n"
-        )
-        return self.env["ir.actions.server"].create(
-            {
-                "name": f"Strat: View Links ({model_name})",
-                "model_id": ir_model.id,
-                "state": "code",
-                "code": code,
-            }
+    def _create_notebook_page(
+        self, model_name, form_view_id, field_name, page_label, has_notebook
+    ):
+        """Inject a <page> inside <notebook> showing the many2many field.
+
+        create="0" prevents creating new target records, but the standard
+        many2many "Add a line" still lets users pick existing records.
+        """
+        comodel = self.model_b if model_name == self.model_a else self.model_a
+        list_view = self.env["ir.ui.view"].search(
+            [
+                ("model", "=", comodel),
+                ("type", "=", "list"),
+                ("inherit_id", "=", False),
+            ],
+            limit=1,
+            order="priority",
         )
 
-    def _create_inherited_view(self, model_name, form_view_id, sa_id, has_button_box):
-        if has_button_box:
-            xpath = '<xpath expr="//div[@name=\'button_box\']" position="inside">'
-        else:
-            xpath = '<xpath expr="//sheet" position="inside">'
-
-        if has_button_box:
-            button = (
-                '<button class="oe_stat_button" icon="fa-link" '
-                f'type="action" name="{sa_id}">'
-                '<field name="x_strat_link_count" widget="statinfo" '
-                'string="Links"/>'
-                "</button>"
+        if list_view:
+            page_arch = (
+                f'<page string="{page_label}" name="strat_link_{self.id}">'
+                f'<field name="{field_name}">'
+                f"</field>"
+                f"</page>"
             )
-            close_xpath = "</xpath>"
         else:
-            button = (
-                '<div class="oe_button_box" name="button_box">'
-                '<button class="oe_stat_button" icon="fa-link" '
-                f'type="action" name="{sa_id}">'
-                '<field name="x_strat_link_count" widget="statinfo" '
-                'string="Links"/>'
-                "</button>"
-                "</div>"
+            inline_list = (
+                '<list string="Linked Records" create="0" delete="0">'
+                '<field name="display_name" string="Name"/>'
+                "</list>"
             )
-            close_xpath = "</xpath>"
-
-        arch = "<data>" + xpath + button + close_xpath + "</data>"
-        self.env["ir.ui.view"].create(
-            {
-                "name": f"Strat Links [{model_name}]",
-                "model": model_name,
-                "inherit_id": form_view_id,
-                "arch": arch,
-            }
-        )
-
-    def _create_notebook_page(self, model_name, form_view_id, has_notebook):
-        """Inject a <page> inside <notebook> showing linked records."""
-        if model_name == self.model_a:
-            target_field = "name_b"
-            page_label = self.page_name or self._model_label(self.model_b)
-        else:
-            target_field = "name_a"
-            page_label = self._model_label(self.model_a)
-
-        inline_list = (
-            '<list string="Linked Records" create="0" delete="0">'
-            f'<field name="{target_field}" string="{page_label}"/>'
-            "</list>"
-        )
-
-        domain = (
-            f"[('link_id', '=', {self.id}),"
-            f"('link_id.model_a', '=', '{self.model_a}'),"
-            f"('link_id.model_b', '=', '{self.model_b}')]"
-        )
-
-        page_arch = (
-            f'<page string="{page_label}" name="strat_link_{self.id}">'
-            f'<field name="x_strat_link_lines" domain="{domain}">'
-            f"{inline_list}"
-            "</field>"
-            "</page>"
-        )
+            page_arch = (
+                f'<page string="{page_label}" name="strat_link_{self.id}">'
+                f'<field name="{field_name}">'
+                f"{inline_list}"
+                f"</field>"
+                f"</page>"
+            )
 
         if has_notebook:
             xpath = '<xpath expr="//notebook" position="inside">'
@@ -297,105 +210,3 @@ class StratModuleLink(models.Model):
         except Exception:
             pass
         return model_name.split(".")[-1].replace("_", " ").title()
-
-
-# =====================================================================
-# Individual link (record-to-record pair)
-# =====================================================================
-
-
-class StratModuleLinkLine(models.Model):
-    """A single link between two records across models."""
-
-    _name = "strat.module.link.line"
-    _description = "Dynamic Module Link Line"
-    _order = "id desc"
-
-    _sql_constraints = [
-        (
-            "unique_pair",
-            "UNIQUE(link_id, res_id_a, res_id_b)",
-            "These two records are already linked.",
-        ),
-    ]
-
-    link_id = fields.Many2one(
-        "strat.module.link",
-        required=True,
-        ondelete="cascade",
-    )
-    res_id_a = fields.Integer(required=True, string="Record A")
-    res_id_b = fields.Integer(required=True, string="Record B")
-    name_a = fields.Char(compute="_compute_names", store=True)
-    name_b = fields.Char(compute="_compute_names", store=True)
-
-    # -- computed ------------------------------------------------------------
-
-    @api.depends("link_id", "res_id_a", "res_id_b")
-    def _compute_names(self):
-        for line in self:
-            ma = line.link_id.model_a if line.link_id else ""
-            mb = line.link_id.model_b if line.link_id else ""
-            line.name_a = line._record_display(ma, line.res_id_a)
-            line.name_b = line._record_display(mb, line.res_id_b)
-
-    # -- create / unlink hooks -----------------------------------------------
-
-    @api.model
-    def create(self, vals):
-        record = super().create(vals)
-        record._sync_linked_records(adding=True)
-        return record
-
-    def unlink(self):
-        self._sync_linked_records(adding=False)
-        return super().unlink()
-
-    def _sync_linked_records(self, adding=True):
-        """Keep ``x_strat_link_count`` and ``x_strat_link_lines`` in sync
-        on both end records whenever a link line is created or deleted."""
-        for line in self:
-            link = line.link_id
-            if not link:
-                continue
-            for model_name, res_id in [
-                (link.model_a, line.res_id_a),
-                (link.model_b, line.res_id_b),
-            ]:
-                try:
-                    rec = self.env[model_name].browse(res_id)
-                    if not rec.exists():
-                        continue
-
-                    # Sync count
-                    current = getattr(rec, "x_strat_link_count", 0) or 0
-                    if adding:
-                        rec.x_strat_link_count = current + 1
-                    else:
-                        rec.x_strat_link_count = max(0, current - 1)
-
-                    # Sync many2many
-                    if adding:
-                        rec.write({"x_strat_link_lines": [(4, line.id)]})
-                    else:
-                        rec.write({"x_strat_link_lines": [(3, line.id)]})
-
-                except Exception:
-                    _logger.exception(
-                        "Strat: failed to sync link fields on %s/%s",
-                        model_name,
-                        res_id,
-                    )
-
-    # -- helpers -------------------------------------------------------------
-
-    def _record_display(self, model_name, res_id):
-        if not model_name:
-            return str(res_id)
-        try:
-            rec = self.env[model_name].browse(res_id)
-            if rec.exists():
-                return rec.display_name or str(res_id)
-        except Exception:
-            pass
-        return str(res_id)

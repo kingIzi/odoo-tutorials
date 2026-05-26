@@ -1,4 +1,3 @@
 id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
 access_strat_message_user,access.strat.message.user,model_strat_message,base.group_user,1,0,1,1
 access_strat_module_link_user,access.strat.module.link.user,model_strat_module_link,base.group_user,1,1,1,1
-access_strat_module_link_line_user,access.strat.module.link.line.user,model_strat_module_link_line,base.group_user,1,1,1,1
