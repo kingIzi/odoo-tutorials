@@ -1,0 +1,9 @@
+[project]
+name = "strat"
+version = "0.1.0"
+description = "Strat - AI Chat Module for Odoo"
+requires-python = ">=3.10"
+dependencies = [
+    "zai-sdk",
+    "mcp-server-odoo",
+]

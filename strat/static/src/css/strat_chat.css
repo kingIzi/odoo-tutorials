@@ -1,0 +1,278 @@
+/* ===== Container ===== */
+.strat-chat-container {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 1050;
+    font-family: inherit;
+}
+
+/* ===== Toggle Button ===== */
+.strat-toggle-btn {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #714b67;
+    color: white;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    box-shadow: 0 4px 16px rgba(113, 75, 103, 0.4);
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+    margin-left: auto;
+}
+
+.strat-toggle-btn:hover {
+    transform: scale(1.08);
+    box-shadow: 0 6px 20px rgba(113, 75, 103, 0.5);
+}
+
+/* ===== Chat Panel ===== */
+.strat-chat-panel {
+    width: 380px;
+    height: 520px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+    overflow: hidden;
+}
+
+/* ===== Header ===== */
+.strat-chat-header {
+    background: #714b67;
+    color: white;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.strat-header-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 16px;
+}
+
+.strat-close-btn {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    opacity: 0.8;
+    padding: 4px 8px;
+}
+
+.strat-close-btn:hover {
+    opacity: 1;
+}
+
+/* ===== Messages ===== */
+.strat-chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: #f9f9f9;
+}
+
+.strat-welcome {
+    text-align: center;
+    color: #666;
+    padding: 40px 20px;
+    font-size: 14px;
+}
+
+.strat-welcome p:first-child {
+    font-size: 18px;
+    margin-bottom: 8px;
+}
+
+.strat-message {
+    max-width: 80%;
+    padding: 10px 14px;
+    border-radius: 16px;
+    font-size: 14px;
+    line-height: 1.4;
+    word-wrap: break-word;
+}
+
+.strat-user {
+    background: #714b67;
+    color: white;
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
+}
+
+.strat-bot {
+    background: white;
+    color: #333;
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* ===== Bot Markdown Content ===== */
+
+.strat-bot p {
+    margin: 0 0 6px;
+}
+
+.strat-bot p:last-child {
+    margin-bottom: 0;
+}
+
+.strat-bot .strat-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 6px 0;
+    font-size: 13px;
+}
+
+.strat-bot .strat-table th {
+    background: #714b67;
+    color: white;
+    padding: 6px 10px;
+    text-align: left;
+    font-weight: 600;
+}
+
+.strat-bot .strat-table td {
+    padding: 5px 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.strat-bot .strat-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.strat-bot .strat-table tbody tr:hover {
+    background: #f5f0f7;
+}
+
+.strat-bot .strat-list {
+    margin: 4px 0;
+    padding-left: 20px;
+}
+
+.strat-bot .strat-list li {
+    margin-bottom: 3px;
+}
+
+.strat-bot strong {
+    color: #714b67;
+}
+
+/* ===== Typing Indicator ===== */
+.strat-typing {
+    padding: 12px 18px;
+}
+
+.strat-dots span {
+    animation: strat-blink 1.4s infinite both;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.strat-dots span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.strat-dots span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes strat-blink {
+    0%,
+    80%,
+    100% {
+        opacity: 0.2;
+    }
+    40% {
+        opacity: 1;
+    }
+}
+
+/* ===== Input Area ===== */
+.strat-clear-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+    padding: 8px;
+    border: none;
+    background: #f3f0f2;
+    color: #888;
+    font-size: 13px;
+    cursor: pointer;
+    transition:
+        background 0.2s,
+        color 0.2s;
+    border-top: 1px solid #eee;
+}
+
+.strat-clear-btn:hover {
+    background: #efe0ea;
+    color: #714b67;
+}
+
+/* ===== Input Area ===== */
+.strat-chat-input {
+    display: flex;
+    padding: 12px 16px;
+    border-top: 1px solid #eee;
+    background: white;
+    gap: 8px;
+    align-items: center;
+}
+
+.strat-chat-input input {
+    flex: 1;
+    border: 1px solid #ddd;
+    border-radius: 24px;
+    padding: 10px 18px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.strat-chat-input input:focus {
+    border-color: #714b67;
+}
+
+.strat-send-btn {
+    background: #714b67;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    transition: background 0.2s;
+}
+
+.strat-send-btn:hover {
+    background: #5a3a52;
+}
+
+.strat-send-btn[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+}

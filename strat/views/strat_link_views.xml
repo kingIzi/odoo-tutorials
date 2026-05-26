@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Tree view used by the server action when the Links button is clicked -->
+    <record id="view_strat_link_line_tree" model="ir.ui.view">
+        <field name="name">strat.module.link.line.tree</field>
+        <field name="model">strat.module.link.line</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="link_id"/>
+                <field name="name_a"/>
+                <field name="name_b"/>
+            </list>
+        </field>
+    </record>
+
+</odoo>

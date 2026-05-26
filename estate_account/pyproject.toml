@@ -1,0 +1,36 @@
+[project]
+name = "estate_account"
+version = "0.1.0"
+description = "Real Estate Account Odoo module"
+requires-python = ">=3.10"
+dependencies = [
+    # Core Odoo dependencies (subset needed for module development)
+    "Werkzeug>=2.0",
+    "psycopg2-binary>=2.9",
+    "python-dateutil>=2.8",
+    "Jinja2>=3.0",
+    "Babel>=2.9",
+    "Pillow>=9.0",
+    "lxml>=4.8",
+    "MarkupSafe>=2.0",
+    "passlib>=1.7",
+    "pytz",
+    "requests>=2.25",
+    "decorator",
+    "polib>=1.1",
+    "python-statemachine>=3.1.2",
+]
+
+[dependency-groups]
+dev = [
+    # Add dev/test packages here, e.g.:
+    # "pytest>=8.0",
+    # "ruff>=0.4",
+]
+
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["estate*"]
