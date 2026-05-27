@@ -1,5 +1,5 @@
 /** @odoo-module */
-import { Component, useState, useRef, onPatched } from "@odoo/owl";
+import { Component, useState, useRef, onPatched, onWillStart } from "@odoo/owl";
 import { registry } from "@web/core/registry";
 import { useService } from "@web/core/utils/hooks";
 
@@ -12,6 +12,20 @@ export class StratChat extends Component {
             messages: [],
             inputText: "",
             isLoading: false,
+            // MCP config state
+            showSetup: false,
+            mcpConfig: {
+                configured: false,
+                odoo_user: "",
+                odoo_password: "",
+                odoo_url: "",
+                odoo_db: "",
+                odoo_yolo: "read",
+            },
+            setupUser: "",
+            setupPassword: "",
+            setupError: "",
+            setupSaving: false,
         });
         this.orm = useService("orm");
         this.action = useService("action");
@@ -32,9 +46,72 @@ export class StratChat extends Component {
 
     async toggleChat() {
         this.state.isOpen = !this.state.isOpen;
-        if (this.state.isOpen && !this.state.messages.length) {
-            await this.loadMessages();
+        if (this.state.isOpen) {
+            // Load config to determine if setup is needed
+            await this._loadConfig();
+            if (this.state.mcpConfig.configured && !this.state.messages.length) {
+                await this.loadMessages();
+            }
         }
+    }
+
+    async _loadConfig() {
+        try {
+            const config = await this.orm.call("strat.message", "get_mcp_config", []);
+            this.state.mcpConfig = config;
+            this.state.showSetup = !config.configured;
+            // Pre-fill form with current values
+            if (config.odoo_user) {
+                this.state.setupUser = config.odoo_user;
+            }
+            if (config.odoo_password) {
+                this.state.setupPassword = config.odoo_password;
+            }
+        } catch (e) {
+            console.error("Strat: failed to load config", e);
+        }
+    }
+
+    async saveConfig() {
+        const username = this.state.setupUser.trim();
+        const password = this.state.setupPassword.trim();
+        if (!username || !password) {
+            this.state.setupError = "Username and password are required.";
+            return;
+        }
+
+        this.state.setupSaving = true;
+        this.state.setupError = "";
+
+        try {
+            const result = await this.orm.call("strat.message", "save_mcp_config", [], {
+                username,
+                password,
+            });
+
+            if (result.success) {
+                this.state.mcpConfig = {
+                    ...result.config,
+                    configured: true,
+                };
+                this.state.showSetup = false;
+            } else {
+                this.state.setupError =
+                    result.error || "Connection failed. Please check your credentials.";
+            }
+        } catch (error) {
+            this.state.setupError =
+                "Failed to save configuration: " + (error.message || error);
+        }
+
+        this.state.setupSaving = false;
+    }
+
+    showSettings() {
+        this.state.setupUser = this.state.mcpConfig.odoo_user;
+        this.state.setupPassword = this.state.mcpConfig.odoo_password;
+        this.state.setupError = "";
+        this.state.showSetup = true;
     }
 
     async loadMessages() {
@@ -94,9 +171,12 @@ export class StratChat extends Component {
     /**
      * Reload the current Odoo view if it was affected by Strat's changes.
      *
-     * Uses ``action.restore()`` which is the same mechanism Odoo's own
-     * "soft_reload" client action uses — it re-renders the current controller
-     * without a full page refresh.
+     * For regular data changes (create/write/delete) a soft reload via
+     * ``action.restore()`` is enough — it re-renders the controller with
+     * fresh data but keeps the same view architecture.
+     *
+     * For module-link creations the view arch itself has changed (new notebook
+     * page injected), so we need a full page reload to pick up the new fields.
      */
     _reloadAffectedViews(changes) {
         const controller = this.action.currentController;
@@ -104,6 +184,17 @@ export class StratChat extends Component {
 
         const currentModel = controller.props?.resModel;
         if (!currentModel) return;
+
+        // If a strat.module.link was created, do a full page reload — the
+        // view architecture has changed and a soft reload won't pick it up.
+        const linkCreated = changes.some(
+            (c) => c.model === "strat.module.link" && c.action === "create",
+        );
+        if (linkCreated) {
+            // Small delay so the user sees the agent's confirmation message
+            setTimeout(() => window.location.reload(), 800);
+            return;
+        }
 
         const affected = changes.some((c) => c.model === currentModel);
         if (!affected) return;

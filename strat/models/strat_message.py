@@ -4,9 +4,41 @@ from pathlib import Path
 
 from odoo import api, fields, models
 
+try:
+    from zai import ZaiClient
+except ImportError:
+    ZaiClient = None
+
+from .mcp_client import test_connection as mcp_test_connection
+from .strat_agent import run as agent_run
+from .utils import get_api_key, get_odoo_config, is_mcp_configured, save_odoo_config
+
 logger = logging.getLogger(__name__)
 
 ZAI_BASE_URL = "https://api.z.ai/api/coding/paas/v4/"
+# Prefixes of internal/system models to exclude from the dynamic model list.
+_SYSTEM_MODEL_PREFIXES = (
+    "ir.",
+    "base.",
+    "report.",
+    "web.",
+    "bus.",
+    "mail.",
+    "pub.",
+    "portal.",
+    "http.",
+    "digest.",
+    "iap.",
+    "rating.",
+    "link.",
+    "utm.",
+    "snippet.",
+    "theme.",
+    "html.",
+    "base_",
+    "l10n_",
+)
+
 SYSTEM_PROMPT = (
     "You are Strat, a friendly and concise AI assistant integrated into Odoo. "
     "You have access to Odoo data through MCP tools. "
@@ -23,17 +55,18 @@ SYSTEM_PROMPT = (
     "3. If a tool returns an error, report the error clearly and suggest next steps.\n"
     "4. Never say 'I will...' or 'Let me...' — just do it via tools, then confirm the result.\n\n"
     "SEARCHING FOR DATA — follow these rules strictly:\n"
-    "• When looking for a record by name, NEVER guess which model it's in. "
-    "Always call list_models first to discover what models exist in this Odoo instance.\n"
-    "• Users may refer to models by informal names (e.g. 'real estate properties', 'properties', "
-    "'estate properties' → estate.property; 'employees' → hr.employee; 'contacts' → res.partner; "
-    "'invoices' → account.move; 'products' → product.template; 'sales orders' → sale.order). "
-    "Use list_models to find the exact technical name.\n"
-    "• If a search in one model returns no results, try related models before telling the user "
+    "• The following models are installed in this Odoo instance:\n"
+    "{MODELS_HINT}\n"
+    "  For these models, go straight to search_records — do NOT call list_models first.\n"
+    "• If the user asks about something NOT in the list above, call list_models to "
+    "discover the exact technical model name.\n"
+    "• If a search returns no results, try related models before telling the user "
     "the record doesn't exist. For example, if 'Kirikou Hotel' is not in res.partner, "
-    "search estate.property, product.template, project.project, etc.\n"
+    "try estate.property, product.template, project.project, etc.\n"
     "• NEVER say a record doesn't exist or ask the user which model it's in — "
-    "use list_models and search to find it yourself.\n\n"
+    "use tools to find it yourself.\n"
+    "• NEVER say a module or model doesn't exist unless you have actually searched "
+    "for records and gotten zero results.\n\n"
     "LINKING MODULES\n"
     "When asked to link two models (e.g. 'link employees and properties'), do ONLY "
     "the following:\n"
@@ -68,6 +101,102 @@ class StratMessage(models.Model):
     message = fields.Text(required=True)
     is_user = fields.Boolean(default=True)
 
+    # -- MCP configuration (called from frontend) ----------------------------
+
+    @api.model
+    def get_mcp_config(self):
+        """Return current MCP connection settings from .env.
+
+        The password is masked for display in the UI.
+        Returns a dict with configured status and current values.
+        """
+        user = get_odoo_config_value("ODOO_USER") or ""
+        password = get_odoo_config_value("ODOO_PASSWORD") or ""
+        url = get_odoo_config_value("ODOO_URL") or ""
+        db = get_odoo_config_value("ODOO_DB") or ""
+        yolo = get_odoo_config_value("ODOO_YOLO") or "read"
+
+        return {
+            "configured": bool(user and password),
+            "odoo_user": user,
+            "odoo_password": password,
+            "odoo_url": url,
+            "odoo_db": db,
+            "odoo_yolo": yolo,
+        }
+
+    @api.model
+    def save_mcp_config(self, username, password, url=None, database=None, yolo=None):
+        """Test the MCP connection first, then save to .env only on success.
+
+        Auto-detects URL and database from the running Odoo instance if not provided.
+        Returns ``{success, error?, config}``.
+        """
+        # Auto-detect URL and DB from current Odoo instance
+        if not url:
+            try:
+                from odoo.http import request
+
+                url = request.httprequest.host_url.rstrip("/")
+            except Exception:
+                url = "http://localhost:8069"
+        if not database:
+            database = self.env.cr.dbname
+        if not yolo:
+            yolo = "read"
+
+        # Test the connection BEFORE saving anything
+        result = mcp_test_connection(
+            odoo_url=url,
+            odoo_db=database,
+            odoo_user=username,
+            odoo_password=password,
+            odoo_yolo=yolo,
+        )
+
+        config = {
+            "odoo_user": username,
+            "odoo_password": password,
+            "odoo_url": url,
+            "odoo_db": database,
+            "odoo_yolo": yolo,
+        }
+
+        if result is True:
+            # Connection OK — persist credentials to .env
+            save_odoo_config(
+                username=username,
+                password=password,
+                url=url,
+                database=database,
+                yolo=yolo,
+            )
+            return {"success": True, "config": config}
+        else:
+            # Connection failed — do NOT save; return friendly error
+            error_msg = self._friendly_mcp_error(result)
+            return {"success": False, "error": error_msg, "config": config}
+
+    @api.model
+    def _friendly_mcp_error(self, raw_error):
+        """Turn a raw MCP exception string into a short, user-friendly message."""
+        err = str(raw_error).lower()
+        if "access denied" in err or "authentication" in err or "403" in err:
+            return "Username or password is incorrect."
+        if "connection refused" in err or "connectionerror" in err:
+            return "Could not reach the Odoo server. Check that Odoo is running."
+        if "database" in err and ("not found" in err or "does not exist" in err):
+            return "Database not found. Check the database name."
+        if "timeout" in err:
+            return "Connection timed out. The server took too long to respond."
+        # Fallback: first line only, stripped of traceback noise
+        first_line = str(raw_error).strip().split("\n")[0]
+        if len(first_line) > 120:
+            first_line = first_line[:120] + "..."
+        return first_line
+
+    # -- chat methods --------------------------------------------------------
+
     @api.model
     def send_and_respond(self, message, context=None):
         """Save user message, generate a response, save it, and return it.
@@ -88,6 +217,25 @@ class StratMessage(models.Model):
             response_text = result
             changes = []
 
+        # When a strat.module.link is created, expand the changes to include
+        # the linked models so the frontend reloads their form views.
+        link_ids = []
+        for change in changes:
+            if (
+                change.get("model") == "strat.module.link"
+                and change.get("action") == "create"
+            ):
+                link_ids.extend(change.get("res_ids", []))
+        if link_ids:
+            for link in self.env["strat.module.link"].sudo().browse(link_ids):
+                if link.exists():
+                    changes.append(
+                        {"model": link.model_a, "action": "write", "res_ids": []}
+                    )
+                    changes.append(
+                        {"model": link.model_b, "action": "write", "res_ids": []}
+                    )
+
         self.create({"message": response_text, "is_user": False})
         return {"response": response_text, "changes": changes}
 
@@ -104,48 +252,32 @@ class StratMessage(models.Model):
         )
         return [{"is_user": m.is_user, "message": m.message} for m in messages]
 
-    # -- config helpers ----------------------------------------------------
-
-    def _read_env_value(self, key):
-        """Read a value from the environment or the module's .env file."""
-        val = os.getenv(key)
-        if val:
-            return val
-
-        env_path = Path(__file__).resolve().parent.parent / ".env"
-        if not env_path.exists():
-            return None
-
-        prefix = f"{key}="
-        for line in env_path.read_text().splitlines():
-            line = line.strip()
-            if not line or line.startswith("#"):
-                continue
-            if line.startswith(prefix):
-                return line[len(prefix) :].strip().strip('"').strip("'")
-        return None
-
-    def _get_api_key(self):
-        key = self._read_env_value("ZAI_API_KEY")
-        if not key:
-            logger.error("ZAI_API_KEY not configured")
-        return key
-
-    def _get_odoo_config(self):
-        """Read Odoo connection params from .env for the MCP server."""
-        odoo_url = self._read_env_value("ODOO_URL")
-        if not odoo_url:
-            logger.debug("ODOO_URL not configured — agent mode disabled")
-            return None
-        return {
-            "odoo_url": odoo_url,
-            "odoo_db": self._read_env_value("ODOO_DB") or "",
-            "odoo_user": self._read_env_value("ODOO_USER") or "admin",
-            "odoo_password": self._read_env_value("ODOO_PASSWORD") or "admin",
-            "odoo_yolo": self._read_env_value("ODOO_YOLO") or "read",
-        }
-
     # -- message building --------------------------------------------------
+
+    @api.model
+    def _get_models_hint(self):
+        """Query ir.model for user-facing models and return a compact mapping.
+
+        Scans all non-transient models in the database, filters out system/internal
+        ones, and returns a bullet list like ``"  - Name (model.name)"``.
+        This is injected into the system prompt so the LLM knows which models
+        are available without calling list_models first.
+        """
+        IrModel = self.env["ir.model"].sudo()
+        models = IrModel.search_read(
+            [("transient", "=", False)],
+            ["model", "name"],
+            order="name",
+        )
+
+        lines = []
+        for m in models:
+            model_name = m["model"]
+            if any(model_name.startswith(p) for p in _SYSTEM_MODEL_PREFIXES):
+                continue
+            lines.append(f"  - {m['name']} ({model_name})")
+
+        return "\n".join(lines) if lines else "  (No user-facing models found)"
 
     def _build_messages(self, current_message, page_context=None):
         """Build the full message list for the LLM (system + history + current).
@@ -154,7 +286,7 @@ class StratMessage(models.Model):
         a context block is appended to the system prompt so the LLM knows what
         record the user is currently viewing.
         """
-        system_content = SYSTEM_PROMPT
+        system_content = SYSTEM_PROMPT.replace("{MODELS_HINT}", self._get_models_hint())
         if page_context:
             ctx_parts = []
             model = page_context.get("model", "")
@@ -199,32 +331,28 @@ class StratMessage(models.Model):
         Tries the MCP-powered agent first (tool calling).
         Falls back to a plain LLM chat if MCP is unavailable.
         """
-        try:
-            from zai import ZaiClient
-        except ImportError:
-            logger.error("zai-sdk is not installed")
-            return "Sorry, the AI service is not available right now."
-
-        api_key = self._get_api_key()
+        api_key = get_api_key()
         if not api_key:
-            return "Sorry, the AI service is not configured."
+            return (
+                "AI service is not configured. Please set ZAI_API_KEY in the .env file."
+            )
+
+        if ZaiClient is None:
+            return "AI service is not available. Please install the zai-sdk package."
+
+        client = ZaiClient(api_key=api_key, base_url=ZAI_BASE_URL, max_retries=3)
+        odoo_config = get_odoo_config()
 
         messages = self._build_messages(message, page_context=page_context)
-
-        # 1) Try the MCP agent (tool-calling loop)
-        odoo_config = self._get_odoo_config()
         if odoo_config:
             try:
-                from .strat_agent import run as agent_run
-
-                result = agent_run(api_key, ZAI_BASE_URL, odoo_config, messages)
+                result = agent_run(client, odoo_config, messages)
                 if result is not None:
                     return result  # dict {text, changes}
             except Exception:
                 logger.exception("Agent failed, falling back to plain chat")
 
-        # 2) Fallback: plain LLM chat without tools
-        client = ZaiClient(api_key=api_key, base_url=ZAI_BASE_URL, max_retries=3)
+        # Fallback: plain LLM chat without tools
         try:
             response = client.chat.completions.create(
                 model="glm-4.7",
@@ -236,3 +364,10 @@ class StratMessage(models.Model):
         except Exception as e:
             logger.exception("Failed to generate response from GLM-4.7")
             return f"Sorry, something went wrong: {e}"
+
+
+def get_odoo_config_value(key):
+    """Read a single value from .env (helper exposed to model methods)."""
+    from .utils import read_env_value
+
+    return read_env_value(key)

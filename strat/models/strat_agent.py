@@ -17,6 +17,39 @@ _logger = logging.getLogger(__name__)
 
 MAX_TOOL_STEPS = 15
 
+# System / internal model prefixes to hide from list_models output.
+# These are never user-facing and just add noise for the LLM.
+_SYSTEM_MODEL_PREFIXES = (
+    "ir.",
+    "base.",
+    "report.",
+    "web.",
+    "bus.",
+    "mail.",
+    "pub.",
+    "portal.",
+    "http.",
+    "digest.",
+    "iap.",
+    "rating.",
+    "link.",
+    "utm.",
+    "snippet.",
+    "theme.",
+    "html.",
+    "base_",
+    "l10n_",
+    "account.edi",
+    "account.favorites",
+    "account.batch",
+    "account.invoice",
+    "pos.",
+    "point_of_sale",
+)
+
+# Maximum number of models to include in a compacted list_models result.
+_MAX_MODELS_IN_RESULT = 200
+
 # Phrases the LLM uses when narrating instead of acting.
 _ACTION_PLAN_PHRASES = (
     "i'll ",
@@ -87,6 +120,44 @@ def _track_change(changes, tool_name, args, tool_result):
     changes.append({"model": model, "action": action, "res_ids": res_ids})
 
 
+def _compact_list_models(raw_text):
+    """Compact a list_models JSON result by filtering out system models.
+
+    The raw result from ``mcp-server-odoo`` can contain 800+ models as a
+    massive JSON blob.  The LLM struggles to process that much data and
+    often misses relevant user-facing models like ``estate.property``.
+
+    This function:
+      1. Parses the JSON
+      2. Filters out models matching known system/internal prefixes
+      3. Returns a compact JSON string with only the model name and
+         human-readable name
+    """
+    try:
+        data = json.loads(raw_text)
+    except (json.JSONDecodeError, TypeError):
+        return raw_text  # not JSON — return as-is
+
+    # Handle {"models": [...]} wrapper
+    models = data.get("models", data) if isinstance(data, dict) else data
+    if not isinstance(models, list):
+        return raw_text
+
+    kept = []
+    for m in models:
+        if not isinstance(m, dict):
+            continue
+        model_name = m.get("model", "")
+        # Skip system/internal models
+        if any(model_name.startswith(prefix) for prefix in _SYSTEM_MODEL_PREFIXES):
+            continue
+        kept.append({"model": model_name, "name": m.get("name", "")})
+        if len(kept) >= _MAX_MODELS_IN_RESULT:
+            break
+
+    return json.dumps({"models": kept, "total": len(models), "shown": len(kept)})
+
+
 def _mcp_to_glm_tools(mcp_tools):
     """Convert MCP tool definitions to GLM function-calling format."""
     out = []
@@ -106,7 +177,7 @@ def _mcp_to_glm_tools(mcp_tools):
     return out
 
 
-def run(zai_api_key, zai_base_url, odoo_config, messages):
+def run(zai_client, odoo_config, messages):
     """
     Execute the agentic loop.
 
@@ -114,7 +185,6 @@ def run(zai_api_key, zai_base_url, odoo_config, messages):
     ``{model, action, res_ids}`` dicts, or ``None`` when the MCP server
     is unreachable (so the caller can fall back to a plain LLM chat).
     """
-    from zai import ZaiClient
 
     # 1. Connect to MCP and discover tools
     try:
@@ -125,8 +195,6 @@ def run(zai_api_key, zai_base_url, odoo_config, messages):
 
     glm_tools = _mcp_to_glm_tools(mcp.tools) if mcp.tools else None
     _logger.info("Agent starting with %d MCP tools", len(mcp.tools))
-
-    zai_client = ZaiClient(api_key=zai_api_key, base_url=zai_base_url, max_retries=3)
 
     # Track models/records modified during the loop
     changes = []
@@ -158,6 +226,35 @@ def run(zai_api_key, zai_base_url, odoo_config, messages):
         # 3. No tool calls → final answer
         if not msg.tool_calls:
             content = msg.content or ""
+            # If the LLM returned an empty response after tool calls, log a warning
+            if not content and step > 0:
+                _logger.warning(
+                    "LLM returned empty content at step %d after tool calls; "
+                    "re-prompting for a summary",
+                    step,
+                )
+                # Ask the LLM to summarize the tool results it just processed
+                messages.append(
+                    {
+                        "role": "user",
+                        "content": (
+                            "Please provide a clear, concise summary of the data you retrieved. "
+                            "Present it using bullet points or a table as appropriate."
+                        ),
+                    }
+                )
+                try:
+                    summary_resp = zai_client.chat.completions.create(
+                        model="glm-4.7",
+                        messages=messages,
+                        temperature=0.2,
+                        max_tokens=1000,
+                    )
+                    content = summary_resp.choices[0].message.content or ""
+                except Exception:
+                    _logger.exception("Summary re-prompt failed")
+                if not content:
+                    content = "I retrieved the data but couldn't generate a summary. Please try again."
             # If the LLM narrates an action instead of taking it on the first step,
             # force it to use tools by re-sending with tool_choice=required.
             if step == 0 and glm_tools and _looks_like_action_plan(content):
@@ -178,10 +275,13 @@ def run(zai_api_key, zai_base_url, odoo_config, messages):
                 return {"text": content, "changes": changes}
 
         # 4. Append assistant message with tool_calls to history
+        # IMPORTANT: Keep content as None (not "") when tool_calls are present.
+        # GLM-4.7 requires null content for assistant messages with tool_calls;
+        # sending "" causes the model to return empty final responses.
         messages.append(
             {
                 "role": "assistant",
-                "content": msg.content or "",
+                "content": msg.content,  # keep as None, not ""
                 "tool_calls": [
                     {
                         "id": tc.id,
@@ -206,6 +306,9 @@ def run(zai_api_key, zai_base_url, odoo_config, messages):
             tool_name = tc.function.name
             try:
                 tool_result = mcp.call_tool(tool_name, args)
+                # Compact list_models results to keep the context manageable
+                if tool_name == "list_models":
+                    tool_result = _compact_list_models(str(tool_result))
                 _logger.info(
                     "Step %d: %s(%s) → %s",
                     step,

@@ -33,6 +33,29 @@ def get_client(odoo_url, odoo_db, odoo_user, odoo_password, odoo_yolo="true"):
         return _cached_client
 
 
+def test_connection(odoo_url, odoo_db, odoo_user, odoo_password, odoo_yolo="true"):
+    """Try to spawn an MCP server and connect.
+
+    Returns ``True`` on success or an error string on failure.
+    Does NOT cache the client — used purely for validation.
+    """
+    try:
+        client = MCPClient(
+            odoo_url=odoo_url,
+            odoo_db=odoo_db,
+            odoo_user=odoo_user,
+            odoo_password=odoo_password,
+            odoo_yolo=odoo_yolo,
+        )
+        client.connect()
+        # If we got here the session is alive
+        client.stop()
+        return True
+    except Exception as exc:
+        _logger.warning("MCP test_connection failed: %s", exc)
+        return str(exc)
+
+
 class MCPClient:
     """Spawn ``mcp-server-odoo`` as a child process and speak JSON-RPC over
     stdin/stdout (the same transport Claude Desktop / Zed use)."""

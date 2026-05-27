@@ -5,55 +5,119 @@
         <div class="strat-chat-container">
             <!-- Chat Panel -->
             <div class="strat-chat-panel" t-if="state.isOpen">
+
                 <!-- Header -->
                 <div class="strat-chat-header">
                     <div class="strat-header-left">
                         <i class="fa fa-robot"/>
                         <strong>Strat</strong>
                     </div>
-                    <button class="strat-close-btn" t-on-click="toggleChat">
-                        <i class="fa fa-times"/>
-                    </button>
+                    <div class="strat-header-actions">
+                        <!-- Settings gear: only show when configured -->
+                        <button t-if="state.mcpConfig.configured and !state.showSetup"
+                                class="strat-close-btn strat-settings-btn"
+                                t-on-click="showSettings"
+                                title="Connection Settings">
+                            <i class="fa fa-cog"/>
+                        </button>
+                        <button class="strat-close-btn" t-on-click="toggleChat">
+                            <i class="fa fa-times"/>
+                        </button>
+                    </div>
                 </div>
 
-                <!-- Messages -->
-                <div class="strat-chat-messages" t-ref="messageArea">
-                    <div class="strat-welcome" t-if="!state.messages.length and !state.isLoading">
-                        <p>👋 Hi! I'm Strat, your Odoo assistant.</p>
-                        <p>Ask me anything!</p>
-                    </div>
-                    <t t-foreach="state.messages" t-as="msg" t-key="msg_index">
-                        <div t-att-class="'strat-message ' + (msg.is_user ? 'strat-user' : 'strat-bot')">
-                            <t t-if="msg.is_user" t-esc="msg.message"/>
-                            <t t-else="">
-                                <span class="strat-bot-raw" t-att-data-html="renderMarkdown(msg.message)"/>
-                            </t>
+                <!-- ====== SETUP / LOGIN FORM ====== -->
+                <div class="strat-setup" t-if="state.showSetup">
+                    <div class="strat-setup-inner">
+                        <div class="strat-setup-icon">
+                            <i class="fa fa-plug"/>
                         </div>
-                    </t>
-                    <div class="strat-message strat-bot strat-typing" t-if="state.isLoading">
-                        <span class="strat-dots"><span>.</span><span>.</span><span>.</span></span>
+                        <h4 class="strat-setup-title">Connect to MCP Server</h4>
+                        <p class="strat-setup-desc">
+                            Enter your Odoo credentials to connect Strat to the MCP agent.
+                        </p>
+
+                        <!-- Error message -->
+                        <div class="strat-setup-error" t-if="state.setupError">
+                            <i class="fa fa-exclamation-circle"/>
+                            <t t-esc="state.setupError"/>
+                        </div>
+
+                        <div class="strat-setup-field">
+                            <label for="strat-username">Username</label>
+                            <input id="strat-username"
+                                   type="text"
+                                   t-model="state.setupUser"
+                                   placeholder="e.g. admin"
+                                   t-on-keydown="(ev) => ev.key === 'Enter' &amp;&amp; saveConfig()"/>
+                        </div>
+
+                        <div class="strat-setup-field">
+                            <label for="strat-password">Password</label>
+                            <input id="strat-password"
+                                   type="password"
+                                   t-model="state.setupPassword"
+                                   placeholder="Your Odoo password"
+                                   t-on-keydown="(ev) => ev.key === 'Enter' &amp;&amp; saveConfig()"/>
+                        </div>
+
+                        <button class="strat-setup-submit"
+                                t-on-click="saveConfig"
+                                t-att-disabled="state.setupSaving ? 'disabled' : undefined">
+                            <t t-if="state.setupSaving">
+                                <i class="fa fa-spinner fa-spin"/> Connecting...
+                            </t>
+                            <t t-else="">
+                                <i class="fa fa-sign-in"/> Connect
+                            </t>
+                        </button>
                     </div>
                 </div>
 
-                <!-- Clear Button -->
-                <button class="strat-clear-btn"
-                        t-on-click="clearChat"
-                        t-if="state.messages.length and !state.isLoading">
-                    <i class="fa fa-plus"/> New Chat
-                </button>
+                <!-- ====== CONFIGURED: show current credentials ====== -->
+                <!-- (briefly shown after save, before switching to chat) -->
 
-                <!-- Input -->
-                <div class="strat-chat-input">
-                    <input type="text"
-                           t-model="state.inputText"
-                           placeholder="Type a message..."
-                           t-on-keydown="onKeydown"/>
-                    <button class="strat-send-btn"
-                            t-on-click="sendMessage"
-                            t-att-disabled="state.isLoading ? 'disabled' : undefined">
-                        <i class="fa fa-paper-plane"/>
+                <!-- ====== CHAT MESSAGES ====== -->
+                <t t-if="!state.showSetup">
+                    <div class="strat-chat-messages" t-ref="messageArea">
+                        <div class="strat-welcome" t-if="!state.messages.length and !state.isLoading">
+                            <p>👋 Hi! I'm Strat, your Odoo assistant.</p>
+                            <p>Ask me anything!</p>
+                        </div>
+                        <t t-foreach="state.messages" t-as="msg" t-key="msg_index">
+                            <div t-att-class="'strat-message ' + (msg.is_user ? 'strat-user' : 'strat-bot')">
+                                <t t-if="msg.is_user" t-esc="msg.message"/>
+                                <t t-else="">
+                                    <span class="strat-bot-raw" t-att-data-html="renderMarkdown(msg.message)"/>
+                                </t>
+                            </div>
+                        </t>
+                        <div class="strat-message strat-bot strat-typing" t-if="state.isLoading">
+                            <span class="strat-dots"><span>.</span><span>.</span><span>.</span></span>
+                        </div>
+                    </div>
+
+                    <!-- Clear Button -->
+                    <button class="strat-clear-btn"
+                            t-on-click="clearChat"
+                            t-if="state.messages.length and !state.isLoading">
+                        <i class="fa fa-plus"/> New Chat
                     </button>
-                </div>
+
+                    <!-- Input -->
+                    <div class="strat-chat-input">
+                        <input type="text"
+                               t-model="state.inputText"
+                               placeholder="Type a message..."
+                               t-on-keydown="onKeydown"/>
+                        <button class="strat-send-btn"
+                                t-on-click="sendMessage"
+                                t-att-disabled="state.isLoading ? 'disabled' : undefined">
+                            <i class="fa fa-paper-plane"/>
+                        </button>
+                    </div>
+                </t>
+
             </div>
 
             <!-- Toggle Button -->

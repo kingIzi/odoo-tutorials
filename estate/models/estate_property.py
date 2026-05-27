@@ -1,6 +1,5 @@
 from odoo import api, fields, models
 from odoo.exceptions import UserError, ValidationError
-from statemachine import State, StateChart
 
 from ..utils.app_utils import show_display_notification
 
