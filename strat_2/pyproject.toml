@@ -1,0 +1,5 @@
+[project]
+name = "strat_2"
+version = "0.1.0"
+description = "Strat 2.0 - AI Chat Module for Odoo"
+requires-python = ">=3.10"

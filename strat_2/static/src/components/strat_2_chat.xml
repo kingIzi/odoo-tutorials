@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-name="strat_2.ChatWidget">
+        <div class="strat2-chat-container">
+            <!-- Chat Panel -->
+            <div class="strat2-chat-panel" t-if="state.isOpen">
+
+                <!-- Header -->
+                <div class="strat2-chat-header">
+                    <div class="strat2-header-left">
+                        <i class="fa fa-robot"/>
+                        <strong>Strat 2.0</strong>
+                    </div>
+                    <div class="strat2-header-actions">
+                        <button class="strat2-close-btn" t-on-click="toggleChat">
+                            <i class="fa fa-times"/>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Chat Messages -->
+                <div class="strat2-chat-messages" t-ref="messageArea">
+                    <div class="strat2-welcome" t-if="!state.messages.length and !state.isLoading">
+                        <p>👋 Hi! I'm Strat 2.0, your Odoo assistant.</p>
+                        <p>What would you like to do?</p>
+                        <div class="strat2-quick-actions">
+                            <button class="strat2-quick-action-btn" t-on-click="() => this.quickAction('Link models')">
+                                <i class="fa fa-link"/>
+                                <span>Link models</span>
+                            </button>
+                        </div>
+                    </div>
+                    <t t-foreach="state.messages" t-as="msg" t-key="msg_index">
+                        <div t-att-class="'strat2-message ' + (msg.is_user ? 'strat2-user' : 'strat2-bot')">
+                            <t t-if="msg.is_user" t-esc="msg.message"/>
+                            <t t-else="">
+                                <span class="strat2-bot-raw" t-att-data-html="renderMarkdown(msg.message)"/>
+                            </t>
+                        </div>
+                    </t>
+                    <div class="strat2-message strat2-bot strat2-typing" t-if="state.isLoading">
+                        <span class="strat2-dots"><span>.</span><span>.</span><span>.</span></span>
+                    </div>
+                </div>
+
+                <!-- Clear Button -->
+                <button class="strat2-clear-btn"
+                        t-on-click="clearChat"
+                        t-if="state.messages.length and !state.isLoading">
+                    <i class="fa fa-plus"/> New Chat
+                </button>
+
+                <!-- Input -->
+                <div class="strat2-chat-input">
+                    <input type="text"
+                           t-model="state.inputText"
+                           placeholder="Type a message..."
+                           t-on-keydown="onKeydown"/>
+                    <button class="strat2-send-btn"
+                            t-on-click="sendMessage"
+                            t-att-disabled="state.isLoading ? 'disabled' : undefined">
+                        <i class="fa fa-paper-plane"/>
+                    </button>
+                </div>
+
+            </div>
+
+            <!-- Toggle Button -->
+            <button class="strat2-toggle-btn" t-on-click="toggleChat">
+                <i t-if="!state.isOpen" class="fa fa-comments"/>
+                <i t-if="state.isOpen" class="fa fa-times"/>
+            </button>
+        </div>
+    </t>
+
+</templates>

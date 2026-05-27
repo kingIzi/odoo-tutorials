@@ -1,0 +1,8 @@
+{
+    "extraPaths": ["/home/user/tools/odoo/community/odoo"],
+    "venvPath": ".",
+    "venv": ".venv",
+    "diagnosticSeverityOverrides": {
+        "reportIncompatibleVariableOverride": "none"
+    }
+}
