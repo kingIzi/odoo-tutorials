@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-name="awesome_gallery.GalleryRenderer">
+        <div class="o_gallery_view d-flex flex-wrap gap-3 p-3">
+            <t t-foreach="props.data" t-as="record" t-key="record.id">
+                <div class="o_gallery_image_card position-relative"
+                     style="width: 200px; height: 200px; cursor: pointer;"
+                     t-on-click="(ev) => this.onImageClick(record.id, ev)">
+                    <t t-if="record[props.imageField]">
+                        <img t-att-src="getImageUrl(record)"
+                             class="o_gallery_img rounded shadow-sm"
+                             style="width: 200px; height: 200px; object-fit: cover;"
+                             loading="lazy"/>
+                    </t>
+                    <t t-else="">
+                        <div class="o_gallery_empty bg-light rounded d-flex align-items-center justify-content-center"
+                             style="width: 200px; height: 200px;">
+                            <i class="fa fa-image fa-3x text-muted"></i>
+                        </div>
+                    </t>
+                    <!-- Simple tooltip (tooltip_field) -->
+                    <t t-if="props.tooltipField and !props.tooltipTemplate">
+                        <span t-att-data-tooltip="getTooltipValue(record)"
+                              data-tooltip-position="top"
+                              class="o_gallery_tooltip_anchor position-absolute"
+                              style="top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;"/>
+                    </t>
+                    <!-- Advanced tooltip template -->
+                    <t t-if="props.tooltipTemplate">
+                        <span t-att-data-tooltip-template="TOOLTIP_TEMPLATE_NAME"
+                              t-att-data-tooltip-info="getTooltipInfo(record)"
+                              data-tooltip-position="top"
+                              class="o_gallery_tooltip_anchor position-absolute"
+                              style="top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;"/>
+                    </t>
+                    <!-- Upload button -->
+                    <div class="o_gallery_upload position-absolute bottom-0 end-0 m-1"
+                         style="pointer-events: auto;">
+                        <FileUploader onUploaded="(fileData) => this.onFileUploaded(record, fileData)"
+                                      allowedMIMETypes="'image/*'">
+                            <button class="o_gallery_upload_btn btn btn-sm btn-secondary"
+                                    t-on-click.stop="(ev) => ev.stopPropagation()">
+                                <i class="fa fa-upload"/>
+                            </button>
+                        </FileUploader>
+                    </div>
+                </div>
+            </t>
+        </div>
+    </t>
+</templates>

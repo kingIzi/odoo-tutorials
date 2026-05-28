@@ -140,15 +140,18 @@ class Strat2Message(models.Model):
     is_user = fields.Boolean(default=True)
 
     @api.model
-    def send_and_respond(self, message, context=None):
+    def send_and_respond(self, message, context=None, form_context=None):
         """Save user message, generate a response, save it, and return it.
 
         Returns a dict ``{response, changes}`` where *changes* tracks
         data-modifying operations so the frontend can refresh affected views.
+
+        :param form_context: optional dict ``{model, resId, displayName}``
+            describing the record currently open in the form view.
         """
         self.create({"message": message, "is_user": True})
 
-        result = self._generate_response(message)
+        result = self._generate_response(message, form_context=form_context)
 
         if isinstance(result, dict):
             response_text = result["text"]
@@ -307,11 +310,74 @@ class Strat2Message(models.Model):
             lines.append(f"  - {name_a} ({link.model_a}) <-> {name_b} ({link.model_b})")
         return "\n".join(lines)
 
-    def _build_messages(self, current_message):
+    @api.model
+    def _resolve_display_name(self, model, res_id):
+        """Fetch the display_name of a record, or return None."""
+        try:
+            rec = self.env[model].sudo().browse(res_id)
+            if rec.exists():
+                return (
+                    getattr(rec, "display_name", None)
+                    or getattr(rec, "name", None)
+                    or None
+                )
+        except Exception:
+            pass
+        return None
+
+    @api.model
+    def _build_form_context_hint(self, form_context):
+        """Build the CURRENT RECORD CONTEXT block for the system prompt.
+
+        Resolves the human-readable model name and record display name
+        so the LLM can map "this employee" → the concrete record.
+        """
+        if not form_context or not isinstance(form_context, dict):
+            return ""
+
+        model = form_context.get("model", "")
+        res_id = form_context.get("resId") or form_context.get("res_id")
+        display_name = form_context.get("displayName") or form_context.get(
+            "display_name"
+        )
+
+        if not model or not res_id:
+            return ""
+
+        # Resolve the human-readable model label
+        ir_model = self.env["ir.model"].sudo().search([("model", "=", model)], limit=1)
+        model_label = ir_model.name if ir_model else model
+
+        # Resolve the record display name from the DB (authoritative)
+        resolved_name = self._resolve_display_name(model, res_id)
+        if resolved_name:
+            display_name = resolved_name
+        if not display_name:
+            display_name = f"(ID {res_id})"
+
+        return (
+            "\nCURRENT RECORD CONTEXT:\n"
+            f"The user currently has a {model_label} ({model}) form open: "
+            f'"{display_name}" (ID: {res_id}).\n'
+            'When the user refers to "this record", "this '
+            + model_label.lower()
+            + '", "here", "linked to this", '
+            "or uses similar contextual language, they mean this specific record.\n"
+            f'In that case, auto-fill record_a with "{display_name}" '
+            f'and model_a with "{model_label}".\n'
+        )
+
+    def _build_messages(self, current_message, form_context=None):
         """Build the full message list: system prompt + history + current."""
         system_content = SYSTEM_PROMPT.replace(
             "{MODELS_HINT}", self._get_models_hint()
         ).replace("{LINKS_HINT}", self._get_links_hint())
+
+        # Inject form-record context when available
+        ctx_hint = self._build_form_context_hint(form_context)
+        if ctx_hint:
+            system_content += ctx_hint
+
         messages = [{"role": "system", "content": system_content}]
         for msg in self.get_conversation():
             role = "user" if msg["is_user"] else "assistant"
@@ -351,7 +417,7 @@ class Strat2Message(models.Model):
 
     # -- agent loop ----------------------------------------------------------
 
-    def _generate_response(self, message):
+    def _generate_response(self, message, form_context=None):
         """Run the agent loop: call Qwen, parse actions, execute if needed."""
         if OpenAI is None:
             raise UserError(
@@ -368,7 +434,7 @@ class Strat2Message(models.Model):
             logger.exception("Failed to create OpenAI client")
             raise UserError("Could not connect to the AI model.")
 
-        messages = self._build_messages(message)
+        messages = self._build_messages(message, form_context=form_context)
         changes = []
 
         for step in range(MAX_AGENT_STEPS):

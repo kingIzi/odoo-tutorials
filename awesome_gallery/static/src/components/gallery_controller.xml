@@ -3,10 +3,15 @@
     <t t-name="awesome_gallery.GalleryController">
         <div t-att-class="props.className">
             <Layout display="display">
-                <div class="o_gallery_view p-4">
-                    <h1>Hello World</h1>
-                    <p>Welcome to the Gallery View!</p>
-                </div>
+                <t t-component="props.Renderer"
+                   data="model.data"
+                   resModel="props.resModel"
+                   imageField="props.imageField"
+                   tooltipField="props.tooltipField"
+                   tooltipTemplate="props.tooltipTemplate"
+                   fieldsForTooltip="props.fieldsForTooltip"
+                   onImageClick="(recordId) => this.switchToFormView(recordId)"
+                   onImageUploaded="(recordId, base64) => this.onImageUploaded(recordId, base64)"/>
             </Layout>
         </div>
     </t>

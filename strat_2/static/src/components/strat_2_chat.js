@@ -49,22 +49,50 @@ export class Strat2Chat extends Component {
         }
     }
 
+    /**
+     * Detect the currently open form-view record (if any).
+     * Returns { model, resId, displayName } or null.
+     */
+    _getFormContext() {
+        const controller = this.action.currentController;
+        if (!controller) return null;
+
+        const props = controller.props || {};
+        const resModel = props.resModel;
+        const resId = props.resId;
+        if (!resModel || !resId) return null;
+
+        // Only form views have a single active resId.
+        const type = controller.viewData?.type || props.type;
+        if (type && type !== "form") return null;
+
+        const displayName =
+            props.displayName || controller.viewData?.displayName || null;
+
+        return { model: resModel, resId: resId, displayName: displayName };
+    }
+
     async sendMessage() {
         const text = this.state.inputText.trim();
         if (!text || this.state.isLoading) return;
+
+        const formContext = this._getFormContext();
 
         this.state.messages.push({ is_user: true, message: text });
         this.state.inputText = "";
         this.state.isLoading = true;
 
         try {
+            const kwargs = { message: text };
+            if (formContext) {
+                kwargs.form_context = formContext;
+            }
+
             const result = await this.orm.call(
                 "strat2.message",
                 "send_and_respond",
                 [],
-                {
-                    message: text,
-                },
+                kwargs,
             );
 
             const responseText =

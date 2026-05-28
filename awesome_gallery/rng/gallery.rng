@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rng:grammar xmlns:rng="http://relaxng.org/ns/structure/1.0">
+
+    <rng:define name="tooltip-template">
+        <rng:element name="tooltip-template">
+            <rng:zeroOrMore>
+                <rng:choice>
+                    <rng:text/>
+                    <rng:ref name="any"/>
+                </rng:choice>
+            </rng:zeroOrMore>
+        </rng:element>
+    </rng:define>
+
+    <rng:define name="any">
+        <rng:element>
+            <rng:anyName/>
+            <rng:zeroOrMore>
+                <rng:choice>
+                    <rng:attribute>
+                        <rng:anyName/>
+                    </rng:attribute>
+                    <rng:text/>
+                    <rng:ref name="any"/>
+                </rng:choice>
+            </rng:zeroOrMore>
+        </rng:element>
+    </rng:define>
+
+    <rng:define name="field">
+        <rng:element name="field">
+            <rng:attribute name="name"/>
+            <rng:optional>
+                <rng:attribute name="widget"/>
+            </rng:optional>
+        </rng:element>
+    </rng:define>
+
+    <rng:start>
+        <rng:element name="gallery">
+            <rng:attribute name="image_field"/>
+            <rng:optional>
+                <rng:attribute name="tooltip_field"/>
+            </rng:optional>
+            <rng:optional>
+                <rng:attribute name="limit"/>
+            </rng:optional>
+            <rng:zeroOrMore>
+                <rng:choice>
+                    <rng:ref name="field"/>
+                    <rng:ref name="tooltip-template"/>
+                </rng:choice>
+            </rng:zeroOrMore>
+        </rng:element>
+    </rng:start>
+
+</rng:grammar>
