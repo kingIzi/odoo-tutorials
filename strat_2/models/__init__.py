@@ -1,1 +1,1 @@
-from . import strat_message
+from . import strat2_link, strat_message

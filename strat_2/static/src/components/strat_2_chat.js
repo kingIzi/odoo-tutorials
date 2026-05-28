@@ -14,6 +14,7 @@ export class Strat2Chat extends Component {
             isLoading: false,
         });
         this.orm = useService("orm");
+        this.action = useService("action");
         this.messageAreaRef = useRef("messageArea");
 
         onPatched(() => {
@@ -68,8 +69,15 @@ export class Strat2Chat extends Component {
 
             const responseText =
                 typeof result === "string" ? result : result.response || "";
+            const changes =
+                typeof result === "object" && result.changes ? result.changes : [];
 
             this.state.messages.push({ is_user: false, message: responseText });
+
+            // Live reload: if the agent modified records, refresh the current view
+            if (changes.length) {
+                this._reloadAffectedViews(changes);
+            }
         } catch (error) {
             this.state.messages.push({
                 is_user: false,
@@ -92,6 +100,37 @@ export class Strat2Chat extends Component {
     quickAction(text) {
         this.state.inputText = text;
         this.sendMessage();
+    }
+
+    /**
+     * Reload the current Odoo view if it was affected by Strat 2's changes.
+     *
+     * For module-link creations/deletions the view arch itself has changed
+     * (notebook page injected or removed), so we need a full page reload
+     * to pick up the new fields.
+     */
+    _reloadAffectedViews(changes) {
+        const linkChanged = changes.some(
+            (c) =>
+                c.model === "strat2.module.link" &&
+                (c.action === "create" || c.action === "delete"),
+        );
+        if (linkChanged) {
+            setTimeout(() => window.location.reload(), 1000);
+            return;
+        }
+
+        // For other data changes, do a soft reload
+        const controller = this.action.currentController;
+        if (!controller) return;
+
+        const currentModel = controller.props?.resModel;
+        if (!currentModel) return;
+
+        const affected = changes.some((c) => c.model === currentModel);
+        if (affected) {
+            this.action.restore(controller.jsId);
+        }
     }
 
     onKeydown(ev) {
