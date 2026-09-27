@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Module Category (app section) -->
+    <record id="module_category_pharmacy_management" model="ir.module.category">
+        <field name="name">Pharmacy Management</field>
+        <field name="sequence" eval="15"/>
+    </record>
+
+    <!-- Group Scope (v20: res.groups are grouped by res.groups.privilege instead of category_id) -->
+    <record model="res.groups.privilege" id="privilege_pharmacy_management">
+        <field name="name">Pharmacy Management</field>
+        <field name="category_id" ref="module_category_pharmacy_management"/>
+    </record>
+
+    <!-- Groups -->
+    <record id="group_pharmacist" model="res.groups">
+        <field name="name">Pharmacist</field>
+        <field name="privilege_id" ref="privilege_pharmacy_management"/>
+        <field name="implied_ids" eval="[(4, ref('point_of_sale.group_pos_user'))]"/>
+        <field name="comment">Sells medication at the register, sees stock levels and alerts, records prescriptions.</field>
+    </record>
+    <record id="group_manager" model="res.groups">
+        <field name="name">Pharmacy Manager</field>
+        <field name="privilege_id" ref="privilege_pharmacy_management"/>
+        <field name="implied_ids" eval="[(4, ref('group_pharmacist')), (4, ref('point_of_sale.group_pos_manager'))]"/>
+        <field name="comment">Owns the drug catalog, branches, staff planning and POS configuration.</field>
+    </record>
+</odoo>

@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- RX KPIs (pivot + graph on prescriptions) -->
+    <record id="view_prescription_pharmacy_pivot" model="ir.ui.view">
+        <field name="name">pharmacy.prescription.pharmacy.pivot</field>
+        <field name="model">pharmacy.prescription</field>
+        <field name="arch" type="xml">
+            <pivot string="RX by Branch">
+                <field name="date_prescribed" interval="month" type="row"/>
+                <field name="pharmacy_id" type="row"/>
+                <field name="doctor_id" type="col"/>
+                <field name="count_field" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="view_prescription_pharmacy_graph" model="ir.ui.view">
+        <field name="name">pharmacy.prescription.pharmacy.graph</field>
+        <field name="model">pharmacy.prescription</field>
+        <field name="arch" type="xml">
+            <graph string="RX by Branch">
+                <field name="pharmacy_id"/>
+                <field name="count_field" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="action_prescription_rx_kpis" model="ir.actions.act_window">
+        <field name="name">RX KPIs</field>
+        <field name="res_model">pharmacy.prescription</field>
+        <field name="view_mode">pivot,graph,list</field>
+        <field name="search_view_id" ref="search_pharmacy_prescription"/>
+    </record>
+
+    <!-- Shortage Alerts -->
+    <record id="view_shortage_alerts_tree" model="ir.ui.view">
+        <field name="name">pharmacy.drug.coverage.shortage.tree</field>
+        <field name="model">pharmacy.drug.coverage</field>
+        <field name="arch" type="xml">
+            <list string="Shortage Alerts" decoration-danger="shortage_flag" create="false" edit="false">
+                <field name="drug_id"/>
+                <field name="pharmacy_id"/>
+                <field name="current_qty" string="On Hand"/>
+                <field name="min_qty" string="Alert Below"/>
+                <field name="shortage_flag"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_shortage_alerts_search" model="ir.ui.view">
+        <field name="name">pharmacy.drug.coverage.shortage.search</field>
+        <field name="model">pharmacy.drug.coverage</field>
+        <field name="arch" type="xml">
+            <search string="Shortage Alerts">
+                <field name="drug_id"/>
+                <field name="pharmacy_id"/>
+                <separator/>
+                <filter string="Drug" name="group_drug" context="{'group_by':'drug_id'}"/>
+                <filter string="Branch" name="group_pharmacy" context="{'group_by':'pharmacy_id'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_pharmacy_shortage_alerts" model="ir.actions.act_window">
+        <field name="name">Shortage Alerts</field>
+        <field name="res_model">pharmacy.drug.coverage</field>
+        <field name="view_mode">list</field>
+        <field name="domain">[('shortage_flag','=',True)]</field>
+        <field name="search_view_id" ref="view_shortage_alerts_search"/>
+    </record>
+
+    <!-- Expiring Lots -->
+    <record id="view_expiring_lots_tree" model="ir.ui.view">
+        <field name="name">stock.lot.expiring.tree</field>
+        <field name="model">stock.lot</field>
+        <field name="arch" type="xml">
+            <list string="Expiring Lots" create="false" decoration-warning="expiry_date != False">
+                <field name="name"/>
+                <field name="product_id"/>
+                <field name="pharmacy_id" string="Branch"/>
+                <field name="expiry_date"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_expiring_lots_search" model="ir.ui.view">
+        <field name="name">stock.lot.expiring.search</field>
+        <field name="model">stock.lot</field>
+        <field name="arch" type="xml">
+            <search string="Expiring Lots">
+                <field name="name"/>
+                <field name="product_id"/>
+                <field name="pharmacy_id" string="Branch"/>
+                <separator/>
+                <filter string="Product" name="group_product" context="{'group_by':'product_id'}"/>
+                <filter string="Branch" name="group_pharmacy" context="{'group_by':'pharmacy_id'}"/>
+                <filter string="Expiry" name="group_expiry" context="{'group_by':'expiry_date:month'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_pharmacy_expiring_lots_from_branch" model="ir.actions.act_window">
+        <field name="name">Expiring Lots</field>
+        <field name="res_model">stock.lot</field>
+        <field name="view_mode">list</field>
+        <field name="domain">[('expiry_date','!=',False)]</field>
+        <field name="search_view_id" ref="view_expiring_lots_search"/>
+    </record>
+
+    <!-- Availability Report -->
+    <record id="view_availability_report_tree" model="ir.ui.view">
+        <field name="name">pharmacy.resource.availability.report.tree</field>
+        <field name="model">pharmacy.resource.availability</field>
+        <field name="arch" type="xml">
+            <list string="Availability Report" create="false">
+                <field name="date"/>
+                <field name="user_id" string="Staff"/>
+                <field name="resource_type"/>
+                <field name="pharmacy_id" string="Branch"/>
+                <field name="start_time" widget="float_time"/>
+                <field name="end_time" widget="float_time"/>
+                <field name="capacity"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_availability_report_search" model="ir.ui.view">
+        <field name="name">pharmacy.resource.availability.report.search</field>
+        <field name="model">pharmacy.resource.availability</field>
+        <field name="arch" type="xml">
+            <search string="Availability Report">
+                <field name="user_id" string="Staff"/>
+                <field name="pharmacy_id" string="Branch"/>
+                <field name="date"/>
+                <filter string="Published Only" name="filter_published" domain="[('state','=','published')]"/>
+                <separator/>
+                <filter string="Staff" name="group_user" context="{'group_by':'user_id'}"/>
+                <filter string="Branch" name="group_pharmacy" context="{'group_by':'pharmacy_id'}"/>
+                <filter string="Date" name="group_date" context="{'group_by':'date:week'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_availability_report" model="ir.actions.act_window">
+        <field name="name">Availability Report</field>
+        <field name="res_model">pharmacy.resource.availability</field>
+        <field name="view_mode">list</field>
+        <field name="search_view_id" ref="view_availability_report_search"/>
+    </record>
+</odoo>

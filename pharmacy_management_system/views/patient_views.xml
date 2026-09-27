@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Patients: res.partner records flagged as patients -->
+    <record id="view_res_partner_patient_search" model="ir.ui.view">
+        <field name="name">res.partner.patient.search</field>
+        <field name="model">res.partner</field>
+        <field name="arch" type="xml">
+            <search string="Patients">
+                <field name="name"/>
+                <field name="medical_record_no"/>
+                <field name="phone"/>
+                <filter string="Patients" name="filter_patients" domain="[('is_patient','=',True)]"/>
+                <separator/>
+                <filter string="Preferred Branch" name="group_pharmacy" context="{'group_by':'preferred_pharmacy_id'}"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Light pharmacy page on the contact form -->
+    <record id="view_res_partner_patient_form" model="ir.ui.view">
+        <field name="name">res.partner.patient.form</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Pharmacy" name="page_pharmacy_patient">
+                    <field name="is_patient" invisible="1"/>
+                    <field name="is_doctor" invisible="1"/>
+                    <group>
+                        <group string="Patient Details" name="patient_details" invisible="not is_patient">
+                            <field name="is_patient"/>
+                            <field name="medical_record_no"/>
+                            <field name="dob"/>
+                            <field name="gender"/>
+                            <field name="blood_type"/>
+                            <field name="allergy_note"/>
+                            <field name="chronic_conditions"/>
+                            <field name="preferred_pharmacy_id" string="Preferred Branch"/>
+                            <field name="loyalty_card"/>
+                        </group>
+                        <group string="Prescriber Details" name="doctor_details" invisible="not is_doctor">
+                            <field name="is_doctor"/>
+                            <field name="license_number"/>
+                            <field name="specialty"/>
+                            <field name="default_pharmacy_id" string="Default Branch"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_res_partner_patient" model="ir.actions.act_window">
+        <field name="name">Patients</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="domain">[('is_patient','=',True)]</field>
+        <field name="search_view_id" ref="view_res_partner_patient_search"/>
+        <field name="context">{'default_is_patient': True}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Add your first patient</p>
+            <p>Patients can be selected as the customer at the register and on prescriptions.</p>
+        </field>
+    </record>
+</odoo>

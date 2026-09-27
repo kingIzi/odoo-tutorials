@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Root -->
+    <menuitem id="menu_pharmacy_root"
+              name="Mama Pharmacy"
+              sequence="10"
+              web_icon="pharmacy_management_system,static/description/icon.png"/>
+
+    <!-- Operations -->
+    <menuitem id="menu_pharmacy_operations"
+              name="Operations"
+              parent="menu_pharmacy_root"
+              sequence="10"/>
+
+    <menuitem id="menu_pharmacy_prescriptions"
+              name="Prescriptions"
+              parent="menu_pharmacy_operations"
+              action="action_pharmacy_prescription"
+              sequence="10"/>
+
+    <menuitem id="menu_pharmacy_patients"
+              name="Patients"
+              parent="menu_pharmacy_operations"
+              action="action_res_partner_patient"
+              sequence="20"/>
+
+    <!-- Catalog -->
+    <menuitem id="menu_pharmacy_catalog"
+              name="Catalog"
+              parent="menu_pharmacy_root"
+              sequence="20"/>
+
+    <menuitem id="menu_pharmacy_drug"
+              name="Drugs"
+              parent="menu_pharmacy_catalog"
+              action="action_pharmacy_drug"
+              sequence="10"/>
+
+    <menuitem id="menu_pharmacy_drug_category"
+              name="Drug Categories"
+              parent="menu_pharmacy_catalog"
+              action="action_pharmacy_drug_category"
+              sequence="20"/>
+
+    <!-- Reporting -->
+    <menuitem id="menu_pharmacy_reporting"
+              name="Reporting"
+              parent="menu_pharmacy_root"
+              sequence="30"/>
+
+    <menuitem id="menu_pharmacy_rx_kpis"
+              name="RX KPIs"
+              parent="menu_pharmacy_reporting"
+              action="action_prescription_rx_kpis"
+              sequence="10"/>
+
+    <menuitem id="menu_pharmacy_shortage_alerts"
+              name="Shortage Alerts"
+              parent="menu_pharmacy_reporting"
+              action="action_pharmacy_shortage_alerts"
+              sequence="20"/>
+
+    <menuitem id="menu_pharmacy_expiring_lots"
+              name="Expiring Lots"
+              parent="menu_pharmacy_reporting"
+              action="action_pharmacy_expiring_lots_from_branch"
+              sequence="30"/>
+
+    <menuitem id="menu_pharmacy_availability_report"
+              name="Availability Report"
+              parent="menu_pharmacy_reporting"
+              action="action_availability_report"
+              sequence="40"/>
+
+    <!-- Configuration -->
+    <menuitem id="menu_pharmacy_setup"
+              name="Configuration"
+              parent="menu_pharmacy_root"
+              sequence="90"/>
+
+    <menuitem id="menu_pharmacy_pharmacy"
+              name="Branches"
+              parent="menu_pharmacy_setup"
+              action="action_pharmacy_pharmacy"
+              sequence="10"/>
+
+    <menuitem id="menu_pharmacy_availability"
+              name="Staff Availability"
+              parent="menu_pharmacy_setup"
+              action="action_pharmacy_resource_availability"
+              sequence="20"/>
+
+    <menuitem id="menu_pharmacy_shift_templates"
+              name="Shift Templates"
+              parent="menu_pharmacy_setup"
+              action="action_pharmacy_shift_template"
+              sequence="30"/>
+
+    <menuitem id="menu_pharmacy_doctors"
+              name="Doctors &amp; Prescribers"
+              parent="menu_pharmacy_setup"
+              action="action_res_partner_doctor"
+              sequence="40"/>
+</odoo>

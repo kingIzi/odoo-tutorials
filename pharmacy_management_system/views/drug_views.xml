@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Drug Categories -->
+    <record id="view_pharmacy_drug_category_tree" model="ir.ui.view">
+        <field name="name">pharmacy.drug.category.tree</field>
+        <field name="model">pharmacy.drug.category</field>
+        <field name="arch" type="xml">
+            <list string="Drug Categories">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="controlled"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_pharmacy_drug_category_form" model="ir.ui.view">
+        <field name="name">pharmacy.drug.category.form</field>
+        <field name="model">pharmacy.drug.category</field>
+        <field name="arch" type="xml">
+            <form string="Drug Category">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code"/>
+                        </group>
+                        <group>
+                            <field name="controlled"/>
+                        </group>
+                    </group>
+                    <field name="description" placeholder="Internal notes about this category..."/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_pharmacy_drug_category" model="ir.actions.act_window">
+        <field name="name">Drug Categories</field>
+        <field name="res_model">pharmacy.drug.category</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Drug List -->
+    <record id="view_pharmacy_drug_tree" model="ir.ui.view">
+        <field name="name">pharmacy.drug.tree</field>
+        <field name="model">pharmacy.drug</field>
+        <field name="arch" type="xml">
+            <list string="Drugs" decoration-danger="has_shortage">
+                <field name="name"/>
+                <field name="drug_category_id"/>
+                <field name="sale_price"/>
+                <field name="stock_qty_available" string="On Hand"/>
+                <field name="is_prescription_required" optional="show"/>
+                <field name="controlled" optional="hide"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="has_shortage" column_invisible="1"/>
+                <field name="has_expiring_lots" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Drug Form -->
+    <record id="view_pharmacy_drug_form" model="ir.ui.view">
+        <field name="name">pharmacy.drug.form</field>
+        <field name="model">pharmacy.drug</field>
+        <field name="arch" type="xml">
+            <form string="Drug">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_stock" type="object" class="oe_stat_button" icon="fa-archive">
+                            <field name="stock_qty_available" widget="statinfo" string="On Hand"/>
+                        </button>
+                        <button name="action_view_expiring_lots" type="object" class="oe_stat_button" icon="fa-hourglass-half"
+                                invisible="expiry_alert_count == 0">
+                            <field name="expiry_alert_count" widget="statinfo" string="Expiring"/>
+                        </button>
+                        <button name="action_view_prescriptions" type="object" class="oe_stat_button" icon="fa-file-text-o">
+                            <field name="prescription_count" widget="statinfo" string="Rx"/>
+                        </button>
+                        <button name="action_view_product" type="object" class="oe_stat_button" icon="fa-cubes"
+                                invisible="not product_id">
+                            <div class="o_stat_info">
+                                <span class="o_stat_text">POS Product</span>
+                            </div>
+                        </button>
+                    </div>
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" invisible="active"/>
+                    <field name="active" invisible="1"/>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="e.g. Paracetamol 500mg"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="sale_price"/>
+                            <field name="drug_category_id"/>
+                            <field name="product_id" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="is_prescription_required"/>
+                            <field name="controlled"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <label for="storage_temp_min" string="Storage Temp (°C)"/>
+                            <div class="o_row">
+                                <field name="storage_temp_min"/> -
+                                <field name="storage_temp_max"/>
+                            </div>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Branch Stock Levels" name="page_coverage">
+                            <field name="coverage_ids">
+                                <list editable="bottom">
+                                    <field name="pharmacy_id"/>
+                                    <field name="current_qty" readonly="1" string="On Hand"/>
+                                    <field name="min_qty" string="Alert Below"/>
+                                    <field name="target_qty" optional="hide"/>
+                                    <field name="max_qty" optional="hide"/>
+                                    <field name="shortage_flag" widget="boolean_toggle" readonly="1"/>
+                                    <field name="has_expiring_lots" optional="hide"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Ingredients" name="page_ingredients">
+                            <field name="ingredient_ids">
+                                <list editable="bottom">
+                                    <field name="name"/>
+                                    <field name="strength"/>
+                                    <field name="unit"/>
+                                    <field name="substitutable"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Drug Kanban -->
+    <record id="view_pharmacy_drug_kanban" model="ir.ui.view">
+        <field name="name">pharmacy.drug.kanban</field>
+        <field name="model">pharmacy.drug</field>
+        <field name="arch" type="xml">
+            <kanban class="pharma-kanban o_kanban_small_column" default_group_by="drug_category_id">
+                <field name="name"/>
+                <field name="sale_price"/>
+                <field name="stock_qty_available"/>
+                <field name="has_shortage"/>
+                <field name="has_expiring_lots"/>
+                <field name="is_prescription_required"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="oe_kanban_card oe_kanban_global_click pharma-card"
+                             t-att-class="record.has_shortage.raw_value ? 'border-danger' : ''">
+                            <div class="o_kanban_record_top">
+                                <div class="o_kanban_record_title">
+                                    <strong><field name="name"/></strong>
+                                </div>
+                            </div>
+                            <div class="o_kanban_record_body">
+                                <span class="badge text-bg-primary"><field name="sale_price"/></span>
+                                <span class="config-tag" t-if="record.is_prescription_required.raw_value">
+                                    <i class="fa fa-file-text-o" title="Prescription required"/> Rx
+                                </span>
+                            </div>
+                            <div class="o_kanban_record_bottom">
+                                <div class="oe_kanban_bottom_left">
+                                    <span class="config-tag">
+                                        <i class="fa fa-archive"/> <field name="stock_qty_available"/>
+                                    </span>
+                                    <span class="config-tag text-bg-danger" t-if="record.has_shortage.raw_value">
+                                        <i class="fa fa-exclamation-triangle"/> Low Stock
+                                    </span>
+                                    <span class="config-tag text-bg-warning" t-if="record.has_expiring_lots.raw_value">
+                                        <i class="fa fa-hourglass-half"/> Expiring
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Drug Search -->
+    <record id="search_pharmacy_drug" model="ir.ui.view">
+        <field name="name">pharmacy.drug.search</field>
+        <field name="model">pharmacy.drug</field>
+        <field name="arch" type="xml">
+            <search string="Drugs">
+                <field name="name"/>
+                <field name="drug_category_id"/>
+                <filter string="Low Stock" name="filter_shortage" domain="[('has_shortage','=',True)]"/>
+                <filter string="Expiring Lots" name="filter_expiring" domain="[('has_expiring_lots','=',True)]"/>
+                <filter string="Prescription Required" name="filter_rx" domain="[('is_prescription_required','=',True)]"/>
+                <filter string="Controlled" name="filter_controlled" domain="[('controlled','=',True)]"/>
+                <separator/>
+                <filter string="Category" name="group_category" context="{'group_by':'drug_category_id'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_pharmacy_drug" model="ir.actions.act_window">
+        <field name="name">Drugs</field>
+        <field name="res_model">pharmacy.drug</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="search_view_id" ref="search_pharmacy_drug"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create your first drug</p>
+            <p>Each drug automatically gets a Point of Sale product at the sale price you set.</p>
+        </field>
+    </record>
+
+    <!-- Branch Stock Levels (standalone view for reporting) -->
+    <record id="view_pharmacy_drug_coverage_tree" model="ir.ui.view">
+        <field name="name">pharmacy.drug.coverage.tree</field>
+        <field name="model">pharmacy.drug.coverage</field>
+        <field name="arch" type="xml">
+            <list string="Branch Stock Levels" decoration-danger="shortage_flag" create="false">
+                <field name="drug_id"/>
+                <field name="pharmacy_id"/>
+                <field name="current_qty" string="On Hand"/>
+                <field name="min_qty" string="Alert Below"/>
+                <field name="shortage_flag" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_pharmacy_drug_coverage_form" model="ir.ui.view">
+        <field name="name">pharmacy.drug.coverage.form</field>
+        <field name="model">pharmacy.drug.coverage</field>
+        <field name="arch" type="xml">
+            <form string="Branch Stock Level">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="drug_id"/>
+                            <field name="pharmacy_id"/>
+                        </group>
+                        <group>
+                            <field name="current_qty" string="On Hand"/>
+                            <field name="min_qty" string="Alert Below"/>
+                            <field name="target_qty"/>
+                            <field name="max_qty"/>
+                            <field name="shortage_flag"/>
+                            <field name="has_expiring_lots"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_pharmacy_drug_coverage" model="ir.actions.act_window">
+        <field name="name">Branch Stock Levels</field>
+        <field name="res_model">pharmacy.drug.coverage</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

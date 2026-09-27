@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Prescription List -->
+    <record id="view_pharmacy_prescription_tree" model="ir.ui.view">
+        <field name="name">pharmacy.prescription.tree</field>
+        <field name="model">pharmacy.prescription</field>
+        <field name="arch" type="xml">
+            <list string="Prescriptions" decoration-info="state == 'draft'" decoration-muted="state == 'cancel'">
+                <field name="name"/>
+                <field name="date_prescribed"/>
+                <field name="patient_id"/>
+                <field name="doctor_id"/>
+                <field name="pharmacy_id" string="Branch"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'done'"
+                       decoration-info="state == 'draft'"
+                       decoration-danger="state == 'cancel'"/>
+                <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Prescription Form -->
+    <record id="view_pharmacy_prescription_form" model="ir.ui.view">
+        <field name="name">pharmacy.prescription.form</field>
+        <field name="model">pharmacy.prescription</field>
+        <field name="arch" type="xml">
+            <form string="Prescription">
+                <header>
+                    <button name="action_mark_done" type="object" string="Mark Done"
+                            invisible="state != 'draft'" class="oe_highlight"/>
+                    <button name="action_open_register" type="object" string="Sell in Register"
+                            invisible="state == 'cancel'" class="btn-secondary"
+                            help="Open the branch register and ring up the medication"/>
+                    <button name="action_cancel" type="object" string="Cancel"
+                            invisible="state != 'draft'"/>
+                    <button name="action_reset_to_draft" type="object" string="Reset to New"
+                            invisible="state != 'cancel'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="patient_id"/>
+                            <field name="doctor_id"/>
+                            <field name="date_prescribed"/>
+                        </group>
+                        <group>
+                            <field name="pharmacy_id" string="Branch"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Drugs" name="page_lines">
+                            <field name="line_ids">
+                                <list editable="bottom">
+                                    <field name="drug_id"/>
+                                    <field name="qty_prescribed" string="Qty"/>
+                                    <field name="uom_id" optional="hide"/>
+                                    <field name="dosage" placeholder="e.g. 1 tablet twice daily"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Attachments" name="page_attachments">
+                            <field name="attachment_ids" widget="many2many_binary"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Prescription Kanban -->
+    <record id="view_pharmacy_prescription_kanban" model="ir.ui.view">
+        <field name="name">pharmacy.prescription.kanban</field>
+        <field name="model">pharmacy.prescription</field>
+        <field name="arch" type="xml">
+            <kanban class="pharma-kanban o_kanban_small_column" default_group_by="state">
+                <field name="name"/>
+                <field name="patient_id"/>
+                <field name="doctor_id"/>
+                <field name="pharmacy_id"/>
+                <field name="date_prescribed"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="oe_kanban_card oe_kanban_global_click pharma-card">
+                            <div class="o_kanban_record_top">
+                                <div class="o_kanban_record_title">
+                                    <strong><field name="name"/></strong>
+                                </div>
+                            </div>
+                            <div class="o_kanban_record_body">
+                                <div><i class="fa fa-user"/> <field name="patient_id"/></div>
+                                <div><i class="fa fa-user-md"/> <field name="doctor_id"/></div>
+                                <div><i class="fa fa-map-marker"/> <field name="pharmacy_id"/></div>
+                            </div>
+                            <div class="o_kanban_record_bottom">
+                                <div class="oe_kanban_bottom_left">
+                                    <span class="config-tag"><field name="date_prescribed"/></span>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Prescription Pivot -->
+    <record id="view_prescription_volume_pivot" model="ir.ui.view">
+        <field name="name">pharmacy.prescription.pivot</field>
+        <field name="model">pharmacy.prescription</field>
+        <field name="arch" type="xml">
+            <pivot string="Prescription Volume">
+                <field name="pharmacy_id" type="row"/>
+                <field name="state" type="col"/>
+                <field name="date_prescribed" interval="month" type="col"/>
+                <field name="count_field" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Prescription Search -->
+    <record id="search_pharmacy_prescription" model="ir.ui.view">
+        <field name="name">pharmacy.prescription.search</field>
+        <field name="model">pharmacy.prescription</field>
+        <field name="arch" type="xml">
+            <search string="Prescriptions">
+                <field name="name"/>
+                <field name="patient_id"/>
+                <field name="doctor_id"/>
+                <field name="pharmacy_id" string="Branch"/>
+                <field name="drug_ids" string="Drug"/>
+                <filter string="New" name="filter_draft" domain="[('state','=','draft')]"/>
+                <filter string="Done" name="filter_done" domain="[('state','=','done')]"/>
+                <separator/>
+                <filter string="Branch" name="group_pharmacy" context="{'group_by':'pharmacy_id'}"/>
+                <filter string="Doctor" name="group_doctor" context="{'group_by':'doctor_id'}"/>
+                <filter string="Prescribed Month" name="group_month" context="{'group_by':'date_prescribed:month'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_pharmacy_prescription" model="ir.actions.act_window">
+        <field name="name">Prescriptions</field>
+        <field name="res_model">pharmacy.prescription</field>
+        <field name="view_mode">kanban,list,form,pivot</field>
+        <field name="search_view_id" ref="search_pharmacy_prescription"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Record a new prescription</p>
+            <p>Log what the doctor prescribed, then use <b>Sell in Register</b> to dispense it at the Point of Sale.</p>
+        </field>
+    </record>
+</odoo>

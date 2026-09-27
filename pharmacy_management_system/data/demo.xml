@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!--
+        Mama Pharmacy demo data (always loaded so the client demo DB is ready).
+        Structural stock (lots + quantities) is seeded by load_demo_stock()
+        at the bottom of this file, which is idempotent.
+    -->
+
+    <!-- One-time purge of stale records from the previous install so the
+         demo pack below loads onto a clean slate (no-op once seeded). -->
+    <function model="pharmacy.pharmacy" name="purge_demo_data" eval="[]"/>
+
+    <!-- POS product category -->
+    <record id="pos_category_medicines" model="pos.category">
+        <field name="name">Medicines</field>
+    </record>
+
+    <!-- Warehouse + branch shelf locations -->
+    <record id="location_mama_top" model="stock.location">
+        <field name="name">Mama Pharmacy</field>
+        <field name="usage">view</field>
+        <field name="company_id" ref="base.main_company"/>
+    </record>
+    <record id="warehouse_mama" model="stock.warehouse">
+        <field name="name">Mama Pharmacy WH</field>
+        <field name="code">MPW</field>
+        <field name="view_location_id" ref="location_mama_top"/>
+    </record>
+    <record id="location_branch_main" model="stock.location">
+        <field name="name">Main Branch Shelves</field>
+        <field name="usage">internal</field>
+        <field name="location_id" ref="location_mama_top"/>
+        <field name="company_id" ref="base.main_company"/>
+    </record>
+    <record id="location_branch_westside" model="stock.location">
+        <field name="name">Westside Branch Shelves</field>
+        <field name="usage">internal</field>
+        <field name="location_id" ref="location_mama_top"/>
+        <field name="company_id" ref="base.main_company"/>
+    </record>
+    <record id="location_branch_eastside" model="stock.location">
+        <field name="name">Eastside Branch Shelves</field>
+        <field name="usage">internal</field>
+        <field name="location_id" ref="location_mama_top"/>
+        <field name="company_id" ref="base.main_company"/>
+    </record>
+
+    <!-- Branches (each auto-provisions its POS register) -->
+    <record id="pharmacy_main" model="pharmacy.pharmacy">
+        <field name="name">Mama Pharmacy - Main</field>
+        <field name="code">MP1</field>
+        <field name="warehouse_id" ref="warehouse_mama"/>
+        <field name="location_id" ref="location_branch_main"/>
+        <field name="compliance_cert_no">PPB-MP-0117</field>
+    </record>
+    <record id="pharmacy_westside" model="pharmacy.pharmacy">
+        <field name="name">Mama Pharmacy - Westside</field>
+        <field name="code">MP2</field>
+        <field name="warehouse_id" ref="warehouse_mama"/>
+        <field name="location_id" ref="location_branch_westside"/>
+        <field name="compliance_cert_no">PPB-MP-0118</field>
+    </record>
+    <record id="pharmacy_eastside" model="pharmacy.pharmacy">
+        <field name="name">Mama Pharmacy - Eastside</field>
+        <field name="code">MP3</field>
+        <field name="warehouse_id" ref="warehouse_mama"/>
+        <field name="location_id" ref="location_branch_eastside"/>
+        <field name="compliance_cert_no">PPB-MP-0119</field>
+    </record>
+
+    <!-- Demo users -->
+    <record id="user_demo_manager" model="res.users">
+        <field name="name">Demo Manager</field>
+        <field name="login">demo_manager</field>
+        <field name="email">manager@mamapharmacy.example</field>
+        <field name="group_ids" eval="[(4, ref('base.group_user')), (4, ref('group_manager'))]"/>
+    </record>
+    <record id="user_demo_pharmacist" model="res.users">
+        <field name="name">Demo Pharmacist</field>
+        <field name="login">demo_pharmacist</field>
+        <field name="email">pharmacist@mamapharmacy.example</field>
+        <field name="group_ids" eval="[(4, ref('base.group_user')), (4, ref('group_pharmacist'))]"/>
+    </record>
+    <function model="res.users" name="write" eval="[[ref('user_demo_manager'), ref('user_demo_pharmacist')], {'password': 'demo1234'}]"/>
+
+    <!-- Doctors / prescribers -->
+    <record id="partner_doctor_alice" model="res.partner">
+        <field name="name">Dr. Alice Kariuki</field>
+        <field name="is_doctor">True</field>
+        <field name="license_number">MED-10023</field>
+        <field name="specialty">General Practice</field>
+        <field name="default_pharmacy_id" ref="pharmacy_main"/>
+        <field name="email">alice.kariuki@clinic.example</field>
+        <field name="phone">+254 700 100 100</field>
+    </record>
+    <record id="partner_doctor_brian" model="res.partner">
+        <field name="name">Dr. Brian Omondi</field>
+        <field name="is_doctor">True</field>
+        <field name="license_number">MED-20481</field>
+        <field name="specialty">Pediatrics</field>
+        <field name="default_pharmacy_id" ref="pharmacy_main"/>
+        <field name="email">brian.omondi@clinic.example</field>
+    </record>
+    <record id="partner_doctor_christine" model="res.partner">
+        <field name="name">Dr. Christine Naliaka</field>
+        <field name="is_doctor">True</field>
+        <field name="license_number">MED-30775</field>
+        <field name="specialty">Internal Medicine</field>
+        <field name="email">christine.naliaka@clinic.example</field>
+    </record>
+
+    <!-- Patients -->
+    <record id="partner_patient_grace" model="res.partner">
+        <field name="name">Grace Wanjiku</field>
+        <field name="is_patient">True</field>
+        <field name="medical_record_no">MRN-000241</field>
+        <field name="preferred_pharmacy_id" ref="pharmacy_main"/>
+        <field name="phone">+254 711 222 333</field>
+    </record>
+    <record id="partner_patient_john" model="res.partner">
+        <field name="name">John Otieno</field>
+        <field name="is_patient">True</field>
+        <field name="medical_record_no">MRN-000242</field>
+        <field name="allergy_note">Penicillin allergy - avoid Amoxicillin.</field>
+    </record>
+    <record id="partner_patient_mary" model="res.partner">
+        <field name="name">Mary Achieng</field>
+        <field name="is_patient">True</field>
+        <field name="medical_record_no">MRN-000243</field>
+        <field name="blood_type">o+</field>
+    </record>
+    <record id="partner_patient_peter" model="res.partner">
+        <field name="name">Peter Kamau</field>
+        <field name="is_patient">True</field>
+        <field name="medical_record_no">MRN-000244</field>
+    </record>
+    <record id="partner_patient_lucy" model="res.partner">
+        <field name="name">Lucy Njeri</field>
+        <field name="is_patient">True</field>
+        <field name="medical_record_no">MRN-000245</field>
+        <field name="chronic_conditions">Type 2 diabetes</field>
+    </record>
+    <record id="partner_patient_samuel" model="res.partner">
+        <field name="name">Samuel Mwangi</field>
+        <field name="is_patient">True</field>
+        <field name="medical_record_no">MRN-000246</field>
+    </record>
+
+    <!-- Drug catalog (POS products are auto-created) -->
+    <record id="drug_paracetamol" model="pharmacy.drug">
+        <field name="name">Paracetamol 500mg</field>
+        <field name="sale_price">5.0</field>
+    </record>
+    <record id="drug_ibuprofen" model="pharmacy.drug">
+        <field name="name">Ibuprofen 400mg</field>
+        <field name="sale_price">8.0</field>
+    </record>
+    <record id="drug_amoxicillin" model="pharmacy.drug">
+        <field name="name">Amoxicillin 500mg</field>
+        <field name="sale_price">15.0</field>
+        <field name="is_prescription_required">True</field>
+    </record>
+    <record id="drug_artemether" model="pharmacy.drug">
+        <field name="name">Artemether/Lumefantrine 20/120mg</field>
+        <field name="sale_price">22.0</field>
+        <field name="is_prescription_required">True</field>
+    </record>
+    <record id="drug_metronidazole" model="pharmacy.drug">
+        <field name="name">Metronidazole 400mg</field>
+        <field name="sale_price">12.0</field>
+        <field name="is_prescription_required">True</field>
+    </record>
+    <record id="drug_cetirizine" model="pharmacy.drug">
+        <field name="name">Cetirizine 10mg</field>
+        <field name="sale_price">6.0</field>
+    </record>
+    <record id="drug_omeprazole" model="pharmacy.drug">
+        <field name="name">Omeprazole 20mg</field>
+        <field name="sale_price">18.0</field>
+    </record>
+    <record id="drug_metformin" model="pharmacy.drug">
+        <field name="name">Metformin 500mg</field>
+        <field name="sale_price">14.0</field>
+        <field name="is_prescription_required">True</field>
+    </record>
+    <record id="drug_ors" model="pharmacy.drug">
+        <field name="name">ORS Sachets (Low Sodium)</field>
+        <field name="sale_price">3.0</field>
+    </record>
+    <record id="drug_zinc" model="pharmacy.drug">
+        <field name="name">Zinc Sulphate 20mg</field>
+        <field name="sale_price">4.0</field>
+    </record>
+
+    <!-- Branch stock levels (shortage alerts demo: Eastside is running low) -->
+    <record id="coverage_paracetamol_main" model="pharmacy.drug.coverage">
+        <field name="drug_id" ref="drug_paracetamol"/>
+        <field name="pharmacy_id" ref="pharmacy_main"/>
+        <field name="min_qty">80</field>
+        <field name="target_qty">200</field>
+        <field name="max_qty">400</field>
+    </record>
+    <record id="coverage_amoxicillin_main" model="pharmacy.drug.coverage">
+        <field name="drug_id" ref="drug_amoxicillin"/>
+        <field name="pharmacy_id" ref="pharmacy_main"/>
+        <field name="min_qty">60</field>
+        <field name="target_qty">150</field>
+    </record>
+    <record id="coverage_artemether_main" model="pharmacy.drug.coverage">
+        <field name="drug_id" ref="drug_artemether"/>
+        <field name="pharmacy_id" ref="pharmacy_main"/>
+        <field name="min_qty">50</field>
+        <field name="target_qty">120</field>
+    </record>
+    <record id="coverage_artemether_eastside" model="pharmacy.drug.coverage">
+        <field name="drug_id" ref="drug_artemether"/>
+        <field name="pharmacy_id" ref="pharmacy_eastside"/>
+        <field name="min_qty">80</field>
+        <field name="target_qty">150</field>
+    </record>
+    <record id="coverage_metformin_eastside" model="pharmacy.drug.coverage">
+        <field name="drug_id" ref="drug_metformin"/>
+        <field name="pharmacy_id" ref="pharmacy_eastside"/>
+        <field name="min_qty">90</field>
+        <field name="target_qty">180</field>
+    </record>
+    <record id="coverage_ibuprofen_westside" model="pharmacy.drug.coverage">
+        <field name="drug_id" ref="drug_ibuprofen"/>
+        <field name="pharmacy_id" ref="pharmacy_westside"/>
+        <field name="min_qty">30</field>
+        <field name="target_qty">100</field>
+    </record>
+    <record id="coverage_ors_westside" model="pharmacy.drug.coverage">
+        <field name="drug_id" ref="drug_ors"/>
+        <field name="pharmacy_id" ref="pharmacy_westside"/>
+        <field name="min_qty">40</field>
+        <field name="target_qty">120</field>
+    </record>
+
+    <!-- Sample prescriptions -->
+    <record id="rx_grace" model="pharmacy.prescription">
+        <field name="patient_id" ref="partner_patient_grace"/>
+        <field name="doctor_id" ref="partner_doctor_alice"/>
+        <field name="pharmacy_id" ref="pharmacy_main"/>
+        <field name="date_prescribed" eval="datetime.now().date()"/>
+        <field name="state">done</field>
+        <field name="line_ids" eval="[
+            (0, 0, {'drug_id': ref('drug_paracetamol'), 'qty_prescribed': 2, 'dosage': '1 tablet every 8 hours'}),
+            (0, 0, {'drug_id': ref('drug_ors'), 'qty_prescribed': 4, 'dosage': '1 sachet after every loose stool'}),
+        ]"/>
+    </record>
+    <record id="rx_lucy" model="pharmacy.prescription">
+        <field name="patient_id" ref="partner_patient_lucy"/>
+        <field name="doctor_id" ref="partner_doctor_christine"/>
+        <field name="pharmacy_id" ref="pharmacy_main"/>
+        <field name="date_prescribed" eval="datetime.now().date()"/>
+        <field name="state">done</field>
+        <field name="line_ids" eval="[
+            (0, 0, {'drug_id': ref('drug_metformin'), 'qty_prescribed': 3, 'dosage': '1 tablet twice daily after meals'}),
+        ]"/>
+    </record>
+    <record id="rx_peter" model="pharmacy.prescription">
+        <field name="patient_id" ref="partner_patient_peter"/>
+        <field name="doctor_id" ref="partner_doctor_alice"/>
+        <field name="pharmacy_id" ref="pharmacy_westside"/>
+        <field name="date_prescribed" eval="datetime.now().date()"/>
+        <field name="state">draft</field>
+        <field name="line_ids" eval="[
+            (0, 0, {'drug_id': ref('drug_artemether'), 'qty_prescribed': 1, 'dosage': 'Full course as directed'}),
+            (0, 0, {'drug_id': ref('drug_zinc'), 'qty_prescribed': 1}),
+        ]"/>
+    </record>
+
+    <!-- Staff availability -->
+    <record id="avail_pharmacist_main_today" model="pharmacy.resource.availability">
+        <field name="user_id" ref="user_demo_pharmacist"/>
+        <field name="resource_type">pharmacist</field>
+        <field name="pharmacy_id" ref="pharmacy_main"/>
+        <field name="date" eval="datetime.now().date()"/>
+        <field name="start_time">8.0</field>
+        <field name="end_time">16.0</field>
+        <field name="state">published</field>
+    </record>
+    <record id="avail_pharmacist_westside_tomorrow" model="pharmacy.resource.availability">
+        <field name="user_id" ref="user_demo_pharmacist"/>
+        <field name="resource_type">pharmacist</field>
+        <field name="pharmacy_id" ref="pharmacy_westside"/>
+        <field name="date" eval="(datetime.now().date() + relativedelta(days=1)).strftime('%Y-%m-%d')"/>
+        <field name="start_time">8.0</field>
+        <field name="end_time">13.0</field>
+        <field name="state">published</field>
+    </record>
+    <record id="avail_pharmacist_main_tomorrow" model="pharmacy.resource.availability">
+        <field name="user_id" ref="user_demo_pharmacist"/>
+        <field name="resource_type">pharmacist</field>
+        <field name="pharmacy_id" ref="pharmacy_main"/>
+        <field name="date" eval="(datetime.now().date() + relativedelta(days=1)).strftime('%Y-%m-%d')"/>
+        <field name="start_time">13.0</field>
+        <field name="end_time">18.0</field>
+        <field name="state">published</field>
+    </record>
+    <record id="avail_manager_eastside_today" model="pharmacy.resource.availability">
+        <field name="user_id" ref="user_demo_manager"/>
+        <field name="resource_type">pharmacist</field>
+        <field name="pharmacy_id" ref="pharmacy_eastside"/>
+        <field name="date" eval="datetime.now().date()"/>
+        <field name="start_time">9.0</field>
+        <field name="end_time">17.0</field>
+        <field name="state">published</field>
+    </record>
+
+    <!-- Seed lots + on-hand quantities (idempotent) -->
+    <function model="pharmacy.pharmacy" name="load_demo_stock" eval="[]"/>
+</odoo>

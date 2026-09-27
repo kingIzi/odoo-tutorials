@@ -1,0 +1,1276 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Pharmacy Management - User Guide</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            background: linear-gradient(135deg, #95ce3d 0%, #7ab82e 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            margin: -20px -20px 40px -20px;
+            border-bottom: 4px solid #6a9a25;
+        }
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.95;
+        }
+        .toc {
+            background-color: #f8f9fa;
+            border-left: 4px solid #95ce3d;
+            padding: 20px;
+            margin-bottom: 40px;
+            border-radius: 5px;
+        }
+        .toc h2 {
+            color: #431436;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+        .toc ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        .toc li {
+            margin: 8px 0;
+        }
+        .toc a {
+            color: #95ce3d;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        .toc a:hover {
+            color: #7ab82e;
+            text-decoration: underline;
+        }
+        .section {
+            margin-bottom: 50px;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .section h2 {
+            color: #431436;
+            font-size: 2em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #95ce3d;
+        }
+        .section h3 {
+            color: #555;
+            font-size: 1.5em;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        .section h4 {
+            color: #666;
+            font-size: 1.2em;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        .step {
+            background-color: #f8f9fa;
+            padding: 15px 20px;
+            margin: 15px 0;
+            border-left: 4px solid #95ce3d;
+            border-radius: 4px;
+        }
+        .step-number {
+            display: inline-block;
+            background-color: #95ce3d;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .feature-box {
+            background-color: #e8f5e9;
+            border: 1px solid #95ce3d;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        .feature-box h4 {
+            color: #431436;
+            margin-top: 0;
+        }
+        .warning-box {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .info-box {
+            background-color: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        ul, ol {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+        li {
+            margin: 8px 0;
+        }
+        .workflow-diagram {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .workflow-step {
+            display: inline-block;
+            background-color: #95ce3d;
+            color: white;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 5px;
+            font-weight: 500;
+        }
+        .arrow {
+            display: inline-block;
+            color: #95ce3d;
+            font-size: 1.5em;
+            margin: 0 5px;
+        }
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: #95ce3d;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 50px;
+            text-decoration: none;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            transition: background-color 0.3s;
+        }
+        .back-to-top:hover {
+            background-color: #7ab82e;
+        }
+        .screenshot-section {
+            background-color: #f8f9fa;
+            border: 2px dashed #95ce3d;
+            border-radius: 8px;
+            padding: 30px;
+            margin: 30px 0;
+            text-align: center;
+        }
+        .screenshot-section h4 {
+            color: #431436;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        .screenshot-placeholder {
+            background-color: #e8f5e9;
+            border: 2px solid #95ce3d;
+            border-radius: 8px;
+            padding: 40px;
+            margin: 20px auto;
+            max-width: 800px;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .screenshot-placeholder img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 15px;
+        }
+        .screenshot-placeholder .placeholder-text {
+            color: #666;
+            font-style: italic;
+            margin-top: 15px;
+        }
+        .screenshot-caption {
+            color: #555;
+            font-size: 0.9em;
+            margin-top: 10px;
+            font-style: italic;
+        }
+        @media print {
+            .back-to-top {
+                display: none;
+            }
+            .screenshot-section {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fa fa-book"></i> Pharmacy Management User Guide</h1>
+            <p>Complete guide to using the Hospital Multi-Branch Pharmacy System</p>
+        </div>
+
+        <div class="toc">
+            <h2>Table of Contents</h2>
+            <ul>
+                <li><a href="#getting-started">1. Getting Started</a></li>
+                <li><a href="#setup">2. Initial Setup</a></li>
+                <li><a href="#hospitals-pharmacies">3. Hospitals & Pharmacies</a></li>
+                <li><a href="#patients-doctors">4. Patients & Doctors</a></li>
+                <li><a href="#drugs">5. Drug Management</a></li>
+                <li><a href="#prescriptions">6. Prescription Workflow</a></li>
+                <li><a href="#insurance">7. Insurance Claims</a></li>
+                <li><a href="#controlled">8. Controlled Drug Logging</a></li>
+                <li><a href="#treatments">9. Treatment Management</a></li>
+                <li><a href="#inventory">10. Inventory & Stock</a></li>
+                <li><a href="#portal">11. Portal Requests</a></li>
+                <li><a href="#reporting">12. Reporting & Analytics</a></li>
+                <li><a href="#tips">13. Tips & Best Practices</a></li>
+            </ul>
+        </div>
+
+        <!-- Getting Started -->
+        <div class="section" id="getting-started">
+            <h2>1. Getting Started</h2>
+            <p>The Pharmacy Management module provides a comprehensive solution for managing hospital pharmacy operations. This guide will walk you through all the features and workflows.</p>
+            
+            <div class="info-box">
+                <strong><i class="fa fa-info-circle"></i> Note:</strong> This module requires Odoo 17.0 and depends on the following modules: base, contacts, mail, product, stock, stock_account, account, sale_management.
+            </div>
+
+            <h3>Key Concepts</h3>
+            <ul>
+                <li><strong>Hospital:</strong> The main entity representing a healthcare facility</li>
+                <li><strong>Pharmacy Branch:</strong> Individual pharmacy locations within a hospital</li>
+                <li><strong>Prescription:</strong> Doctor's order for medications</li>
+                <li><strong>Treatment:</strong> Patient treatment episode</li>
+                <li><strong>Controlled Log:</strong> Compliance tracking for controlled substances</li>
+            </ul>
+
+            <div class="screenshot-section">
+                <h4><i class="fa fa-camera"></i> Screenshot: Module Overview</h4>
+                <div class="screenshot-placeholder">
+                    <img src="main_screenshot.png" alt="Pharmacy Management Module Overview" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <div class="placeholder-text" style="display:none;">
+                        <i class="fa fa-image" style="font-size: 48px; color: #95ce3d; margin-bottom: 15px;"></i><br>
+                        Screenshot: Main pharmacy management interface
+                    </div>
+                    <p class="screenshot-caption">Overview of the Pharmacy Management module main interface and menu structure</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Initial Setup -->
+        <div class="section" id="setup">
+            <h2>2. Initial Setup</h2>
+            
+            <h3>2.1 Install the Module</h3>
+            <div class="step">
+                <span class="step-number">1</span>
+                <strong>Go to Apps:</strong> Navigate to Apps menu in Odoo
+            </div>
+            <div class="step">
+                <span class="step-number">2</span>
+                <strong>Search:</strong> Search for "Pharmacy Management"
+            </div>
+            <div class="step">
+                <span class="step-number">3</span>
+                <strong>Install:</strong> Click Install button
+            </div>
+            <div class="step">
+                <span class="step-number">4</span>
+                <strong>Load Demo Data:</strong> Check "Load Demo Data" if you want sample data for testing
+            </div>
+
+            <div class="screenshot-section">
+                <h4><i class="fa fa-camera"></i> Screenshot: Module Installation</h4>
+                <div class="screenshot-placeholder">
+                    <img src="pharmacy_management_1.png" alt="Module Installation" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <div class="placeholder-text" style="display:none;">
+                        <i class="fa fa-image" style="font-size: 48px; color: #95ce3d; margin-bottom: 15px;"></i><br>
+                        Screenshot: Apps menu showing Pharmacy Management module with Install button
+                    </div>
+                    <p class="screenshot-caption">Apps menu showing Pharmacy Management module ready for installation</p>
+                </div>
+            </div>
+
+            <h3>2.2 Configure User Defaults</h3>
+            <div class="step">
+                <span class="step-number">1</span>
+                <strong>Go to Settings → Users & Companies → Users</strong>
+            </div>
+            <div class="step">
+                <span class="step-number">2</span>
+                <strong>Select a user</strong> and set their <strong>Default Hospital</strong>
+            </div>
+            <div class="step">
+                <span class="step-number">3</span>
+                <strong>Set Hospital Access:</strong> Define which hospitals the user can access
+            </div>
+
+            <div class="feature-box">
+                <h4><i class="fa fa-lightbulb-o"></i> Pro Tip</h4>
+                <p>Setting default hospitals for users will automatically pre-fill hospital fields when creating new records, saving time and reducing errors.</p>
+            </div>
+
+            <div class="screenshot-section">
+                <h4><i class="fa fa-camera"></i> Screenshot: User Default Hospital Configuration</h4>
+                <div class="screenshot-placeholder">
+                    <img src="screenshot_user_defaults.png" alt="User Default Hospital Configuration" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <div class="placeholder-text" style="display:none;">
+                        <i class="fa fa-image" style="font-size: 48px; color: #95ce3d; margin-bottom: 15px;"></i><br>
+                        Screenshot: Settings → Users → Default Hospital field
+                    </div>
+                    <p class="screenshot-caption">Configure default hospital for users in Settings → Users & Companies → Users</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hospitals & Pharmacies -->
+        <div class="section" id="hospitals-pharmacies">
+            <h2>3. Hospitals & Pharmacies</h2>
+            
+            <h3>3.1 Creating a Hospital</h3>
+            <div class="step">
+                <span class="step-number">1</span>
+                <strong>Navigate:</strong> Go to <span class="code">Pharmacy → Setup → Hospitals</span>
+            </div>
+            <div class="step">
+                <span class="step-number">2</span>
+                <strong>Create:</strong> Click Create button
+            </div>
+            <div class="step">
+                <span class="step-number">3</span>
+                <strong>Fill Required Fields:</strong>
+                <ul>
+                    <li><strong>Name:</strong> Hospital name (e.g., "City General Hospital")</li>
+                    <li><strong>Code:</strong> Unique hospital code</li>
+                    <li><strong>Company:</strong> Select the company (required)</li>
+                    <li><strong>Address:</strong> Link to a contact/partner for address</li>
+                    <li><strong>Default Warehouse:</strong> Select warehouse for stock operations</li>
+                </ul>
+            </div>
+            <div class="step">
+                <span class="step-number">4</span>
+                <strong>Save:</strong> Click Save
+            </div>
+
+            <h3>3.2 Creating Pharmacy Branches</h3>
+            <div class="step">
+                <span class="step-number">1</span>
+                <strong>Navigate:</strong> Go to <span class="code">Pharmacy → Setup → Pharmacies</span>
+            </div>
+            <div class="step">
+                <span class="step-number">2</span>
+                <strong>Create:</strong> Click Create button
+            </div>
+            <div class="step">
+                <span class="step-number">3</span>
+                <strong>Fill Required Fields:</strong>
+                <ul>
+                    <li><strong>Hospital:</strong> Select parent hospital</li>
+                    <li><strong>Name:</strong> Pharmacy branch name</li>
+                    <li><strong>Code:</strong> Unique code (must be unique per company)</li>
+                    <li><strong>Company:</strong> Select company</li>
+                    <li><strong>Warehouse:</strong> Select warehouse (location auto-derived)</li>
+                    <li><strong>Pricelist:</strong> Default pricelist for sales</li>
+                </ul>
+            </div>
+
+            <div class="warning-box">
+                <strong><i class="fa fa-exclamation-triangle"></i> Important:</strong> Each pharmacy must have a warehouse configured to enable stock operations like creating pickings and dispensing prescriptions.
+            </div>
+
+            <div class="screenshot-section">
+                <h4><i class="fa fa-camera"></i> Screenshot: Hospital Form View</h4>
+                <div class="screenshot-placeholder">
+                    <img src="screenshot_hospital_form.png" alt="Hospital Form View" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <div class="placeholder-text" style="display:none;">
+                        <i class="fa fa-image" style="font-size: 48px; color: #95ce3d; margin-bottom: 15px;"></i><br>
+                        Screenshot: Hospital creation form with all fields
+                    </div>
+                    <p class="screenshot-caption">Hospital form showing name, code, company, warehouse, and smart buttons</p>
+                </div>
+            </div>
+
+            <div class="screenshot-section">
+                <h4><i class="fa fa-camera"></i> Screenshot: Pharmacy Kanban View</h4>
+                <div class="screenshot-placeholder">
+                    <img src="screenshot_pharmacy_kanban.png" alt="Pharmacy Kanban View" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <div class="placeholder-text" style="display:none;">
+                        <i class="fa fa-image" style="font-size: 48px; color: #95ce3d; margin-bottom: 15px;"></i><br>
+                        Screenshot: Pharmacy kanban cards showing KPIs
+                    </div>
+                    <p class="screenshot-caption">Pharmacy kanban view displaying prescriptions today, expiring lots, and shortage alerts</p>
+                </div>
+            </div>
+
+            <h3>3.3 Viewing KPIs</h3>
+            <p>Each pharmacy displays real-time KPIs on the kanban view:</p>
+            <ul>
+                <li><strong>Prescriptions Today:</strong> Number of prescriptions created today</li>
+                <li><strong>Expiring Lots:</strong> Stock lots expiring in next 30 days</li>
+                <li><strong>Shortage Alerts:</strong> Drugs below minimum stock threshold</li>
+            </ul>
+        </div>
+
+        <!-- Patients & Doctors -->
+        <div class="section" id="patients-doctors">
+            <h2>4. Patients & Doctors</h2>
+            
+            <h3>4.1 Creating Patients</h3>
+            <div class="step">
+                <span class="step-number">1</span>
+                <strong>Navigate:</strong> Go to <span class="code">Pharmacy → Operations → Patients</span>
+            </div>
+            <div class="step">
+                <span class="step-number">2</span>
+                <strong>Create:</strong> Click Create button
+            </div>
+            <div class="step">
+                <span class="step-number">3</span>
+                <strong>Fill Patient Information:</strong>
+                <ul>
+                    <li><strong>Name:</strong> Patient full name</li>
+                    <li><strong>Patient Code:</strong> Auto-generated (unique per company)</li>
+                    <li><strong>Patient Type:</strong> Adult or Pediatric</li>
+                    <li><strong>Gender:</strong> Male/Female/Other</li>
+                    <li><strong>Birth Date:</strong> Date of birth</li>
+                    <li><strong>Contact:</strong> Link to res.partner for contact details</li>
+                    <li><strong>Insurance:</strong> Insurance company</li>
+                    <li><strong>Blood Type:</strong> For medical records</li>
+                    <li><strong>Allergy Note:</strong> Important allergy information</li>
+                </ul>
+            </div>
+
+            <h3>4.2 Setting Up Doctors/Prescribers</h3>
+            <div class="step">
+                <span class="step-number">1</span>
+                <strong>Navigate:</strong> Go to <span class="code">Pharmacy → Setup → Doctors & Prescribers</span>
+            </div>
+            <div class="step">
+                <span class="step-number">2</span>
+                <strong>Create or Edit Contact:</strong> Create new contact or edit existing
+            </div>
+            <div class="step">
+                <span class="step-number">3</span>
+                <strong>Enable Doctor Flag:</strong> Check <span class="code">Is Doctor</span> checkbox
+            </div>
+            <div class="step">
+                <span class="step-number">4</span>
+                <strong>Fill Doctor Information:</strong>
+                <ul>
+                    <li><strong>License Number:</strong> Medical license (unique per company)</li>
+                    <li><strong>Specialty:</strong> Medical specialty</li>
+                    <li><strong>Default Pharmacy:</strong> Default pharmacy for prescriptions</li>
+                </ul>
+            </div>
+
+            <div class="feature-box">
+                <h4><i class="fa fa-star"></i> Smart Features</h4>
+                <p>The system automatically tracks:</p>
+                <ul>
+                    <li>Total prescriptions written by each doctor</li>
+                    <li>Prescriptions at doctor's default pharmacy</li>
+                    <li>Patient prescription and treatment history</li>
+                </ul>
+            </div>
+
+            <div class="screenshot-section">
+                <h4><i class="fa fa-camera"></i> Screenshot: Patient Kanban View</h4>
+                <div class="screenshot-placeholder">
+                    <img src="screenshot_patient_kanban.png" alt="Patient Kanban View" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <div class="placeholder-text" style="display:none;">
+                        <i class="fa fa-image" style="font-size: 48px; color: #95ce3d; margin-bottom: 15px;"></i><br>
+                        Screenshot: Patient kanban cards grouped by patient type
+                    </div>
+                    <p class="screenshot-caption">Patient kanban view showing patient information, treatment count, and prescription count</p>
+                </div>
+            </div>
+
+            <div class="screenshot-section">
+                <h4><i class="fa fa-camera"></i> Screenshot: Doctor Form View</h4>
+                <div class="screenshot-placeholder">
+                    <img src="screenshot_doctor_form.png" alt="Doctor Form View" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <div class="placeholder-text" style="display:none;">
+                        <i class="fa fa-image" style="font-size: 48px; color: #95ce3d; margin-bottom: 15px;"></i><br>
+                        Screenshot: Doctor contact form with license number and specialty
+                    </div>
+                    <p class="screenshot-caption">Doctor form showing is_doctor flag, license number, specialty, and default pharmacy</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Drug Management -->
+        <div class="section" id="drugs">
+            <h2>5. Drug Management</h2>
+            
+            <h3>5.1 Creating Drug Categories</h3>
+            <div class="step">
+                <span class="step-number">1</span>
+                <strong>Navigate:</strong> Go to <span class="code">Pharmacy → Drugs → Drug Categories</span>
+            </div>
+            <div class="step">
+                <span class="step-number">2</span>
+                <strong>Create Categories:</strong> Examples: Analgesic, Antibiotic, Controlled, etc.
+            </div>
+
+            <h3>5.2 Adding Drugs</h3>
+            <div class="step">
+                <span class="step-number">1</span>
+                <strong>Navigate:</strong> Go to <span class="code">Pharmacy → Drugs → Drugs</span>
+            </div>
+            <div class="step">
+                <span class="step-number">2</span>
+                <strong>Create:</strong> Click Create button
+            </div>
+            <div class="step">
+                <span class="step-number">3</span>
+                <strong>Link Product:</strong> Select an existing product from Odoo's product catalog
+            </div>
+            <div class="step">
+                <span class="step-number">4</span>
+                <strong>Configure Drug:</strong>
+                <ul>
+                    <li><strong>Drug Category:</strong> Select category</li>
+                    <li><strong>Prescription Required:</strong> Check if prescription needed</li>
+                    <li><strong>Controlled:</strong> Check if controlled substance</li>
+                    <li><strong>Storage Temperature:</strong> Min/Max storage temps</li>
+                    <li><strong>Hospitals:</strong> Select hospitals where available</li>
+                    <li><strong>Pharmacies:</strong> Select pharmacy branches</li>
+                </ul>
+            </div>
+            <div class="step">
+                <span class="step-number">5</span>
+                <strong>Add Ingredients:</strong> In the Ingredients tab, add active ingredients with strength and unit
+            </div>
+
+            <h3>5.3 Drug Coverage Configuration</h3>
+            <div class="step">
+                <span class="step-number">1</span>
+                <strong>Open Drug:</strong> Open a drug record
+            </div>
+            <div class="step">
+                <span class="step-number">2</span>
+                <strong>Go to Coverage Tab:</strong> Click on Hospital Coverage smart button or tab
+            </div>
+            <div class="step">
+                <span class="step-number">3</span>
+                <strong>Create Coverage:</strong> Define stock thresholds per hospital/pharmacy:
+                <ul>
+                    <li><strong>Min Qty:</strong> Minimum stock level (triggers shortage alert)</li>
+                    <li><strong>Target Qty:</strong> Target stock level</li>
+                    <li><strong>Max Qty:</strong> Maximum stock level</li>
+                </ul>
+            </div>
+
+            <div class="info-box">
+                <strong><i class="fa fa-info-circle"></i> Automatic Monitoring:</strong> The system automatically calculates current stock and flags shortages and expiring lots based on coverage settings.
+            </div>
+
+            <div class="screenshot-section">
+                <h4><i class="fa fa-camera"></i> Screenshot: Drug Form View</h4>
+                <div class="screenshot-placeholder">
+                    <img src="screenshot_drug_form.png" alt="Drug Form View" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <div class="placeholder-text" style="display:none;">
+                        <i class="fa fa-image" style="font-size: 48px; color: #95ce3d; margin-bottom: 15px;"></i><br>
+                        Screenshot: Drug form with product link, category, and coverage
+                    </div>
+                    <p class="screenshot-caption">Drug form showing product link, category, prescription requirement, controlled flag, and hospital/pharmacy associations</p>
+                </div>
+            </div>
+
+            <div class="screenshot-section">
+                <h4><i class="fa fa-camera"></i> Screenshot: Drug Kanban View</h4>
+                <div class="screenshot-placeholder">
+                    <img src="screenshot_drug_kanban.png" alt="Drug Kanban View" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <div class="placeholder-text" style="display:none;">
+                        <i class="fa fa-image" style="font-size: 48px; color: #95ce3d; margin-bottom: 15px;"></i><br>
+                        Screenshot: Drug kanban cards showing drug information
+                    </div>
+                    <p class="screenshot-caption">Drug kanban view displaying drugs with category, prescription requirement, and stock information</p>
+                </div>
+            </div>
+
+            <div class="screenshot-section">
+                <h4><i class="fa fa-camera"></i> Screenshot: Drug Coverage Configuration</h4>
+                <div class="screenshot-placeholder">
+                    <img src="screenshot_drug_coverage.png" alt="Drug Coverage Configuration" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <div class="placeholder-text" style="display:none;">
+                        <i class="fa fa-image" style="font-size: 48px; color: #95ce3d; margin-bottom: 15px;"></i><br>
+                        Screenshot: Drug coverage form with min/target/max quantities
+                    </div>
+                    <p class="screenshot-caption">Drug coverage form showing hospital, pharmacy, and stock threshold settings</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Prescription Workflow -->
+        <div class="section" id="prescriptions">
+            <h2>6. Prescription Workflow</h2>
+            
+            <h3>6.1 Creating a Prescription</h3>
+            <div class="step">
+                <span class="step-number">1</span>
+                <strong>Navigate:</strong> Go to <span class="code">Pharmacy → Operations → Prescriptions</span>
+            </div>
+            <div class="step">
+                <span class="step-number">2</span>
+                <strong>Create:</strong> Click Create button
+            </div>
+            <div class="step">
+                <span class="step-number">3</span>
+                <strong>Fill Prescription Header:</strong>
+                <ul>
+                    <li><strong>Hospital:</strong> Auto-filled from user default</li>
+                    <li><strong>Pharmacy:</strong> Select pharmacy branch</li>
+                    <li><strong>Patient:</strong> Select patient (must have is_patient=True)</li>
+                    <li><strong>Doctor:</strong> Select prescribing doctor (must have is_doctor=True)</li>
+                    <li><strong>Date Prescribed:</strong> Prescription date</li>
+                </ul>
+            </div>
+            <div class="step">
+                <span class="step-number">4</span>
+                <strong>Add Prescription Lines:</strong>
+                <ul>
+                    <li>Click <span class="code">Add a line</span> in the Lines section</li>
+                    <li>Select <strong>Drug</strong></li>
+                    <li>Enter <strong>Dosage</strong> instructions</li>
+                    <li>Set <strong>Quantity Prescribed</strong></li>
+                    <li>Select <strong>Unit of Measure</strong></li>
+                </ul>
+            </div>
+            <div class="step">
+                <span class="step-number">5</span>
+                <strong>Attach Documents:</strong> Upload prescription images/scans if needed
+            </div>
+            <div class="step">
+                <span class="step-number">6</span>
+                <strong>Save:</strong> Click Save (state: Draft)
+            </div>
+
+            <h3>6.2 Prescription Workflow</h3>
+            <div class="workflow-diagram">
+                <span class="workflow-step">Draft</span>
+                <span class="arrow">→</span>
+                <span class="workflow-step">Approved</span>
+                <span class="arrow">→</span>
+                <span class="workflow-step">Dispensed</span>
+            </div>
+
+            <h4>Step 1: Approve Prescription</h4>
+            <div class="step">
+                <span class="step-number">1</span>
+                <strong>Open Prescription:</strong> Open a draft prescription
+            </div>
+            <div class="step">
+                <span class="step-number">2</span>
+                <strong>Review:</strong> Verify patient, doctor, and drugs
+            </div>
+            <div class="step">
+                <span class="step-number">3</span>
+                <strong>Approve:</strong> Click <span class="code">Approve</span> button (state: Approved)
+            </div>
+
+            <h4>Step 2: Create Delivery Picking</h4>
+            <div class="step">
+                <span class="step-number">1</span>
+                <strong>Create Picking:</strong> Click <span class="code">Create Picking</span> button
+            </div>
+            <div class="step">
+                <span class="step-number">2</span>
+                <strong>Verify:</strong> System creates stock picking with moves for undispensed quantities
+            </div>
+            <div class="warning-box">
+                <strong>Requirement:</strong> Pharmacy must have a warehouse configured to create pickings.
+            </div>
+
+            <h4>Step 3: Dispense Prescription</h4>
+            <div class="step">
+                <span class="step-number">1</span>
+                <strong>Dispense:</strong> Click <span class="code">Dispense</span> button
+            </div>
+            <div class="step">
+                <span class="step-number">2</span>
+                <strong>Automatic Actions:</strong>
+                <ul>
+                    <li>Sets qty_dispensed = qty_prescribed for all lines</li>
+                    <li>Creates picking if not already created</li>
+                    <li>Changes state to "Dispensed"</li>
+                </ul>
+            </div>
+
+            <h4>Step 4: Generate Invoice</h4>
+            <div class="step">
+                <span class="step-number">1</span>
+                <strong>Create Invoice:</strong> Click <span class="code">Create Invoice</span> button (or it auto-creates on dispense)
+            </div>
+            <div class="step">
+                <span class="step-number">2</span>
+                <strong>View Invoice:</strong> Click <span class="code">View Invoice</span> smart button to open the generated invoice
+            </div>
+
+            <div class="feature-box">
+                <h4><i class="fa fa-magic"></i> Automatic Features</h4>
+                <ul>
+                    <li>Invoice automatically includes all dispensed drugs</li>
+                    <li>Uses product list prices</li>
+                    <li>Links invoice to prescription for traceability</li>
+                </ul>
+            </div>
+
+            <div class="screenshot-section">
+                <h4><i class="fa fa-camera"></i> Screenshot: Prescription Form View</h4>
+                <div class="screenshot-placeholder">
+                    <img src="screenshot_prescription_form.png" alt="Prescription Form View" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <div class="placeholder-text" style="display:none;">
+                        <i class="fa fa-image" style="font-size: 48px; color: #95ce3d; margin-bottom: 15px;"></i><br>
+                        Screenshot: Prescription form with patient, doctor, and prescription lines
+                    </div>
+                    <p class="screenshot-caption">Prescription form showing header information and prescription lines with drugs and quantities</p>
+                </div>
+            </div>
+
+            <div class="screenshot-section">
+                <h4><i class="fa fa-camera"></i> Screenshot: Prescription Kanban View</h4>
+                <div class="screenshot-placeholder">
+                    <img src="screenshot_prescription_kanban.png" alt="Prescription Kanban View" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <div class="placeholder-text" style="display:none;">
+                        <i class="fa fa-image" style="font-size: 48px; color: #95ce3d; margin-bottom: 15px;"></i><br>
+                        Screenshot: Prescription kanban cards grouped by state
+                    </div>
+                    <p class="screenshot-caption">Prescription kanban view showing cards grouped by state (Draft, Approved, Dispensed) with patient and doctor info</p>
+                </div>
+            </div>
+
+            <div class="screenshot-section">
+                <h4><i class="fa fa-camera"></i> Screenshot: Prescription Workflow Buttons</h4>
+                <div class="screenshot-placeholder">
+                    <img src="screenshot_prescription_workflow.png" alt="Prescription Workflow Buttons" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <div class="placeholder-text" style="display:none;">
+                        <i class="fa fa-image" style="font-size: 48px; color: #95ce3d; margin-bottom: 15px;"></i><br>
+                        Screenshot: Prescription form showing Approve, Create Picking, Dispense buttons
+                    </div>
+                    <p class="screenshot-caption">Prescription form action buttons: Approve, Create Picking, Dispense, and View Invoice</p>
+                </div>
+            </div>
+
+            <div class="screenshot-section">
+                <h4><i class="fa fa-camera"></i> Screenshot: Prescription Lines Detail</h4>
+                <div class="screenshot-placeholder">
+                    <img src="screenshot_prescription_lines.png" alt="Prescription Lines Detail" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <div class="placeholder-text" style="display:none;">
+                        <i class="fa fa-image" style="font-size: 48px; color: #95ce3d; margin-bottom: 15px;"></i><br>
+                        Screenshot: Prescription lines showing drugs, quantities, and dosage
+                    </div>
+                    <p class="screenshot-caption">Prescription lines section showing drugs with prescribed quantities, dispensed quantities, and dosage instructions</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Insurance Claims -->
+        <div class="section" id="insurance">
+            <h2>7. Insurance Claims</h2>
+            
+            <h3>7.1 Creating an Insurance Claim</h3>
+            <div class="step">
+                <span class="step-number">1</span>
+                <strong>Navigate:</strong> Go to <span class="code">Pharmacy → Operations → Insurance Claims</span>
+            </div>
+            <div class="step">
+                <span class="step-number">2</span>
+                <strong>Create:</strong> Click Create button
+            </div>
+            <div class="step">
+                <span class="step-number">3</span>
+                <strong>Link Prescription:</strong> Select the prescription (auto-fills patient, hospital, pharmacy)
+            </div>
+            <div class="step">
+                <span class="step-number">4</span>
+                <strong>Fill Claim Details:</strong>
+                <ul>
+                    <li><strong>Insurance Company:</strong> Select insurance provider</li>
+                    <li><strong>Amount Claimed:</strong> Enter claim amount</li>
+                </ul>
+            </div>
+            <div class="step">
+                <span class="step-number">5</span>
+                <strong>Save:</strong> Click Save (state: Draft)
+            </div>
+
+            <h3>7.2 Claim Workflow</h3>
+            <div class="workflow-diagram">
+                <span class="workflow-step">Draft</span>
+                <span class="arrow">→</span>
+                <span class="workflow-step">Submitted</span>
+                <span class="arrow">→</span>
+                <span class="workflow-step">Approved</span>
+                <span class="arrow">→</span>
+                <span class="workflow-step">Paid</span>
+            </div>
+
+            <div class="step">
+                <span class="step-number">1</span>
+                <strong>Submit:</strong> Click <span class="code">Submit</span> button
+            </div>
+            <div class="step">
+                <span class="step-number">2</span>
+                <strong>Approve/Reject:</strong> Insurance company approves or rejects
+            </div>
+            <div class="step">
+                <span class="step-number">3</span>
+                <strong>Mark Paid:</strong> When reimbursement received, click <span class="code">Mark as Paid</span>
+            </div>
+
+            <div class="screenshot-section">
+                <h4><i class="fa fa-camera"></i> Screenshot: Insurance Claim Form</h4>
+                <div class="screenshot-placeholder">
+                    <img src="screenshot_insurance_claim.png" alt="Insurance Claim Form" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <div class="placeholder-text" style="display:none;">
+                        <i class="fa fa-image" style="font-size: 48px; color: #95ce3d; margin-bottom: 15px;"></i><br>
+                        Screenshot: Insurance claim form with prescription link and claim amount
+                    </div>
+                    <p class="screenshot-caption">Insurance claim form showing prescription link, patient, insurance company, and claim amount</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controlled Drug Logging -->
+        <div class="section" id="controlled">
+            <h2>8. Controlled Drug Logging</h2>
+            
+            <h3>8.1 Logging Controlled Drug Transactions</h3>
+            <div class="step">
+                <span class="step-number">1</span>
+                <strong>Navigate:</strong> Go to <span class="code">Pharmacy → Operations → Controlled Logs</span>
+            </div>
+            <div class="step">
+                <span class="step-number">2</span>
+                <strong>Create:</strong> Click Create button
+            </div>
+            <div class="step">
+                <span class="step-number">3</span>
+                <strong>Fill Log Entry:</strong>
+                <ul>
+                    <li><strong>Hospital:</strong> Select hospital</li>
+                    <li><strong>Pharmacy:</strong> Select pharmacy branch</li>
+                    <li><strong>Drug:</strong> Select controlled drug</li>
+                    <li><strong>Quantity:</strong> Enter quantity (must be > 0)</li>
+                    <li><strong>Action Type:</strong> Dispense/Return/Destroy</li>
+                    <li><strong>User:</strong> Auto-filled with current user</li>
+                    <li><strong>Notes:</strong> Additional information</li>
+                </ul>
+            </div>
+            <div class="step">
+                <span class="step-number">4</span>
+                <strong>Save:</strong> System auto-generates log name and timestamp
+            </div>
+
+            <div class="warning-box">
+                <strong><i class="fa fa-shield"></i> Compliance Requirement:</strong> All controlled substance transactions must be logged. This is essential for regulatory compliance and audit trails.
+            </div>
+
+            <div class="screenshot-section">
+                <h4><i class="fa fa-camera"></i> Screenshot: Controlled Log Form</h4>
+                <div class="screenshot-placeholder">
+                    <img src="screenshot_controlled_log.png" alt="Controlled Log Form" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <div class="placeholder-text" style="display:none;">
+                        <i class="fa fa-image" style="font-size: 48px; color: #95ce3d; margin-bottom: 15px;"></i><br>
+                        Screenshot: Controlled log form with drug, action type, and quantity
+                    </div>
+                    <p class="screenshot-caption">Controlled log form showing hospital, pharmacy, drug, action type (Dispense/Return/Destroy), quantity, and user</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Treatment Management -->
+        <div class="section" id="treatments">
+            <h2>9. Treatment Management</h2>
+            
+            <h3>9.1 Creating a Treatment</h3>
+            <div class="step">
+                <span class="step-number">1</span>
+                <strong>Navigate:</strong> Go to <span class="code">Pharmacy → Operations → Treatments</span>
+            </div>
+            <div class="step">
+                <span class="step-number">2</span>
+                <strong>Create:</strong> Click Create button
+            </div>
+            <div class="step">
+                <span class="step-number">3</span>
+                <strong>Fill Treatment Details:</strong>
+                <ul>
+                    <li><strong>Patient:</strong> Select patient</li>
+                    <li><strong>Hospital:</strong> Select hospital</li>
+                    <li><strong>Pharmacy:</strong> Select pharmacy (optional)</li>
+                    <li><strong>Responsible:</strong> Assigned doctor/user</li>
+                    <li><strong>Stage:</strong> Auto-filled with default stage</li>
+                    <li><strong>Start Date/Time:</strong> Treatment start</li>
+                </ul>
+            </div>
+            <div class="step">
+                <span class="step-number">4</span>
+                <strong>Link Prescriptions:</strong> In Prescriptions tab, link related prescriptions
+            </div>
+            <div class="step">
+                <span class="step-number">5</span>
+                <strong>Add Notes/Attachments:</strong> Document treatment details
+            </div>
+
+            <h3>9.2 Treatment Workflow</h3>
+            <p>Treatments move through stages defined in <span class="code">Pharmacy → Setup → Treatment Stages</span>:</p>
+            <ul>
+                <li><strong>Draft:</strong> Initial creation</li>
+                <li><strong>Active:</strong> Treatment in progress</li>
+                <li><strong>Done:</strong> Treatment completed (closed stage)</li>
+                <li><strong>Cancelled:</strong> Treatment cancelled</li>
+            </ul>
+
+            <h3>9.3 Telemedicine Support</h3>
+            <div class="step">
+                <span class="step-number">1</span>
+                <strong>Enable Telemedicine:</strong> Check <span class="code">Telemedicine Enabled</span>
+            </div>
+            <div class="step">
+                <span class="step-number">2</span>
+                <strong>Configure Session:</strong> Enter session ID, URL, and join token
+            </div>
+            <div class="info-box">
+                <strong>Note:</strong> Telemedicine tokens are automatically base64 encoded for security.
+            </div>
+
+            <div class="screenshot-section">
+                <h4><i class="fa fa-camera"></i> Screenshot: Treatment Kanban View</h4>
+                <div class="screenshot-placeholder">
+                    <img src="screenshot_treatment_kanban.png" alt="Treatment Kanban View" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <div class="placeholder-text" style="display:none;">
+                        <i class="fa fa-image" style="font-size: 48px; color: #95ce3d; margin-bottom: 15px;"></i><br>
+                        Screenshot: Treatment kanban cards grouped by stage
+                    </div>
+                    <p class="screenshot-caption">Treatment kanban view showing treatments grouped by stage with patient and hospital information</p>
+                </div>
+            </div>
+
+            <div class="screenshot-section">
+                <h4><i class="fa fa-camera"></i> Screenshot: Treatment Form View</h4>
+                <div class="screenshot-placeholder">
+                    <img src="screenshot_treatment_form.png" alt="Treatment Form View" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <div class="placeholder-text" style="display:none;">
+                        <i class="fa fa-image" style="font-size: 48px; color: #95ce3d; margin-bottom: 15px;"></i><br>
+                        Screenshot: Treatment form with patient, stage, and prescription links
+                    </div>
+                    <p class="screenshot-caption">Treatment form showing patient, hospital, stage, start/end datetime, and linked prescriptions</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Inventory & Stock -->
+        <div class="section" id="inventory">
+            <h2>10. Inventory & Stock</h2>
+            
+            <h3>10.1 Stock Lots & Expiry Tracking</h3>
+            <div class="step">
+                <span class="step-number">1</span>
+                <strong>Navigate:</strong> Go to <span class="code">Inventory → Operations → Lots/Serial Numbers</span>
+            </div>
+            <div class="step">
+                <span class="step-number">2</span>
+                <strong>Create Lot:</strong> Create new lot or edit existing
+            </div>
+            <div class="step">
+                <span class="step-number">3</span>
+                <strong>Set Pharmacy Fields:</strong>
+                <ul>
+                    <li><strong>Hospital:</strong> Hospital where lot is located</li>
+                    <li><strong>Pharmacy:</strong> Pharmacy branch</li>
+                    <li><strong>Expiry Date:</strong> Product expiry date</li>
+                    <li><strong>Recall Flag:</strong> Mark if recalled</li>
+                    <li><strong>Temperature Log:</strong> JSON field for temp monitoring</li>
+                </ul>
+            </div>
+
+            <h3>10.2 Expiry Alerts</h3>
+            <p>The system automatically identifies lots expiring in the next 30 days:</p>
+            <div class="step">
+                <span class="step-number">1</span>
+                <strong>View Alerts:</strong> Go to <span class="code">Pharmacy → Reports → Shortage & Expiry → Expiring Lots</span>
+            </div>
+            <div class="step">
+                <span class="step-number">2</span>
+                <strong>Filter:</strong> Filter by hospital, pharmacy, or date range
+            </div>
+
+            <h3>10.3 Stock Shortage Alerts</h3>
+            <div class="step">
+                <span class="step-number">1</span>
+                <strong>Configure Coverage:</strong> Set min_qty in drug coverage records
+            </div>
+            <div class="step">
+                <span class="step-number">2</span>
+                <strong>View Shortages:</strong> Go to <span class="code">Pharmacy → Reports → Shortage & Expiry → Shortage Alerts</span>
+            </div>
+            <div class="step">
+                <span class="step-number">3</span>
+                <strong>Replenish:</strong> Create purchase orders or stock transfers to replenish
+            </div>
+
+            <div class="screenshot-section">
+                <h4><i class="fa fa-camera"></i> Screenshot: Expiring Lots Report</h4>
+                <div class="screenshot-placeholder">
+                    <img src="screenshot_expiring_lots.png" alt="Expiring Lots Report" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <div class="placeholder-text" style="display:none;">
+                        <i class="fa fa-image" style="font-size: 48px; color: #95ce3d; margin-bottom: 15px;"></i><br>
+                        Screenshot: Expiring lots tree view with expiry dates
+                    </div>
+                    <p class="screenshot-caption">Expiring lots report showing lots expiring in next 30 days with product, hospital, pharmacy, and expiry date</p>
+                </div>
+            </div>
+
+            <div class="screenshot-section">
+                <h4><i class="fa fa-camera"></i> Screenshot: Shortage Alerts Report</h4>
+                <div class="screenshot-placeholder">
+                    <img src="screenshot_shortage_alerts.png" alt="Shortage Alerts Report" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <div class="placeholder-text" style="display:none;">
+                        <i class="fa fa-image" style="font-size: 48px; color: #95ce3d; margin-bottom: 15px;"></i><br>
+                        Screenshot: Drug coverage shortage alerts
+                    </div>
+                    <p class="screenshot-caption">Shortage alerts report showing drugs below minimum stock threshold with current vs minimum quantities</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Portal Requests -->
+        <div class="section" id="portal">
+            <h2>11. Portal Requests</h2>
+            
+            <h3>11.1 Managing Portal Requests</h3>
+            <div class="step">
+                <span class="step-number">1</span>
+                <strong>Navigate:</strong> Go to <span class="code">Pharmacy → Operations → Portal Requests</span>
+            </div>
+            <div class="step">
+                <span class="step-number">2</span>
+                <strong>View Requests:</strong> Requests are grouped by state (New, Processing, Done)
+            </div>
+            <div class="step">
+                <span class="step-number">3</span>
+                <strong>Process Request:</strong>
+                <ul>
+                    <li>Open request</li>
+                    <li>Review attachments</li>
+                    <li>Change state to Processing</li>
+                    <li>Complete and mark as Done</li>
+                </ul>
+            </div>
+
+            <h3>11.2 Request Types</h3>
+            <ul>
+                <li><strong>Upload:</strong> Patient uploads prescription or document</li>
+                <li><strong>Reservation:</strong> Drug reservation request</li>
+                <li><strong>Query:</strong> Patient inquiry</li>
+            </ul>
+
+            <div class="screenshot-section">
+                <h4><i class="fa fa-camera"></i> Screenshot: Portal Request Kanban</h4>
+                <div class="screenshot-placeholder">
+                    <img src="screenshot_portal_request.png" alt="Portal Request Kanban" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <div class="placeholder-text" style="display:none;">
+                        <i class="fa fa-image" style="font-size: 48px; color: #95ce3d; margin-bottom: 15px;"></i><br>
+                        Screenshot: Portal request kanban grouped by state
+                    </div>
+                    <p class="screenshot-caption">Portal request kanban view showing requests grouped by state (New, Processing, Done) with attachments</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reporting -->
+        <div class="section" id="reporting">
+            <h2>12. Reporting & Analytics</h2>
+            
+            <h3>12.1 Available Reports</h3>
+            <ul>
+                <li><strong>Prescription Volume:</strong> Graph view of prescriptions over time</li>
+                <li><strong>Insurance Claims:</strong> Claims analysis by status</li>
+                <li><strong>Controlled Activity:</strong> Controlled drug transaction logs</li>
+                <li><strong>Drug Coverage:</strong> Stock coverage analysis</li>
+                <li><strong>Treatment Progress:</strong> Treatment stage distribution</li>
+                <li><strong>Shortage Alerts:</strong> Drugs below minimum stock</li>
+                <li><strong>Expiring Lots:</strong> Lots expiring in next 30 days</li>
+                <li><strong>Availability Report:</strong> Staff availability tracking</li>
+            </ul>
+
+            <h3>12.2 Pivot Views</h3>
+            <p>Many models support pivot views for advanced analysis:</p>
+            <ul>
+                <li>Prescriptions by Hospital/Pharmacy/State</li>
+                <li>Controlled logs by Drug/Action Type</li>
+                <li>Insurance claims by Status/Company</li>
+                <li>Treatments by Stage/Hospital</li>
+            </ul>
+
+            <div class="screenshot-section">
+                <h4><i class="fa fa-camera"></i> Screenshot: Prescription Volume Graph</h4>
+                <div class="screenshot-placeholder">
+                    <img src="screenshot_prescription_graph.png" alt="Prescription Volume Graph" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <div class="placeholder-text" style="display:none;">
+                        <i class="fa fa-image" style="font-size: 48px; color: #95ce3d; margin-bottom: 15px;"></i><br>
+                        Screenshot: Prescription volume graph over time
+                    </div>
+                    <p class="screenshot-caption">Prescription volume graph showing prescriptions over time by hospital or pharmacy</p>
+                </div>
+            </div>
+
+            <div class="screenshot-section">
+                <h4><i class="fa fa-camera"></i> Screenshot: Prescription Pivot View</h4>
+                <div class="screenshot-placeholder">
+                    <img src="screenshot_prescription_pivot.png" alt="Prescription Pivot View" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <div class="placeholder-text" style="display:none;">
+                        <i class="fa fa-image" style="font-size: 48px; color: #95ce3d; margin-bottom: 15px;"></i><br>
+                        Screenshot: Prescription pivot table
+                    </div>
+                    <p class="screenshot-caption">Prescription pivot view analyzing prescriptions by hospital, pharmacy, and state</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tips & Best Practices -->
+        <div class="section" id="tips">
+            <h2>13. Tips & Best Practices</h2>
+            
+            <h3>13.1 Data Entry Tips</h3>
+            <ul>
+                <li><strong>Use Defaults:</strong> Set user default hospitals to speed up data entry</li>
+                <li><strong>Link Partners:</strong> Link patients to res.partner for unified contact management</li>
+                <li><strong>Configure Warehouses:</strong> Always set warehouses on hospitals and pharmacies</li>
+                <li><strong>Set Coverage:</strong> Configure drug coverage for automatic shortage alerts</li>
+            </ul>
+
+            <h3>13.2 Workflow Best Practices</h3>
+            <ul>
+                <li><strong>Approve Before Dispensing:</strong> Always approve prescriptions before dispensing</li>
+                <li><strong>Log Controlled Drugs:</strong> Immediately log all controlled substance transactions</li>
+                <li><strong>Link Treatments:</strong> Link prescriptions to treatments for complete patient history</li>
+                <li><strong>Review Expiry Alerts:</strong> Regularly check expiring lots report</li>
+            </ul>
+
+            <h3>13.3 Performance Tips</h3>
+            <ul>
+                <li><strong>Batch Operations:</strong> Use kanban views for quick bulk actions</li>
+                <li><strong>Smart Buttons:</strong> Use smart buttons to navigate related records</li>
+                <li><strong>Filters:</strong> Save frequently used filters for quick access</li>
+                <li><strong>Group By:</strong> Use group by in kanban views for better organization</li>
+            </ul>
+
+            <h3>13.4 Common Issues & Solutions</h3>
+            
+            <div class="warning-box">
+                <strong>Issue:</strong> "No warehouse configured" error when creating picking<br>
+                <strong>Solution:</strong> Ensure both hospital and pharmacy have warehouses set
+            </div>
+
+            <div class="warning-box">
+                <strong>Issue:</strong> Cannot find patient/doctor in dropdown<br>
+                <strong>Solution:</strong> Ensure res.partner has is_patient=True or is_doctor=True flag set
+            </div>
+
+            <div class="warning-box">
+                <strong>Issue:</strong> Prescription code not generating<br>
+                <strong>Solution:</strong> Check that sequence "pharmacy.prescription" exists in Settings → Technical → Sequences
+            </div>
+
+        </div>
+
+        <!-- Footer -->
+        <div class="section" style="text-align: center; padding: 40px 20px; background-color: #f8f9fa; border-radius: 8px; margin-top: 50px;">
+            <h2 style="color: #431436; border: none; padding: 0; margin-bottom: 20px;">Need Help?</h2>
+            <p style="font-size: 1.1em; margin-bottom: 20px;">
+                For additional support, please contact:
+            </p>
+            <p style="font-size: 1.2em; color: #95ce3d; font-weight: 600;">
+                <i class="fa fa-phone"></i> +91 (942) 867-7503<br>
+                <i class="fa fa-whatsapp"></i> WhatsApp Support Available
+            </p>
+            <p style="margin-top: 30px; color: #666;">
+                <strong>Pharmacy Management Module</strong><br>
+                Developed by WebbyCrown Solutions<br>
+                Version 17.0.1.0.0
+            </p>
+        </div>
+    </div>
+
+    <a href="#" class="back-to-top" title="Back to Top">
+        <i class="fa fa-arrow-up"></i>
+    </a>
+
+    <script>
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Back to top button visibility
+        window.addEventListener('scroll', function() {
+            const backToTop = document.querySelector('.back-to-top');
+            if (window.pageYOffset > 300) {
+                backToTop.style.display = 'block';
+            } else {
+                backToTop.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
+

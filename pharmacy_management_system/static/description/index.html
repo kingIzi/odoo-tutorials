@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Pharmacy Management - Hospital Multi-Branch Pharmacy System for Odoo</title>
+</head>
+<body>
+
+    <link type="text/css" rel="stylesheet" href="https://apps.odoo.com/web/assets/1/4ff65ca/web.assets_frontend.min.css">
+
+    <div class="py-xl-5 py-4 px-3" style="background-color: #fff; max-width: 1420px; margin: 0 auto;">
+        <div class="px-lg-6 px-md-5 px-sm-4 px-3 pt-md-5 pt-sm-4 pt-3 rounded-3" style="max-width: 1300px; background-color: #fff; margin: 0 auto; box-shadow: 0px 5px 25px 0px #00000066; border: 4px solid #95ce3d;">
+            <div class="row">
+                <div class="col-12 col-md-6">
+                    <img class="w-100 ms-md-0 mx-auto" style="max-width:340px" src="logo.png" alt="Pharmacy Management Logo">
+                </div>
+                <div class="col-12 col-md-6 mt-md-0 mt-4 gap-1 d-flex justify-content-center justify-content-md-end flex-wrap">
+                    <span class="d-inline-flex align-items-center py-md-2 px-md-3 py-2 px-2" style="border-radius:8px; color:#fff; background-color:#95ce3d; font-weight:500; font-size:20px; line-height:30px">
+                        <a href="https://wa.me/919428677503" style="color: #fff; text-decoration: none;">
+                            <img style="width:20px; height:20px" src="info-icon-3.png" alt="whatsapp icon">
+                        </a>
+                    </span>
+                    <span class="d-inline-flex align-items-center py-md-2 px-md-3 py-2 px-2" style="border-radius:8px; color:#fff; background-color:#95ce3d; font-weight:500; font-size:20px; line-height:30px">
+                        <a href="tel:+919428677503" style="color: #fff; text-decoration: none;">
+                            <img style="width:20px; height:20px; margin-right:4px" src="info-icon-4.png" alt="phone icon">
+                            +91 (942) 867-7503
+                        </a>
+                    </span>
+                </div>
+            </div>
+            <div class="w-100 my-lg-6 my-5 mx-auto" style="max-width: 870px;">
+                <h2 class="text-center h1-fs" style="font-weight: 600; color: #111827;">Pharmacy Management — Complete Hospital Multi-Branch Pharmacy System with Prescriptions, Claims & Compliance</h2>
+            </div>
+            <div class="w-100" style="margin-bottom: 60px;">
+                <div class="text-center">
+                    <div class="text-center w-sm-auto w-100" style="padding: 0 20px; display: inline-block;">
+                        <div class="d-inline-flex align-items-center justify-content-center text-center w-100" style="position: relative; z-index: 1; border-radius: 10px 10px 0 0; padding: 8px 25px; background-color: #95ce3d; margin: 0 auto;">
+                            <i class="fa fa-star" style="color: #fff; font-size: 20px; margin-right: 10px;"></i>
+                            <h3 style="color: #fff; font-weight: 500; font-size: 20px; line-height: 30px; margin: 0 10px;">Streamline Your Pharmacy Operations with Enterprise-Grade Management</h3>
+                            <i class="fa fa-star" style="color: #fff; font-size: 20px; margin-left: 10px;"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="w-100" style="box-shadow: 0px 5px 20px 0px #40404066; border-radius: 16px; border: 4px solid #95ce3d; padding: 11px;">
+                    <img class="w-100" style="border-radius: 7px;" src="main_screenshot.png" alt="Pharmacy Management Screenshot">
+                </div>
+            </div>
+
+            <!-- Overview Section -->
+            <div class="w-100" style="margin-bottom:50px">
+                <div class="w-100" style="border-radius:8px; border:1px solid #95ce3d4D">
+                    <div style="border-radius:8px 8px 0 0; padding:14px 25px; background-color:#95ce3d1A; width:100%; margin:0 auto">
+                        <h3 class="text-center h3" style="color:#431436; font-weight:600; margin:0"><i class="fa fa-hospital-o"></i> Complete Pharmacy Management Solution</h3>
+                    </div>
+                    <div class="p-lg-5 p-md-4 p-3">
+                        <div class="row align-items-center">
+                            <div class="col-12 col-md-7">
+                                <div style="padding-left: 20px;">
+                                    <p style="font-size:18px; color:#404040; line-height:30px; margin-bottom:25px; font-weight: 400;">
+                                        Pharmacy Management is a purpose-built Odoo pharmacy management app for hospitals and healthcare groups. It supports a true multi-branch pharmacy system and links directly with Odoo stock/warehouse to automate the entire prescription workflow — from prescription creation to picking, dispensing and invoice. This module is compatible with Odoo 16, 17, 18 and 19 and depends on core modules: base, contacts, mail, product, stock, stock_account, account, and sale_management.
+                                    </p>
+                                    <div style="background-color:#f8f9fa; padding:20px; border-radius:10px; border-left: 4px solid #95ce3d; margin-bottom:25px;">
+                                        <p style="font-size:16px; color:#431436; margin:0 0 15px 0; font-weight: 600;">
+                                            <i class="fa fa-clipboard" style="margin-right: 8px;"></i>Who this is for:
+                                        </p>
+                                        <ul style="margin: 0; padding-left: 25px; font-size: 15px; color: #555; line-height: 28px;">
+                                            <li>Hospital pharmacists and pharmacy supervisors running multiple branches.</li>
+                                            <li>Odoo implementers building hospital pharmacy software Odoo solutions.</li>
+                                            <li>IT teams wanting Odoo pharmacy integration with stock/warehouse and API hooks.</li>
+                                            <li>Organizations needing compliant controlled drug logging and chain-of-custody reports.</li>
+                                        </ul>
+                                    </div>
+                                    <div style="text-align: center;">
+
+                                        <a href="https://youtu.be/8lOP_2XZ4Gs" target="_blank" rel="noreferrer">
+
+                                            <img src="button.png" alt="Watch Complete Walkthrough Play" style="margin-right: 10px;">
+
+                                        </a>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-5 mb-4 mb-md-0">
+                                <div style="position: relative; text-align: center;">
+                                    <div style="position: relative; display: inline-block;">
+                                        <a href="https://youtu.be/8lOP_2XZ4Gs" target="_blank" rel="noreferrer">
+                                            <img src="play.png" alt="Pharmacy Management Overview" style="width: 100%; max-width: 400px; height: auto; border-radius: 12px; box-shadow: 0px 8px 25px 0px #00000040;">
+                                        </a>
+                                        <p style="margin-top: 15px; font-size: 14px; color: #666; font-style: italic;">Click the play button to watch the complete walkthrough</p>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Why Choose Section -->
+            <div class="w-100" style="margin-bottom: 50px;">
+                <div class="w-100" style="box-shadow: 0px 4px 15px 0px #0000001F; border-radius: 8px; border: 1px solid #95ce3d4D;">
+                    <div style="position: relative; z-index: 1; border-radius: 8px 8px 0 0; padding: 14px 25px; background-color: #95ce3d1A; width: 100%; margin: 0 auto;">
+                        <h3 class="text-center h3" style="color: #000; font-weight: 600; margin: 0;">Why Choose Pharmacy Management?</h3>
+                    </div>
+                    <div class="p-lg-5 p-md-4 p-3">
+                        <p style="font-size: 18px; font-weight: 400; color: #404040; line-height: 32px; margin-bottom: 0px;">Built specifically for healthcare facilities managing multiple pharmacy branches, this module eliminates the complexity of tracking prescriptions, managing drug inventory, processing insurance claims, and maintaining compliance across locations. It seamlessly integrates with Odoo's native modules for stock management, accounting, and sales, providing a unified platform for all pharmacy operations.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Benefits Section -->
+            <div class="w-100" style="margin-bottom: 50px;">
+                <div class="w-100" style="box-shadow: 0px 4px 15px 0px #0000001F; border-radius: 8px; border: 1px solid #95ce3d4D;">
+                    <div style="position: relative; z-index: 1; border-radius: 8px 8px 0 0; padding: 14px 25px; background-color: #95ce3d1A; width: 100%; margin: 0 auto;">
+                        <h3 class="text-center h3" style="color: #000; font-weight: 600; margin: 0;">Key Benefits at a Glance</h3>
+                    </div>
+                    <div class="p-lg-5 p-md-4 p-3">
+                        <ul style="padding-left: 25px; margin-bottom: 0;">
+                            <li style="font-size: 18px; font-weight: 400; color: #404040; line-height: 36px;"><strong style="font-weight: 600; color: #95ce3d;">Reduce stockouts</strong> with automated coverage and shortage alerts — pharmacy inventory optimization for hospitals.</li>
+                            <li style="font-size: 18px; font-weight: 400; color: #404040; line-height: 36px;"><strong style="font-weight: 600; color: #95ce3d;">Improve compliance</strong> for controlled drugs with auditable logs — best practices for controlled substance logging baked in.</li>
+                            <li style="font-size: 18px; font-weight: 400; color: #404040; line-height: 36px;"><strong style="font-weight: 600; color: #95ce3d;">Cut waste</strong> by monitoring expiries and recalls — how expiry tracking prevents medication waste.</li>
+                            <li style="font-size: 18px; font-weight: 400; color: #404040; line-height: 36px;"><strong style="font-weight: 600; color: #95ce3d;">Faster patient throughput</strong> with portal uploads, telemedicine support, and automated invoice creation — clear benefits of pharmacy management software for hospitals.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detailed Features Section -->
+            <div class="w-100" style="margin-bottom:50px">
+                <div class="w-100" style="border-radius:8px; border:1px solid #95ce3d4D">
+                    <div style="border-radius:8px 8px 0 0; padding:14px 25px; background-color:#95ce3d1A; width:100%; margin:0 auto">
+                        <h3 class="text-center h3" style="color:#000; font-weight:600; margin:0">Key Features (What Makes It Download-Worthy)</h3>
+                    </div>
+                    <div class="p-lg-5 p-md-4 p-3">
+                        <div style="background-color: #f8f9fa; padding: 25px; border-radius: 8px; border-left: 4px solid #95ce3d; margin-bottom: 30px;">
+                            <p style="font-size:18px; font-weight:400; color:#404040; line-height:32px; margin-bottom:20px;"><strong style="color: #431436;">Prescription management:</strong> Create, approve and dispense prescriptions — full Odoo prescription management with image attachments and audit trails.</p>
+                            <p style="font-size:18px; font-weight:400; color:#404040; line-height:32px; margin-bottom:20px;"><strong style="color: #431436;">Multi-branch support:</strong> Handles parent hospitals and multiple pharmacy branches — true hospital multi-branch pharmacy system Odoo.</p>
+                            <p style="font-size:18px; font-weight:400; color:#404040; line-height:32px; margin-bottom:20px;"><strong style="color: #431436;">Inventory & expiry tracking:</strong> Lot tracking, expiry alerts and temperature logs for lots — Odoo medicine lot expiry tracking and Odoo pharmacy expiry alerts and reports.</p>
+                            <p style="font-size:18px; font-weight:400; color:#404040; line-height:32px; margin-bottom:20px;"><strong style="color: #431436;">Coverage & replenishment:</strong> Min/Target/Max coverage per hospital/pharmacy — pharmacy coverage min max qty Odoo with automated shortage alerts.</p>
+                            <p style="font-size:18px; font-weight:400; color:#404040; line-height:32px; margin-bottom:20px;"><strong style="color: #431436;">Controlled substances & compliance:</strong> Full controlled drug logging workflows and secure logs — supports Odoo pharmacy controlled substances compliance.</p>
+                            <p style="font-size:18px; font-weight:400; color:#404040; line-height:32px; margin-bottom:20px;"><strong style="color: #431436;">Prescription → Picking → Dispense → Invoice:</strong> Automated flow that creates pickings and invoices — supports Odoo pharmacy create picking dispense prescription and prescription to invoice automation in Odoo.</p>
+                            <p style="font-size:18px; font-weight:400; color:#404040; line-height:32px; margin-bottom:20px;"><strong style="color: #431436;">Insurance claims:</strong> Draft → Submit → Approve → Paid workflow for reimbursements — Odoo pharmacy insurance claims workflow.</p>
+                            <p style="font-size:18px; font-weight:400; color:#404040; line-height:32px; margin-bottom:20px;"><strong style="color: #431436;">Portal & patient uploads:</strong> Patient portal for prescription upload and reservation requests — patient portal prescription upload Odoo.</p>
+                            <p style="font-size:18px; font-weight:400; color:#404040; line-height:32px; margin-bottom:20px;"><strong style="color: #431436;">Treatment linking & telemedicine:</strong> Link prescriptions to treatments and support Odoo telemedicine pharmacy integration tokens for remote consults.</p>
+                            <p style="font-size:18px; font-weight:400; color:#404040; line-height:32px; margin-bottom:20px;"><strong style="color: #431436;">Reporting & KPIs:</strong> Prescription volume graphs, controlled activity logs, coverage dashboards — key pharmacy KPI metrics to monitor.</p>
+                            <p style="font-size:18px; font-weight:400; color:#404040; line-height:32px; margin-bottom:20px;"><strong style="color: #431436;">APIs & integration hooks:</strong> Ready for custom integrations — Odoo pharmacy API integration for third-party systems.</p>
+                            <p style="font-size:18px; font-weight:400; color:#404040; line-height:32px; margin-bottom:20px;"><strong style="color: #431436;">Multi-company & POS readiness:</strong> Works across companies and supports Odoo pharmacy POS & dispensing flows.</p>
+                            <p style="font-size:18px; font-weight:400; color:#404040; line-height:32px; margin-bottom:0px;"><strong style="color: #431436;">Admin & troubleshooting:</strong> Includes guidance for pharmacy.prescription sequence issues — pharmacy.prescription sequence Odoo troubleshooting.</p>
+                        </div>
+                        
+                        <!-- Feature Overview Grid -->
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 40px;">
+                            <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid #95ce3d;">
+                                <h5 style="color: #431436; margin-bottom: 10px;"><i class="fa fa-file-text-o" style="color: #95ce3d; margin-right: 8px;"></i>Prescription Management</h5>
+                                <ul style="margin: 0; padding-left: 20px; font-size: 14px; color: #555;">
+                                    <li>Complete workflow (Draft → Approved → Dispensed)</li>
+                                    <li>Multi-line prescriptions</li>
+                                    <li>Automatic invoice generation</li>
+                                    <li>Delivery picking creation</li>
+                                    <li>Attachment support</li>
+                                </ul>
+                            </div>
+                            <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid #95ce3d;">
+                                <h5 style="color: #431436; margin-bottom: 10px;"><i class="fa fa-medkit" style="color: #95ce3d; margin-right: 8px;"></i>Drug Inventory</h5>
+                                <ul style="margin: 0; padding-left: 20px; font-size: 14px; color: #555;">
+                                    <li>Drug catalog with categories</li>
+                                    <li>Expiry date tracking</li>
+                                    <li>Stock coverage per location</li>
+                                    <li>Shortage alerts</li>
+                                    <li>FEFO lot management</li>
+                                </ul>
+                            </div>
+                            <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid #95ce3d;">
+                                <h5 style="color: #431436; margin-bottom: 10px;"><i class="fa fa-hospital-o" style="color: #95ce3d; margin-right: 8px;"></i>Multi-Branch</h5>
+                                <ul style="margin: 0; padding-left: 20px; font-size: 14px; color: #555;">
+                                    <li>Hospital management</li>
+                                    <li>Multiple pharmacy branches</li>
+                                    <li>Branch-specific KPIs</li>
+                                    <li>Centralized control</li>
+                                    <li>Warehouse integration</li>
+                                </ul>
+                            </div>
+                            <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid #95ce3d;">
+                                <h5 style="color: #431436; margin-bottom: 10px;"><i class="fa fa-credit-card" style="color: #95ce3d; margin-right: 8px;"></i>Insurance Claims</h5>
+                                <ul style="margin: 0; padding-left: 20px; font-size: 14px; color: #555;">
+                                    <li>Automatic claim linking</li>
+                                    <li>Status workflow tracking</li>
+                                    <li>Amount management</li>
+                                    <li>Multi-provider support</li>
+                                    <li>Reimbursement tracking</li>
+                                </ul>
+                            </div>
+                            <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid #95ce3d;">
+                                <h5 style="color: #431436; margin-bottom: 10px;"><i class="fa fa-shield" style="color: #95ce3d; margin-right: 8px;"></i>Compliance</h5>
+                                <ul style="margin: 0; padding-left: 20px; font-size: 14px; color: #555;">
+                                    <li>Controlled drug logging</li>
+                                    <li>Full audit trails</li>
+                                    <li>Timestamp records</li>
+                                    <li>User tracking</li>
+                                    <li>Regulatory reporting</li>
+                                </ul>
+                            </div>
+                            <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid #95ce3d;">
+                                <h5 style="color: #431436; margin-bottom: 10px;"><i class="fa fa-users" style="color: #95ce3d; margin-right: 8px;"></i>Patient & Doctor</h5>
+                                <ul style="margin: 0; padding-left: 20px; font-size: 14px; color: #555;">
+                                    <li>Patient records</li>
+                                    <li>Doctor/prescriber profiles</li>
+                                    <li>License management</li>
+                                    <li>Prescription history</li>
+                                    <li>Treatment tracking</li>
+                                </ul>
+                            </div>
+                            <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid #95ce3d;">
+                                <h5 style="color: #431436; margin-bottom: 10px;"><i class="fa fa-line-chart" style="color: #95ce3d; margin-right: 8px;"></i>Reporting</h5>
+                                <ul style="margin: 0; padding-left: 20px; font-size: 14px; color: #555;">
+                                    <li>Prescription analytics</li>
+                                    <li>Drug usage reports</li>
+                                    <li>Pivot & graph views</li>
+                                    <li>Shortage alerts</li>
+                                    <li>Expiry monitoring</li>
+                                </ul>
+                            </div>
+                            <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid #95ce3d;">
+                                <h5 style="color: #431436; margin-bottom: 10px;"><i class="fa fa-plug" style="color: #95ce3d; margin-right: 8px;"></i>Integrations</h5>
+                                <ul style="margin: 0; padding-left: 20px; font-size: 14px; color: #555;">
+                                    <li>Odoo Stock integration</li>
+                                    <li>Accounting integration</li>
+                                    <li>Sales module support</li>
+                                    <li>Portal integration</li>
+                                    <li>API configuration</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- 1. Prescription Management -->
+            <div class="w-100" style="margin-bottom:35px">
+                            <div style="height:100%; border-radius:8px; background-color:#95ce3d14">
+                                <div style="border-radius:8px 8px 0 0; padding:13px 30px; background-color:#95ce3d; width:100%; margin:0 auto">
+                                    <h5 style="color:#fff; font-weight:500; font-size:22px; line-height:32px; margin:0"><i class="fa fa-file-text-o" style="margin-right: 10px;"></i>Prescription Management</h5>
+                                </div>
+                                <div style="padding: 30px;">
+                                    <div class="w-100" style="margin-bottom: 20px;">
+                                        <div style="border-radius:8px; background-color:#95ce3d14; padding:10px">
+                                            <img style="width:100%; height:auto; border-radius:5px" src="screenshot_pharmacy_kanban.png" alt="Prescription Management">
+                                        </div>
+                                    </div>
+                                    <div class="w-100">
+                                        <p style="font-size:18px; font-weight:400; color:#404040; line-height:32px; margin-bottom:15px;">Complete prescription lifecycle management from creation to delivery. Track prescription status (Draft, Approved, Dispensed, Canceled), manage prescription lines with quantities, link to patients and doctors, generate delivery pickings, and create invoices automatically. Full audit trail and attachment support for prescription documents.</p>
+                                        <div style="background-color: #fff; padding: 15px; border-radius: 8px; margin-top: 15px;">
+                                            <strong style="color: #431436;">Key Capabilities:</strong>
+                                            <ul style="margin: 10px 0 0 20px; font-size: 15px; color: #555;">
+                                                <li>Auto-generated prescription numbers with sequences</li>
+                                                <li>Multi-drug prescription lines with dosage instructions</li>
+                                                <li>Partial dispensing support (qty_dispensed < qty_prescribed)</li>
+                                                <li>Automatic stock picking creation for delivery</li>
+                                                <li>Customer invoice generation from prescriptions</li>
+                                                <li>Smart buttons for claims, controlled logs, and delivery</li>
+                                                <li>Kanban view grouped by state for workflow management</li>
+                                                <li>Search by drug name across all prescriptions</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+            <!-- 2. Drug Inventory -->
+            <div class="w-100" style="margin-bottom:35px">
+                            <div style="height:100%; border-radius:8px; background-color:#95ce3d14">
+                                <div style="border-radius:8px 8px 0 0; padding:13px 30px; background-color:#95ce3d; width:100%; margin:0 auto">
+                                    <h5 style="color:#fff; font-weight:500; font-size:22px; line-height:32px; margin:0"><i class="fa fa-medkit" style="margin-right: 10px;"></i>Drug Inventory & Tracking</h5>
+                                </div>
+                                <div style="padding: 30px;">
+                                    <div class="w-100" style="margin-bottom: 20px;">
+                                        <div style="border-radius:8px; background-color:#95ce3d14; padding:10px">
+                                            <img style="width:100%; height:auto; border-radius:5px" src="Drug Inventory & Tracking.gif" alt="Drug Inventory">
+                                        </div>
+                                    </div>
+                                    <div class="w-100">
+                                        <p style="font-size:18px; font-weight:400; color:#404040; line-height:32px; margin-bottom:15px;">Comprehensive drug catalog with category management, ingredient tracking, and storage temperature requirements. Monitor stock levels across hospitals and pharmacies, track expiry dates with automatic alerts for expiring lots, and manage drug coverage per hospital/pharmacy location. Support for controlled substances with special handling flags.</p>
+                                        <div style="background-color: #fff; padding: 15px; border-radius: 8px; margin-top: 15px;">
+                                            <strong style="color: #431436;">Advanced Features:</strong>
+                                            <ul style="margin: 10px 0 0 20px; font-size: 15px; color: #555;">
+                                                <li>Link drugs to Odoo products for inventory management</li>
+                                                <li>Drug categories with controlled substance flags</li>
+                                                <li>Active ingredient tracking with strength and units</li>
+                                                <li>Storage temperature range (min/max) requirements</li>
+                                                <li>Hospital and pharmacy availability (Many2many)</li>
+                                                <li>Drug coverage with min/target/max stock levels</li>
+                                                <li>Automatic expiry alert calculation (30-day window)</li>
+                                                <li>Searchable "has expiring lots" filter</li>
+                                                <li>Stock quantity computation from stock.quant</li>
+                                                <li>Drug substitution mapping (brand to generic)</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+            <!-- 3. Multi-Branch Management -->
+            <div class="w-100" style="margin-bottom:35px">
+                            <div style="height:100%; border-radius:8px; background-color:#95ce3d14">
+                                <div style="border-radius:8px 8px 0 0; padding:13px 30px; background-color:#95ce3d; width:100%; margin:0 auto">
+                                    <h5 style="color:#fff; font-weight:500; font-size:22px; line-height:32px; margin:0"><i class="fa fa-hospital-o" style="margin-right: 10px;"></i>Multi-Branch Hospital & Pharmacy</h5>
+                                </div>
+                                <div style="padding: 30px;">
+                                    <div class="w-100" style="margin-bottom: 20px;">
+                                        <div style="border-radius:8px; background-color:#95ce3d14; padding:10px">
+                                            <img style="width:100%; height:auto; border-radius:5px" src="Multi-Branch Hospital & Pharmacy.gif" alt="Multi-Branch Management">
+                                        </div>
+                                    </div>
+                                    <div class="w-100">
+                                        <p style="font-size:18px; font-weight:400; color:#404040; line-height:32px; margin-bottom:15px;">Manage multiple hospitals and pharmacy branches with centralized control. Each branch can have its own warehouse, stock location, pricelist, and compliance certifications. Track KPIs per branch including daily sales, prescription counts, shortage alerts, and expiring lots. Support for parent-child pharmacy relationships and department management within hospitals.</p>
+                                        <div style="background-color: #fff; padding: 15px; border-radius: 8px; margin-top: 15px;">
+                                            <strong style="color: #431436;">Hospital Features:</strong>
+                                            <ul style="margin: 10px 0 0 20px; font-size: 15px; color: #555;">
+                                                <li>Hospital code and name management</li>
+                                                <li>Default warehouse configuration</li>
+                                                <li>API configuration for FHIR/HL7 integration</li>
+                                                <li>Department management</li>
+                                                <li>Smart buttons: Pharmacies, Prescriptions, Treatments</li>
+                                                <li>Optimized KPI computation (read_group)</li>
+                                            </ul>
+                                            <strong style="color: #431436; margin-top: 15px; display: block;">Pharmacy Branch Features:</strong>
+                                            <ul style="margin: 10px 0 0 20px; font-size: 15px; color: #555;">
+                                                <li>Unique code per company (SQL constraint)</li>
+                                                <li>Warehouse and location auto-derivation</li>
+                                                <li>Default pricelist per branch</li>
+                                                <li>Parent-child pharmacy relationships</li>
+                                                <li>Real-time KPIs: RX today, expiring lots, shortages</li>
+                                                <li>Compliance certificate tracking</li>
+                                                <li>Kanban view with visual KPI cards</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+            <!-- 4. Insurance Claims -->
+            <div class="w-100" style="margin-bottom:35px">
+                            <div style="height:100%; border-radius:8px; background-color:#95ce3d14">
+                                <div style="border-radius:8px 8px 0 0; padding:13px 30px; background-color:#95ce3d; width:100%; margin:0 auto">
+                                    <h5 style="color:#fff; font-weight:500; font-size:22px; line-height:32px; margin:0"><i class="fa fa-credit-card" style="margin-right: 10px;"></i>Insurance Claims Processing</h5>
+                                </div>
+                                <div style="padding: 30px;">
+                                    <div class="w-100" style="margin-bottom: 20px;">
+                                        <div style="border-radius:8px; background-color:#95ce3d14; padding:10px">
+                                            <img style="width:100%; height:auto; border-radius:5px" src="Insurance Claims Processing.gif" alt="Insurance Claims">
+                                        </div>
+                                    </div>
+                                    <div class="w-100">
+                                        <p style="font-size:18px; font-weight:400; color:#404040; line-height:32px; margin-bottom:15px;">Streamlined insurance claims management with automatic linking to prescriptions, patients, and insurers. Track claim status, amounts, and processing workflow. Integrated with patient insurance information for seamless claim generation and tracking across multiple insurance providers.</p>
+                                        <div style="background-color: #fff; padding: 15px; border-radius: 8px; margin-top: 15px;">
+                                            <strong style="color: #431436;">Workflow States:</strong>
+                                            <ul style="margin: 10px 0 0 20px; font-size: 15px; color: #555;">
+                                                <li><strong>Draft:</strong> Initial claim creation</li>
+                                                <li><strong>Submitted:</strong> Sent to insurance company</li>
+                                                <li><strong>Approved:</strong> Claim approved by insurer</li>
+                                                <li><strong>Paid:</strong> Reimbursement received</li>
+                                                <li><strong>Rejected:</strong> Claim denied</li>
+                                            </ul>
+                                            <strong style="color: #431436; margin-top: 15px; display: block;">Auto-Fill Features:</strong>
+                                            <ul style="margin: 10px 0 0 20px; font-size: 15px; color: #555;">
+                                                <li>Auto-fills patient from prescription</li>
+                                                <li>Auto-fills hospital from prescription</li>
+                                                <li>Auto-fills pharmacy from prescription</li>
+                                                <li>Data consistency validation</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+            <!-- 5. Controlled Substances -->
+            <div class="w-100" style="margin-bottom:35px">
+                            <div style="height:100%; border-radius:8px; background-color:#95ce3d14">
+                                <div style="border-radius:8px 8px 0 0; padding:13px 30px; background-color:#95ce3d; width:100%; margin:0 auto">
+                                    <h5 style="color:#fff; font-weight:500; font-size:22px; line-height:32px; margin:0"><i class="fa fa-shield" style="margin-right: 10px;"></i>Controlled Substance Logging</h5>
+                                </div>
+                                <div style="padding: 30px;">
+                                    <div class="w-100" style="margin-bottom: 20px;">
+                                        <div style="border-radius:8px; background-color:#95ce3d14; padding:10px">
+                                            <img style="width:100%; height:auto; border-radius:5px" src="Controlled_Substance_Logging.png" alt="Controlled Substances">
+                                        </div>
+                                    </div>
+                                    <div class="w-100">
+                                        <p style="font-size:18px; font-weight:400; color:#404040; line-height:32px; margin-bottom:15px;">Comprehensive logging and tracking for controlled substances with timestamp records, quantity tracking, and full audit trails. Ensure regulatory compliance with detailed logs of all controlled drug transactions, linked to prescriptions, patients, and dispensing locations.</p>
+                                        <div style="background-color: #fff; padding: 15px; border-radius: 8px; margin-top: 15px;">
+                                            <strong style="color: #431436;">Action Types:</strong>
+                                            <ul style="margin: 10px 0 0 20px; font-size: 15px; color: #555;">
+                                                <li><strong>Dispense:</strong> Controlled drug dispensed to patient</li>
+                                                <li><strong>Return:</strong> Controlled drug returned to pharmacy</li>
+                                                <li><strong>Destroy:</strong> Controlled drug destroyed/disposed</li>
+                                            </ul>
+                                            <strong style="color: #431436; margin-top: 15px; display: block;">Compliance Features:</strong>
+                                            <ul style="margin: 10px 0 0 20px; font-size: 15px; color: #555;">
+                                                <li>Auto-generated log names with timestamps</li>
+                                                <li>User tracking (who performed action)</li>
+                                                <li>Quantity validation (must be > 0)</li>
+                                                <li>Hospital/pharmacy consistency checks</li>
+                                                <li>Indexed fields for fast reporting</li>
+                                                <li>Full mail.thread integration for audit</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+            <!-- 6. Patient & Doctor Management -->
+            <div class="w-100" style="margin-bottom:35px">
+                            <div style="height:100%; border-radius:8px; background-color:#95ce3d14">
+                                <div style="border-radius:8px 8px 0 0; padding:13px 30px; background-color:#95ce3d; width:100%; margin:0 auto">
+                                    <h5 style="color:#fff; font-weight:500; font-size:22px; line-height:32px; margin:0"><i class="fa fa-users" style="margin-right: 10px;"></i>Patient & Doctor Management</h5>
+                                </div>
+                                <div style="padding: 30px;">
+                                    <div class="w-100" style="margin-bottom: 20px;">
+                                        <div style="border-radius:8px; background-color:#95ce3d14; padding:10px">
+                                            <img style="width:100%; height:auto; border-radius:5px" src="Patient & Doctor Management.gif" alt="Patient Management">
+                                        </div>
+                                    </div>
+                                    <div class="w-100">
+                                        <p style="font-size:18px; font-weight:400; color:#404040; line-height:32px; margin-bottom:15px;">Extended partner management for patients and doctors with classification flags, license numbers, medical record numbers, and insurance information. Smart buttons showing prescription counts, treatment history, and related records. Support for patient types (adult, pediatric) and comprehensive doctor/prescriber profiles.</p>
+                                        <div style="background-color: #fff; padding: 15px; border-radius: 8px; margin-top: 15px;">
+                                            <strong style="color: #431436;">Patient Features:</strong>
+                                            <ul style="margin: 10px 0 0 20px; font-size: 15px; color: #555;">
+                                                <li>Auto-generated patient codes (unique per company)</li>
+                                                <li>Patient types: Adult, Pediatric</li>
+                                                <li>Clinical data: Blood type, allergies, medical history</li>
+                                                <li>Emergency contact information</li>
+                                                <li>Insurance company linking</li>
+                                                <li>Smart buttons: Treatments, Prescriptions</li>
+                                                <li>Kanban view grouped by patient type</li>
+                                            </ul>
+                                            <strong style="color: #431436; margin-top: 15px; display: block;">Doctor Features:</strong>
+                                            <ul style="margin: 10px 0 0 20px; font-size: 15px; color: #555;">
+                                                <li>License number (unique per company)</li>
+                                                <li>Medical specialty tracking</li>
+                                                <li>Default pharmacy assignment</li>
+                                                <li>RX count tracking (total and by pharmacy)</li>
+                                                <li>Optimized KPI computation</li>
+                                                <li>Kanban view grouped by default pharmacy</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+            <!-- 7. Portal & Requests -->
+            <div class="w-100" style="margin-bottom:35px">
+                            <div style="height:100%; border-radius:8px; background-color:#95ce3d14">
+                                <div style="border-radius:8px 8px 0 0; padding:13px 30px; background-color:#95ce3d; width:100%; margin:0 auto">
+                                    <h5 style="color:#fff; font-weight:500; font-size:22px; line-height:32px; margin:0"><i class="fa fa-envelope" style="margin-right: 10px;"></i>Portal Requests & Messaging</h5>
+                                </div>
+                                <div style="padding: 30px;">
+                                    <div class="w-100" style="margin-bottom: 20px;">
+                                        <div style="border-radius:8px; background-color:#95ce3d14; padding:10px">
+                                            <img style="width:100%; height:auto; border-radius:5px" src="Portal Requests & Messaging.gif" alt="Portal Requests">
+                                        </div>
+                                    </div>
+                                    <div class="w-100">
+                                        <p style="font-size:18px; font-weight:400; color:#404040; line-height:32px; margin-bottom:15px;">Patient portal integration for prescription requests, refills, and communication. Track portal requests with status workflow, attachment support, and messaging capabilities. Enable patients to submit requests and communicate with pharmacy staff through the Odoo portal.</p>
+                                        <div style="background-color: #fff; padding: 15px; border-radius: 8px; margin-top: 15px;">
+                                            <strong style="color: #431436;">Request Types:</strong>
+                                            <ul style="margin: 10px 0 0 20px; font-size: 15px; color: #555;">
+                                                <li><strong>Upload:</strong> Patient uploads prescription/document</li>
+                                                <li><strong>Reservation:</strong> Drug reservation request</li>
+                                                <li><strong>Query:</strong> Patient inquiry/question</li>
+                                            </ul>
+                                            <strong style="color: #431436; margin-top: 15px; display: block;">Workflow:</strong>
+                                            <ul style="margin: 10px 0 0 20px; font-size: 15px; color: #555;">
+                                                <li>New → Processing → Done</li>
+                                                <li>Attachment support for documents</li>
+                                                <li>Kanban view grouped by state</li>
+                                                <li>Message configuration for notifications</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+            <!-- 8. Reporting & Analytics -->
+            <div class="w-100" style="margin-bottom:35px">
+                            <div style="height:100%; border-radius:8px; background-color:#95ce3d14">
+                                <div style="border-radius:8px 8px 0 0; padding:13px 30px; background-color:#95ce3d; width:100%; margin:0 auto">
+                                    <h5 style="color:#fff; font-weight:500; font-size:22px; line-height:32px; margin:0"><i class="fa fa-line-chart" style="margin-right: 10px;"></i>Reporting & Analytics</h5>
+                                </div>
+                                <div style="padding: 30px;">
+                                    <div class="w-100" style="margin-bottom: 20px;">
+                                        <div style="border-radius:8px; background-color:#95ce3d14; padding:10px">
+                                            <img style="width:100%; height:auto; border-radius:5px" src="Reporting & Analytics.gif" alt="Reporting">
+                                        </div>
+                                    </div>
+                                    <div class="w-100">
+                                        <p style="font-size:18px; font-weight:400; color:#404040; line-height:32px; margin-bottom:15px;">Comprehensive reporting dashboards with prescription KPIs, availability reports, and controlled substance logs. Pivot and graph views for analyzing prescription trends, drug usage, and operational metrics across hospitals and pharmacy branches.</p>
+                                        <div style="background-color: #fff; padding: 15px; border-radius: 8px; margin-top: 15px;">
+                                            <strong style="color: #431436;">Available Reports:</strong>
+                                            <ul style="margin: 10px 0 0 20px; font-size: 15px; color: #555;">
+                                                <li>Prescription Volume (graph & pivot)</li>
+                                                <li>Insurance Claims Analysis</li>
+                                                <li>Controlled Drug Activity Logs</li>
+                                                <li>Drug Coverage Analysis</li>
+                                                <li>Treatment Progress by Stage</li>
+                                                <li>Prescription by Doctor</li>
+                                                <li>Shortage Alerts Report</li>
+                                                <li>Expiring Lots Report (30-day window)</li>
+                                                <li>Resource Availability Report</li>
+                                            </ul>
+                                            <strong style="color: #431436; margin-top: 15px; display: block;">Analytics Features:</strong>
+                                            <ul style="margin: 10px 0 0 20px; font-size: 15px; color: #555;">
+                                                <li>Pivot views for multi-dimensional analysis</li>
+                                                <li>Graph views for trend visualization</li>
+                                                <li>Group by: Hospital, Pharmacy, State, Date</li>
+                                                <li>Filter by date ranges and status</li>
+                                                <li>Export capabilities</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+            <!-- 9. Treatment Management -->
+            <div class="w-100" style="margin-bottom:35px">
+                            <div style="height:100%; border-radius:8px; background-color:#95ce3d14">
+                                <div style="border-radius:8px 8px 0 0; padding:13px 30px; background-color:#95ce3d; width:100%; margin:0 auto">
+                                    <h5 style="color:#fff; font-weight:500; font-size:22px; line-height:32px; margin:0"><i class="fa fa-stethoscope" style="margin-right: 10px;"></i>Treatment Management</h5>
+                                </div>
+                                <div style="padding: 30px;">
+                                    <div class="w-100" style="margin-bottom: 20px;">
+                                        <div style="border-radius:8px; background-color:#95ce3d14; padding:10px">
+                                            <img style="width:100%; height:auto; border-radius:5px" src="Treatment Management.gif" alt="Treatment Management">
+                                        </div>
+                                    </div>
+                                    <div class="w-100">
+                                        <p style="font-size:18px; font-weight:400; color:#404040; line-height:32px; margin-bottom:15px;">Complete treatment episode management with stage-based workflow, telemedicine support, and prescription linking. Track treatment progress, duration, and compliance. Support for patient portal visibility and compliance flagging for audit purposes.</p>
+                                        <div style="background-color: #fff; padding: 15px; border-radius: 8px; margin-top: 15px;">
+                                            <strong style="color: #431436;">Key Features:</strong>
+                                            <ul style="margin: 10px 0 0 20px; font-size: 15px; color: #555;">
+                                                <li>Stage-based workflow (customizable stages)</li>
+                                                <li>Telemedicine session management</li>
+                                                <li>Prescription linking (Many2many)</li>
+                                                <li>Duration calculation (start/end datetime)</li>
+                                                <li>Vitals snapshot (JSON field)</li>
+                                                <li>Portal visibility control</li>
+                                                <li>Compliance flagging</li>
+                                                <li>Activity log for audit trails</li>
+                                                <li>Kanban view grouped by stage</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+            <!-- 10. Return & Refund Management -->
+            <div class="w-100" style="margin-bottom:35px">
+                            <div style="height:100%; border-radius:8px; background-color:#95ce3d14">
+                                <div style="border-radius:8px 8px 0 0; padding:13px 30px; background-color:#95ce3d; width:100%; margin:0 auto">
+                                    <h5 style="color:#fff; font-weight:500; font-size:22px; line-height:32px; margin:0"><i class="fa fa-undo" style="margin-right: 10px;"></i>Return & Refund Management</h5>
+                                </div>
+                                <div style="padding: 30px;">
+                                    <div class="w-100" style="margin-bottom: 20px;">
+                                        <div style="border-radius:8px; background-color:#95ce3d14; padding:10px">
+                                            <img style="width:100%; height:auto; border-radius:5px" src="Return & Refund Management.png" alt="Return Management">
+                                        </div>
+                                    </div>
+                                    <div class="w-100">
+                                        <p style="font-size:18px; font-weight:400; color:#404040; line-height:32px; margin-bottom:15px;">Manage product returns with quarantine tracking and automatic refund generation. Link returns to source invoices, track return reasons, and generate credit notes automatically. Support for disposal workflow and compliance tracking.</p>
+                                        <div style="background-color: #fff; padding: 15px; border-radius: 8px; margin-top: 15px;">
+                                            <strong style="color: #431436;">Workflow:</strong>
+                                            <ul style="margin: 10px 0 0 20px; font-size: 15px; color: #555;">
+                                                <li>Create return with source invoice</li>
+                                                <li>Automatic refund (credit note) generation</li>
+                                                <li>Quarantine state: Awaiting → Disposed</li>
+                                                <li>Quantity validation (> 0)</li>
+                                                <li>Refund linked to original invoice</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+            <!-- 11. Alert & Monitoring -->
+            <div class="w-100" style="margin-bottom:35px">
+                            <div style="height:100%; border-radius:8px; background-color:#95ce3d14">
+                                <div style="border-radius:8px 8px 0 0; padding:13px 30px; background-color:#95ce3d; width:100%; margin:0 auto">
+                                    <h5 style="color:#fff; font-weight:500; font-size:22px; line-height:32px; margin:0"><i class="fa fa-bell" style="margin-right: 10px;"></i>Alert & Monitoring System</h5>
+                                </div>
+                                <div style="padding: 30px;">
+                                    <div class="w-100" style="margin-bottom: 20px;">
+                                        <div style="border-radius:8px; background-color:#95ce3d14; padding:10px">
+                                            <img style="width:100%; height:auto; border-radius:5px" src="Alert & Monitoring System.png" alt="Alert System">
+                                        </div>
+                                    </div>
+                                    <div class="w-100">
+                                        <p style="font-size:18px; font-weight:400; color:#404040; line-height:32px; margin-bottom:15px;">Configurable alert rules for various pharmacy events including expiry alerts, stock shortages, product recalls, and controlled substance monitoring. Scoped alerts can target specific companies, hospitals, pharmacies, drug categories, or individual drugs.</p>
+                                        <div style="background-color: #fff; padding: 15px; border-radius: 8px; margin-top: 15px;">
+                                            <strong style="color: #431436;">Alert Types:</strong>
+                                            <ul style="margin: 10px 0 0 20px; font-size: 15px; color: #555;">
+                                                <li><strong>Expiry:</strong> Drug expiry date alerts</li>
+                                                <li><strong>Stock:</strong> Low stock level alerts</li>
+                                                <li><strong>Recall:</strong> Product recall notifications</li>
+                                                <li><strong>Controlled:</strong> Controlled drug monitoring</li>
+                                            </ul>
+                                            <strong style="color: #431436; margin-top: 15px; display: block;">Scoping Options:</strong>
+                                            <ul style="margin: 10px 0 0 20px; font-size: 15px; color: #555;">
+                                                <li>Company-wide alerts</li>
+                                                <li>Hospital-specific alerts</li>
+                                                <li>Pharmacy branch alerts</li>
+                                                <li>Drug category alerts</li>
+                                                <li>Individual drug alerts</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+            <!-- 12. Resource Availability -->
+            <div class="w-100" style="margin-bottom:35px">
+                            <div style="height:100%; border-radius:8px; background-color:#95ce3d14">
+                                <div style="border-radius:8px 8px 0 0; padding:13px 30px; background-color:#95ce3d; width:100%; margin:0 auto">
+                                    <h5 style="color:#fff; font-weight:500; font-size:22px; line-height:32px; margin:0"><i class="fa fa-calendar" style="margin-right: 10px;"></i>Resource Availability & Scheduling</h5>
+                                </div>
+                                <div style="padding: 30px;">
+                                    <div class="w-100" style="margin-bottom: 20px;">
+                                        <div style="border-radius:8px; background-color:#95ce3d14; padding:10px">
+                                            <img style="width:100%; height:auto; border-radius:5px" src="Resource Availability & Scheduling.gif" alt="Resource Availability">
+                                        </div>
+                                    </div>
+                                    <div class="w-100">
+                                        <p style="font-size:18px; font-weight:400; color:#404040; line-height:32px; margin-bottom:15px;">Staff scheduling and resource availability management for pharmacists and technicians. Create shift templates for recurring schedules, manage availability slots, and link to treatments. Calendar view for visual scheduling and overlap prevention.</p>
+                                        <div style="background-color: #fff; padding: 15px; border-radius: 8px; margin-top: 15px;">
+                                            <strong style="color: #431436;">Features:</strong>
+                                            <ul style="margin: 10px 0 0 20px; font-size: 15px; color: #555;">
+                                                <li>Shift templates for recurring schedules</li>
+                                                <li>Resource types: Pharmacist, Technician</li>
+                                                <li>Time slot management (start/end times)</li>
+                                                <li>Capacity and slot duration settings</li>
+                                                <li>Overlap prevention for published slots</li>
+                                                <li>Calendar view for visual scheduling</li>
+                                                <li>Treatment linking</li>
+                                                <li>State workflow: Draft → Published → Completed</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+            <!-- Typical Use Cases Section -->
+            <div class="w-100" style="margin-bottom: 50px;">
+                <div class="w-100" style="box-shadow: 0px 4px 15px 0px #0000001F; border-radius: 8px; border: 1px solid #95ce3d4D;">
+                    <div style="position: relative; z-index: 1; border-radius: 8px 8px 0 0; padding: 14px 25px; background-color: #95ce3d1A; width: 100%; margin: 0 auto;">
+                        <h3 class="text-center h3" style="color: #000; font-weight: 600; margin: 0;">Typical Use Cases</h3>
+                    </div>
+                    <div class="p-lg-5 p-md-4 p-3">
+                        <ul style="padding-left: 25px; margin-bottom: 0;">
+                            <li style="font-size: 18px; font-weight: 400; color: #404040; line-height: 36px;">Hospital networks managing multiple pharmacy branches across different locations.</li>
+                            <li style="font-size: 18px; font-weight: 400; color: #404040; line-height: 36px;">Pharmacy chains requiring centralized inventory management and prescription tracking.</li>
+                            <li style="font-size: 18px; font-weight: 400; color: #404040; line-height: 36px;">Healthcare facilities needing compliance tracking for controlled substances.</li>
+                            <li style="font-size: 18px; font-weight: 400; color: #404040; line-height: 36px;">Pharmacies processing insurance claims and managing patient billing.</li>
+                            <li style="font-size: 18px; font-weight: 400; color: #404040; line-height: 36px;">Institutions requiring comprehensive drug inventory with expiry management and alerts.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Installation & Compatibility Section -->
+            <div class="w-100" style="margin-bottom: 50px;">
+                <div class="w-100" style="box-shadow: 0px 4px 15px 0px #0000001F; border-radius: 8px; border: 1px solid #95ce3d4D;">
+                    <div style="position: relative; z-index: 1; border-radius: 8px 8px 0 0; padding: 14px 25px; background-color: #95ce3d1A; width: 100%; margin: 0 auto;">
+                        <h3 class="text-center h3" style="color: #000; font-weight: 600; margin: 0;">Installation & Compatibility</h3>
+                    </div>
+                    <div class="p-lg-5 p-md-4 p-3">
+                        <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+                            <h4 style="color: #431436; margin-bottom: 15px;"><i class="fa fa-check-circle" style="color: #95ce3d; margin-right: 8px;"></i>Odoo Compatibility</h4>
+                            <p style="font-size: 16px; color: #404040; line-height: 32px; margin-bottom: 10px;">Compatible with Odoo 16, 17, 18 & 19.</p>
+                            <h4 style="color: #431436; margin-bottom: 15px; margin-top: 20px;"><i class="fa fa-database" style="color: #95ce3d; margin-right: 8px;"></i>System Requirements</h4>
+                            <ul style="margin: 0; padding-left: 25px; font-size: 16px; color: #404040; line-height: 32px;">
+                                <li><strong>Python:</strong> 3.10+</li>
+                                <li><strong>Database:</strong> PostgreSQL</li>
+                            </ul>
+                        </div>
+                        <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+                            <h4 style="color: #431436; margin-bottom: 15px;"><i class="fa fa-puzzle-piece" style="color: #95ce3d; margin-right: 8px;"></i>Dependencies</h4>
+                            <p style="font-size: 16px; color: #404040; line-height: 32px; margin-bottom: 10px;">base, contacts, mail, product, stock, stock_account, account, and sale_management.</p>
+                        </div>
+                        <div style="background-color: #e8f5e9; padding: 20px; border-radius: 8px; border-left: 4px solid #95ce3d;">
+                            <h4 style="color: #431436; margin-bottom: 15px;"><i class="fa fa-rocket" style="color: #95ce3d; margin-right: 8px;"></i>Installation Steps</h4>
+                            <ol style="margin: 0; padding-left: 25px; font-size: 16px; color: #404040; line-height: 32px;">
+                                <li><strong>From Apps:</strong> Search Pharmacy Management, click Install, optionally Load Demo Data.</li>
+                                <li><strong>Manifest check:</strong> Verify __manifest__.py contains supported versions (e.g., "version": "19.0.1.0.0" or compatibility markers) and "installable": True.</li>
+                                <li><strong>Configure defaults:</strong> Set default hospitals and warehouses for users — see set up warehouses for pharmacy Odoo guidance.</li>
+                            </ol>
+                            <p style="margin-top: 15px; font-size: 14px; color: #666; font-style: italic;"><strong>Version note:</strong> If you maintain separate branches/uploads per Odoo version on the marketplace, ensure the marketplace listing reflects 16, 17, 18 & 19 support.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Technical Specifications Section -->
+            <div class="w-100" style="margin-bottom: 50px;">
+                <div class="w-100" style="box-shadow: 0px 4px 15px 0px #0000001F; border-radius: 8px; border: 1px solid #95ce3d4D;">
+                    <div style="position: relative; z-index: 1; border-radius: 8px 8px 0 0; padding: 14px 25px; background-color: #95ce3d1A; width: 100%; margin: 0 auto;">
+                        <h3 class="text-center h3" style="color: #000; font-weight: 600; margin: 0;">Technical Specifications</h3>
+                    </div>
+                    <div class="p-lg-5 p-md-4 p-3">
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                            <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px;">
+                                <h5 style="color: #431436; margin-bottom: 15px;"><i class="fa fa-database" style="color: #95ce3d; margin-right: 8px;"></i>Database Features</h5>
+                                <ul style="margin: 0; padding-left: 20px; font-size: 15px; color: #555;">
+                                    <li>Multi-company support with data isolation</li>
+                                    <li>SQL constraints for data integrity</li>
+                                    <li>Indexed fields for performance</li>
+                                    <li>Unique constraints per company</li>
+                                    <li>Cascade deletes for related records</li>
+                                </ul>
+                            </div>
+                            <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px;">
+                                <h5 style="color: #431436; margin-bottom: 15px;"><i class="fa fa-tachometer" style="color: #95ce3d; margin-right: 8px;"></i>Performance Optimizations</h5>
+                                <ul style="margin: 0; padding-left: 20px; font-size: 15px; color: #555;">
+                                    <li>Batch KPI computation (read_group)</li>
+                                    <li>Reduced N+1 query problems</li>
+                                    <li>Optimized search domains</li>
+                                    <li>Computed fields with store=True</li>
+                                    <li>Efficient related field usage</li>
+                                </ul>
+                            </div>
+                            <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px;">
+                                <h5 style="color: #431436; margin-bottom: 15px;"><i class="fa fa-shield" style="color: #95ce3d; margin-right: 8px;"></i>Security & Compliance</h5>
+                                <ul style="margin: 0; padding-left: 20px; font-size: 15px; color: #555;">
+                                    <li>Access control lists (ACL)</li>
+                                    <li>Record rules for data security</li>
+                                    <li>Audit trails (mail.thread)</li>
+                                    <li>User activity tracking</li>
+                                    <li>Company-based data isolation</li>
+                                </ul>
+                            </div>
+                            <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px;">
+                                <h5 style="color: #431436; margin-bottom: 15px;"><i class="fa fa-code" style="color: #95ce3d; margin-right: 8px;"></i>Integration Points</h5>
+                                <ul style="margin: 0; padding-left: 20px; font-size: 15px; color: #555;">
+                                    <li>Odoo Stock (pickings, moves, quants)</li>
+                                    <li>Odoo Accounting (invoices, refunds)</li>
+                                    <li>Odoo Sales (pricelists)</li>
+                                    <li>Odoo Portal (patient requests)</li>
+                                    <li>API configuration (FHIR/HL7)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Best Practices Section -->
+            <div class="w-100" style="margin-bottom: 50px;">
+                <div class="w-100" style="box-shadow: 0px 4px 15px 0px #0000001F; border-radius: 8px; border: 1px solid #95ce3d4D;">
+                    <div style="position: relative; z-index: 1; border-radius: 8px 8px 0 0; padding: 14px 25px; background-color: #95ce3d1A; width: 100%; margin: 0 auto;">
+                        <h3 class="text-center h3" style="color: #000; font-weight: 600; margin: 0;">Best Practices</h3>
+                    </div>
+                    <div class="p-lg-5 p-md-4 p-3">
+                        <ul style="padding-left: 25px; margin-bottom: 0;">
+                            <li style="font-size: 18px; font-weight: 400; color: #404040; line-height: 36px;">Configure warehouses and stock locations for each pharmacy branch to enable accurate inventory tracking.</li>
+                            <li style="font-size: 18px; font-weight: 400; color: #404040; line-height: 36px;">Set up drug coverage thresholds (min, target, max) per hospital/pharmacy to automate shortage alerts.</li>
+                            <li style="font-size: 18px; font-weight: 400; color: #404040; line-height: 36px;">Enable expiry alerts and regularly review expiring lots to minimize waste and ensure patient safety.</li>
+                            <li style="font-size: 18px; font-weight: 400; color: #404040; line-height: 36px;">Use controlled substance logging for all regulated drugs to maintain compliance and audit trails.</li>
+                            <li style="font-size: 18px; font-weight: 400; color: #404040; line-height: 36px;">Link prescriptions to insurance claims for streamlined billing and reimbursement processing.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Support & Customization Section -->
+            <div class="w-100" style="margin-bottom: 50px;">
+                <div class="w-100" style="box-shadow: 0px 4px 15px 0px #0000001F; border-radius: 8px; border: 1px solid #95ce3d4D;">
+                    <div style="position: relative; z-index: 1; border-radius: 8px 8px 0 0; padding: 14px 25px; background-color: #95ce3d1A; width: 100%; margin: 0 auto;">
+                        <h3 class="text-center h3" style="color: #000; font-weight: 600; margin: 0;">Support & Customization</h3>
+                    </div>
+                    <div class="p-lg-5 p-md-4 p-3">
+                        <p style="font-size: 18px; font-weight: 400; color: #404040; line-height: 32px; margin-bottom: 0px;">We offer documentation, configuration guides, and support for setting up your pharmacy management system. If you need custom integrations, additional reporting, or workflow modifications to meet specific regulatory requirements, our team can extend the module to fit your needs.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQ Section -->
+            <div class="w-100" style="margin-bottom: 50px;">
+                <div class="w-100" style="box-shadow: 0px 4px 15px 0px #0000001F; border-radius: 8px; border: 1px solid #95ce3d4D;">
+                    <div style="position: relative; z-index: 1; border-radius: 8px 8px 0 0; padding: 14px 25px; background-color: #95ce3d1A; width: 100%; margin: 0 auto;">
+                        <h3 class="text-center h3" style="color: #000; font-weight: 600; margin: 0;">FAQs</h3>
+                    </div>
+                    <div class="p-lg-5 p-md-4 p-3">
+                        <div class="accordion-container">
+
+                            <div class="acc" style="margin-bottom: 30px;">
+                                <div style="height: 100%; border-radius: 8px; background-color: #95ce3d14;">
+                                    <div class="accordion-head" style="position: relative; cursor: pointer; z-index: 1; border-radius: 8px 8px 0 0; padding: 13px 27px; background-color: #95ce3d; width: 100%; margin: 0 auto;">
+                                        <h5 style="color: #fff; font-weight: 500; font-size: 22px; line-height: 32px; margin: 0;">Q: Which Odoo versions are supported?</h5>
+                                    </div>
+                                    <div class="accordion-content" style="padding: 20px; display: none;">
+                                        <p style="font-size:18px; font-weight:400; color:#404040; line-height:32px; margin-bottom:0px">A: Compatible with Odoo 16, 17, 18 & 19 — check your installed app manifest or marketplace listing for exact supported versions.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="acc" style="margin-bottom: 30px;">
+                                <div style="height: 100%; border-radius: 8px; background-color: #95ce3d14;">
+                                    <div class="accordion-head" style="position: relative; cursor: pointer; z-index: 1; border-radius: 8px 8px 0 0; padding: 13px 27px; background-color: #95ce3d; width: 100%; margin: 0 auto;">
+                                        <h5 style="color: #fff; font-weight: 500; font-size: 22px; line-height: 32px; margin: 0;">Q: Can it handle multiple hospitals and companies?</h5>
+                                    </div>
+                                    <div class="accordion-content" style="padding: 20px; display: none;">
+                                        <p style="font-size:18px; font-weight:400; color:#404040; line-height:32px; margin-bottom:0px">A: Yes — built for multi-company & multi-branch workflows and cross-company operations.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="acc" style="margin-bottom: 30px;">
+                                <div style="height: 100%; border-radius: 8px; background-color: #95ce3d14;">
+                                    <div class="accordion-head" style="position: relative; cursor: pointer; z-index: 1; border-radius: 8px 8px 0 0; padding: 13px 27px; background-color: #95ce3d; width: 100%; margin: 0 auto;">
+                                        <h5 style="color: #fff; font-weight: 500; font-size: 22px; line-height: 32px; margin: 0;">Q: Does it track controlled substances?</h5>
+                                    </div>
+                                    <div class="accordion-content" style="padding: 20px; display: none;">
+                                        <p style="font-size:18px; font-weight:400; color:#404040; line-height:32px; margin-bottom:0px">A: Yes — full controlled drug logging with auditable compliance logs.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="acc">
+                                <div style="height: 100%; border-radius: 8px; background-color: #95ce3d14;">
+                                    <div class="accordion-head" style="position: relative; cursor: pointer; z-index: 1; border-radius: 8px 8px 0 0; padding: 13px 27px; background-color: #95ce3d; width: 100%; margin: 0 auto;">
+                                        <h5 style="color: #fff; font-weight: 500; font-size: 22px; line-height: 32px; margin: 0;">Q: How do expiry alerts work?</h5>
+                                    </div>
+                                    <div class="accordion-content" style="padding: 20px; display: none;">
+                                        <p style="font-size:18px; font-weight:400; color:#404040; line-height:32px; margin-bottom:0px">A: The module identifies lots expiring within the next 30 days by default — see the Expiring Lots report for details.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Section -->
+            <div class="w-100" style="margin-bottom: 50px;">
+                <div class="w-100" style="box-shadow: 0px 4px 15px 0px #0000001F; border-radius: 8px; border: 1px solid #95ce3d4D;">
+                    <div style="position: relative; z-index: 1; border-radius: 8px 8px 0 0; padding: 14px 25px; background-color: #95ce3d1A; width: 100%; margin: 0 auto;">
+                        <h3 class="text-center h3" style="color: #000; font-weight: 600; margin: 0;">Contact & Support</h3>
+                    </div>
+                    <div class="p-lg-5 p-md-4 p-3">
+                        <div class="d-flex flex-column flex-lg-row gap-4" style="max-width:860px; margin:0 auto 45px">
+                            <div class="d-flex flex-column flex-sm-row gap-4" style="background-color:#95ce3d1F; border-radius:16px; width:100%; padding:24px 26px">
+                                <i class="fa fa-phone" style="width: 64px; height: 64px; font-size: 32px; color: #95ce3d; display: flex; align-items: center; justify-content: center;"></i>
+                                <div>
+                                    <h5 style="font-size:22px; font-weight:500; line-height:30px; color:#000; margin-bottom:13px">Have Any Question ?</h5>
+                                    <p style="font-size:17px; font-weight:400; color:#38404A; margin-bottom:6px"><span style="color:#95ce3d; font-weight:500">Sales :</span> <span style="color:#38404A" href="tel:+919428677503">+91 (942) 867-7503</span></p>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-column flex-sm-row gap-4" style="background-color:#95ce3d1F; border-radius:16px; width:100%; padding:24px 26px">
+                                <i class="fa fa-envelope" style="width: 64px; height: 64px; font-size: 32px; color: #95ce3d; display: flex; align-items: center; justify-content: center;"></i>
+                                <div>
+                                    <h5 style="font-size:22px; font-weight:500; line-height:30px; color:#000; margin-bottom:13px">Write &amp; Send Email</h5>
+                                    <p style="font-size:17px; font-weight:400; color:#38404A; margin-bottom:6px"><span style="color:#95ce3d; font-weight:500">Sales :</span> <a style="color:#38404A" href="mailto:sales@webbycrown.com">sales@webbycrown.com</a></p>
+                                    <p style="font-size:17px; font-weight:400; color:#38404A"><span style="color:#95ce3d; font-weight:500">Support :</span> <a style="color:#38404A" href="mailto:info@webbycrown.com">info@webbycrown.com</a></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-inline-flex align-items-center justify-content-center text-center w-100" style="border-radius:20px 20px 0 0; padding:8px 25px; background-color:#95ce3d; margin:0 auto">
+                <i class="fa fa-star" style="color: #fff; font-size: 16px; margin-right: 10px;"></i>
+                <h3 style="color:#fff; font-weight:500; font-size:16px; line-height:30px; margin:0 10px">Thank you for exploring Pharmacy Management!</h3>
+                <i class="fa fa-star" style="color: #fff; font-size: 16px; margin-left: 10px;"></i>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // Accordion functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            var accordionHeads = document.querySelectorAll('.accordion-head');
+            accordionHeads.forEach(function(head) {
+                head.addEventListener('click', function() {
+                    var content = this.nextElementSibling;
+                    var isOpen = content.style.display === 'block';
+                    
+                    // Close all accordions
+                    document.querySelectorAll('.accordion-content').forEach(function(accContent) {
+                        accContent.style.display = 'none';
+                    });
+                    
+                    // Open clicked accordion if it was closed
+                    if (!isOpen) {
+                        content.style.display = 'block';
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>

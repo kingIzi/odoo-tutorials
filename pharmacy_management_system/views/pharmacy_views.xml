@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Branch Kanban -->
+    <record id="view_pharmacy_pharmacy_kanban" model="ir.ui.view">
+        <field name="name">pharmacy.pharmacy.kanban</field>
+        <field name="model">pharmacy.pharmacy</field>
+        <field name="arch" type="xml">
+            <kanban class="pharma-kanban o_kanban_small_column">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="rx_count_today"/>
+                <field name="daily_sales_count"/>
+                <field name="shortage_alerts_count"/>
+                <field name="expiring_lots_count"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="oe_kanban_card oe_kanban_global_click pharma-card">
+                            <div class="o_kanban_record_top">
+                                <div class="o_kanban_record_title">
+                                    <strong><field name="name"/></strong>
+                                    <div class="o_kanban_record_subtitle" t-if="record.code.raw_value">
+                                        <field name="code"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="o_kanban_record_body">
+                                <div class="stats-section">
+                                    <span class="config-tag"><i class="fa fa-file-text-o"/> <field name="rx_count_today"/> Rx today</span>
+                                    <span class="config-tag"><i class="fa fa-shopping-cart"/> <field name="daily_sales_count"/> sales today</span>
+                                    <span class="config-tag text-bg-danger" t-if="record.shortage_alerts_count.raw_value">
+                                        <i class="fa fa-exclamation-triangle"/> <field name="shortage_alerts_count"/> shortages
+                                    </span>
+                                    <span class="config-tag text-bg-warning" t-if="record.expiring_lots_count.raw_value">
+                                        <i class="fa fa-hourglass-half"/> <field name="expiring_lots_count"/> expiring
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Branch List -->
+    <record id="view_pharmacy_pharmacy_tree" model="ir.ui.view">
+        <field name="name">pharmacy.pharmacy.tree</field>
+        <field name="model">pharmacy.pharmacy</field>
+        <field name="arch" type="xml">
+            <list string="Branches">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="warehouse_id"/>
+                <field name="location_id" optional="show"/>
+                <field name="pos_config_id" optional="show"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Branch Form -->
+    <record id="view_pharmacy_pharmacy_form" model="ir.ui.view">
+        <field name="name">pharmacy.pharmacy.form</field>
+        <field name="model">pharmacy.pharmacy</field>
+        <field name="arch" type="xml">
+            <form string="Pharmacy Branch">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_open_register" type="object" class="oe_stat_button" icon="fa-cash-register"
+                                help="Open this branch's Point of Sale register">
+                            <div class="o_stat_info">
+                                <span class="o_stat_text">Open</span>
+                                <span class="o_stat_text">Register</span>
+                            </div>
+                        </button>
+                        <button name="action_view_prescriptions" type="object" class="oe_stat_button" icon="fa-file-text-o">
+                            <field name="rx_count_today" widget="statinfo" string="Rx Today"/>
+                        </button>
+                        <button name="action_view_shortages" type="object" class="oe_stat_button" icon="fa-exclamation-triangle">
+                            <field name="shortage_alerts_count" widget="statinfo" string="Shortages"/>
+                        </button>
+                        <button name="action_view_expiring_lots" type="object" class="oe_stat_button" icon="fa-hourglass-half">
+                            <field name="expiring_lots_count" widget="statinfo" string="Expiring"/>
+                        </button>
+                    </div>
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" invisible="active"/>
+                    <field name="active" invisible="1"/>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="e.g. Mama Pharmacy — Westside"/></h1>
+                    </div>
+                    <group>
+                        <group name="main">
+                            <field name="code"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="parent_pharmacy_id"/>
+                            <field name="compliance_cert_no"/>
+                        </group>
+                        <group name="stock">
+                            <field name="warehouse_id"/>
+                            <field name="location_id"/>
+                            <field name="pricelist_id"/>
+                        </group>
+                    </group>
+                    <group name="pos">
+                        <group>
+                            <field name="pos_config_id" readonly="1"/>
+                            <field name="create_register"/>
+                        </group>
+                    </group>
+                    <field name="address_id"/>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Branch Search -->
+    <record id="search_pharmacy_pharmacy" model="ir.ui.view">
+        <field name="name">pharmacy.pharmacy.search</field>
+        <field name="model">pharmacy.pharmacy</field>
+        <field name="arch" type="xml">
+            <search string="Branches">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="warehouse_id"/>
+                <separator/>
+                <filter string="Company" name="group_company" context="{'group_by':'company_id'}"/>
+                <filter string="Warehouse" name="group_warehouse" context="{'group_by':'warehouse_id'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_pharmacy_pharmacy" model="ir.actions.act_window">
+        <field name="name">Branches</field>
+        <field name="res_model">pharmacy.pharmacy</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="search_view_id" ref="search_pharmacy_pharmacy"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Add your first branch</p>
+            <p>Each branch gets its own stock location and Point of Sale register automatically.</p>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,488 @@
+/* Pharmacy Kanban compact styling - Applies to all pharma-kanban views */
+
+/* Remove default Odoo kanban padding for all pharma kanban views */
+.pharma-kanban.o_kanban_small_column .o_kanban_renderer .o_kanban_record > div:not(.o_dropdown_kanban) {
+  padding: 0 !important;
+}
+
+/* Ensure proper card spacing in kanban columns */
+.pharma-kanban.o_kanban_small_column .o_kanban_record {
+  margin-bottom: 12px;
+}
+
+.pharma-kanban.o_kanban_small_column .o_kanban_record:last-child {
+  margin-bottom: 0;
+}
+
+.pharma-kanban .pharma-card {
+  border: 1px solid rgba(0,0,0,0.06);
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.pharma-kanban .pharma-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+  border-color: rgba(0,123,255,0.3);
+}
+
+.pharma-kanban .pharma-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+  transition: background-color 0.2s ease;
+}
+
+.pharma-kanban .pharma-card:hover .pharma-header {
+  background-color: rgba(0,123,255,0.03);
+}
+
+.pharma-kanban .pharma-title {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.pharma-kanban .pharma-title strong {
+  font-weight: 600;
+  font-size: 14px;
+  color: #2c2c2c;
+}
+
+.pharma-kanban .pharma-sub {
+  font-size: 12px;
+  color: #6b6b6b;
+}
+
+.pharma-kanban .pharma-badge .badge {
+  font-size: 11px;
+  padding: 4px 8px;
+  border-radius: 20px;
+}
+
+.pharma-kanban .pharma-content {
+  padding: 10px 12px;
+  display: grid;
+  gap: 6px;
+}
+
+.pharma-kanban .pharma-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: #444;
+}
+
+.pharma-kanban .pharma-row i {
+  width: 14px;
+  color: #8a8a8a;
+  transition: color 0.2s ease;
+}
+
+.pharma-kanban .pharma-card:hover .pharma-row i {
+  color: #007bff;
+}
+
+.pharma-kanban .pharma-footer {
+  padding: 8px 12px 12px 12px;
+}
+
+.pharma-kanban .pharma-footer .btn {
+  font-size: 12px;
+  padding: 4px 8px;
+  margin-right: 6px;
+  transition: all 0.2s ease;
+}
+
+.pharma-kanban .pharma-footer .btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.pharma-kanban .badge-success { background-color: #28a745; }
+.pharma-kanban .badge-info { background-color: #17a2b8; }
+.pharma-kanban .badge-danger { background-color: #dc3545; }
+.pharma-kanban .badge-warning { background-color: #ffc107; color: #212529; }
+.pharma-kanban .badge-secondary { background-color: #6c757d; }
+
+/* Additional hover effects */
+.pharma-kanban .pharma-card:hover .pharma-title strong {
+  color: #007bff;
+}
+
+.pharma-kanban .pharma-content {
+  transition: background-color 0.2s ease;
+}
+
+.pharma-kanban .pharma-card:hover .pharma-content {
+  background-color: rgba(0,123,255,0.01);
+}
+
+/* Card styling is now handled by general .oe_kanban_card rules above */
+.pharma-kanban.pharmacy-prescription-kanban .oe_kanban_card {
+  margin: 0;
+  width: 100%;
+  padding: 0;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  word-wrap: break-word;
+}
+
+/* Advanced kanban header styling - applies to all pharma kanban views */
+.pharma-kanban.o_kanban_small_column .o_kanban_record_top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 16px;
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+  margin: 0;
+  border-radius: 8px 8px 0 0;
+}
+
+/* Advanced kanban styling - applies to all pharma kanban views */
+.pharma-kanban.o_kanban_small_column .kanban-header-left {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  flex: 1;
+}
+
+.pharma-kanban.o_kanban_small_column .kanban-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  flex-shrink: 0;
+  box-shadow: 0 2px 4px rgba(102, 126, 234, 0.3);
+  transition: all 0.3s ease;
+}
+
+.pharma-kanban.o_kanban_small_column .oe_kanban_card:hover .kanban-icon-wrapper {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(102, 126, 234, 0.4);
+}
+
+.pharma-kanban.o_kanban_small_column .kanban-icon {
+  color: #fff;
+  font-size: 16px;
+}
+
+.pharma-kanban.o_kanban_small_column .o_kanban_record_headings {
+  flex: 1;
+  min-width: 0;
+}
+
+.pharma-kanban.o_kanban_small_column .o_kanban_record_title {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pharma-kanban.o_kanban_small_column .o_kanban_record_title strong {
+  font-size: 14px;
+  font-weight: 600;
+  color: #2c3e50;
+  line-height: 1.3;
+}
+
+.pharma-kanban.o_kanban_small_column .o_kanban_record_subtitle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+}
+
+.pharma-kanban.o_kanban_small_column .status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.pharma-kanban.o_kanban_small_column .status-dot.status-draft,
+.pharma-kanban.o_kanban_small_column .status-dot.status-new {
+  background-color: #6c757d;
+}
+
+.pharma-kanban.o_kanban_small_column .status-dot.status-approved,
+.pharma-kanban.o_kanban_small_column .status-dot.status-submitted,
+.pharma-kanban.o_kanban_small_column .status-dot.status-processing,
+.pharma-kanban.o_kanban_small_column .status-dot.status-active {
+  background-color: #17a2b8;
+}
+
+.pharma-kanban.o_kanban_small_column .status-dot.status-dispensed,
+.pharma-kanban.o_kanban_small_column .status-dot.status-done,
+.pharma-kanban.o_kanban_small_column .status-dot.status-paid {
+  background-color: #28a745;
+}
+
+.pharma-kanban.o_kanban_small_column .status-dot.status-cancel,
+.pharma-kanban.o_kanban_small_column .status-dot.status-cancelled,
+.pharma-kanban.o_kanban_small_column .status-dot.status-rejected {
+  background-color: #dc3545;
+}
+
+.pharma-kanban.o_kanban_small_column .o_kanban_record_top_right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pharma-kanban.o_kanban_small_column .oe_kanban_content {
+  padding: 16px;
+  margin: 0;
+  background: #fff;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.pharma-kanban.o_kanban_small_column .o_kanban_record_body {
+  margin: 0 0 12px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+/* Config tags inside record body should be full width */
+.pharma-kanban.o_kanban_small_column .o_kanban_record_body .config-tag {
+  width: 100% !important;
+  max-width: 100% !important;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: #555;
+  padding: 5px 10px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  border: 1px solid #e9ecef;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.pharma-kanban.o_kanban_small_column .o_kanban_record_body .config-tag span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+  min-width: 0;
+}
+
+.pharma-kanban.o_kanban_small_column .config-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 0 12px 0;
+  padding: 0 0 12px 0;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+  min-width: 0;
+}
+
+.pharma-kanban.o_kanban_small_column .o_kanban_record_bottom.config-tags {
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.pharma-kanban.o_kanban_small_column .oe_kanban_bottom_left {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  width: 100%;
+  box-sizing: border-box;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.pharma-kanban.o_kanban_small_column .config-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: #555;
+  padding: 5px 10px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  border: 1px solid #e9ecef;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: calc(50% - 6px);
+  overflow: hidden;
+}
+
+.pharma-kanban.o_kanban_small_column .config-tag span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 120px;
+  display: inline-block;
+}
+
+.pharma-kanban.o_kanban_small_column .oe_kanban_card:hover .config-tag {
+  background: #e9ecef;
+  border-color: #dee2e6;
+}
+
+.pharma-kanban.o_kanban_small_column .config-tag i {
+  color: #6c757d;
+  font-size: 11px;
+  width: 14px;
+  text-align: center;
+}
+
+.pharma-kanban.o_kanban_small_column .stats-section {
+  display: flex;
+  gap: 12px;
+  margin: 0 0 12px 0;
+  padding: 0 0 12px 0;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+.pharma-kanban.o_kanban_small_column .stats-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.pharma-kanban.o_kanban_small_column .stat-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: #555;
+  padding: 4px 0;
+}
+
+.pharma-kanban.o_kanban_small_column .stat-item i {
+  font-size: 13px;
+  width: 16px;
+  text-align: center;
+}
+
+.pharma-kanban.o_kanban_small_column .stat-value {
+  font-weight: 500;
+  color: #2c3e50;
+}
+
+.pharma-kanban.o_kanban_small_column .actions-section {
+  display: flex;
+  justify-content: flex-end;
+  padding: 8px 0 0 0;
+  margin: 0;
+}
+
+.pharma-kanban.o_kanban_small_column .oe_kanban_bottom_right {
+  display: flex;
+  gap: 6px;
+}
+
+.pharma-kanban.o_kanban_small_column .btn-icon {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  border: 1px solid #dee2e6;
+  background: #fff;
+  color: #6c757d;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.pharma-kanban.o_kanban_small_column .btn-icon:hover {
+  background: #007bff;
+  border-color: #007bff;
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0,123,255,0.2);
+}
+
+.pharma-kanban.o_kanban_small_column .btn-icon i {
+  font-size: 12px;
+}
+
+.pharma-kanban.o_kanban_small_column .btn-preview:hover {
+  background: #17a2b8;
+  border-color: #17a2b8;
+}
+
+.pharma-kanban.o_kanban_small_column .btn-publish:hover {
+  background: #28a745;
+  border-color: #28a745;
+}
+
+.pharma-kanban.o_kanban_small_column .btn-duplicate:hover {
+  background: #dc3545;
+  border-color: #dc3545;
+}
+
+.pharma-kanban.o_kanban_small_column .btn-refresh:hover {
+  background: #ffc107;
+  border-color: #ffc107;
+  color: #212529;
+}
+
+/* Card styling for all pharma kanban views */
+.pharma-kanban.o_kanban_small_column .oe_kanban_card {
+  margin: 0;
+  width: 100%;
+  padding: 0;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  word-wrap: break-word;
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(0,0,0,0.08);
+  background: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  transition: all 0.3s ease;
+}
+
+.pharma-kanban.o_kanban_small_column .oe_kanban_card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  border-color: rgba(102, 126, 234, 0.3);
+}
+
+/* Responsive adjustments - applies to all pharma kanban views */
+@media (max-width: 768px) {
+  .pharma-kanban.o_kanban_small_column .stats-section {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .pharma-kanban.o_kanban_small_column .config-tags {
+    flex-direction: column;
+  }
+}
+

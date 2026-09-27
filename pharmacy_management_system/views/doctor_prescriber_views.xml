@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Doctors & Prescribers list -->
+    <record id="view_res_partner_doctor_tree" model="ir.ui.view">
+        <field name="name">res.partner.doctor.tree</field>
+        <field name="model">res.partner</field>
+        <field name="arch" type="xml">
+            <list string="Doctors &amp; Prescribers" create="false" delete="false">
+                <field name="name"/>
+                <field name="license_number"/>
+                <field name="specialty"/>
+                <field name="default_pharmacy_id" string="Default Branch"/>
+                <field name="rx_count_total"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_res_partner_doctor_search" model="ir.ui.view">
+        <field name="name">res.partner.doctor.search</field>
+        <field name="model">res.partner</field>
+        <field name="arch" type="xml">
+            <search string="Doctors &amp; Prescribers">
+                <field name="name"/>
+                <field name="license_number"/>
+                <field name="specialty"/>
+                <separator/>
+                <filter string="Default Branch" name="grp_default_pharmacy" context="{'group_by':'default_pharmacy_id'}"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Doctors Kanban View -->
+    <record id="view_res_partner_doctor_kanban" model="ir.ui.view">
+        <field name="name">res.partner.doctor.kanban</field>
+        <field name="model">res.partner</field>
+        <field name="arch" type="xml">
+            <kanban class="pharma-kanban o_kanban_small_column doctor-prescriber-kanban" default_group_by="default_pharmacy_id">
+                <field name="name"/>
+                <field name="license_number"/>
+                <field name="specialty"/>
+                <field name="default_pharmacy_id"/>
+                <field name="email"/>
+                <field name="phone"/>
+                <field name="rx_count_total"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="oe_kanban_card oe_kanban_global_click doctor-prescriber-card pharma-card">
+                            <div class="o_kanban_record_top">
+                                <div class="kanban-header-left">
+                                    <div class="kanban-icon-wrapper">
+                                        <i class="fa fa-user-md kanban-icon" title="Doctor"></i>
+                                    </div>
+                                    <div class="o_kanban_record_headings">
+                                        <div class="o_kanban_record_title">
+                                            <strong><field name="name"/></strong>
+                                            <div class="o_kanban_record_subtitle">
+                                                <span class="status-dot status-active"></span>
+                                                <field name="license_number" t-if="record.license_number.raw_value"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="oe_kanban_content">
+                                <div class="o_kanban_record_body">
+                                    <div class="config-tag" t-if="record.specialty.raw_value">
+                                        <i class="fa fa-graduation-cap" title="Specialty"></i>
+                                        <field name="specialty"/>
+                                    </div>
+                                </div>
+                                <div class="o_kanban_record_bottom config-tags">
+                                    <div class="oe_kanban_bottom_left">
+                                        <div class="config-tag" t-if="record.default_pharmacy_id.raw_value">
+                                            <i class="fa fa-home" title="Default Branch"></i>
+                                            <field name="default_pharmacy_id"/>
+                                        </div>
+                                        <div class="stat-item">
+                                            <i class="fa fa-file-text text-primary"></i>
+                                            <span class="stat-value">
+                                                <field name="rx_count_total"/> Rx
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="action_res_partner_doctor" model="ir.actions.act_window">
+        <field name="name">Doctors &amp; Prescribers</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="domain">[('is_doctor','=',True)]</field>
+        <field name="search_view_id" ref="view_res_partner_doctor_search"/>
+        <field name="context">{'default_is_doctor': True}</field>
+    </record>
+</odoo>
