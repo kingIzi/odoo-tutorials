@@ -86,6 +86,8 @@
                     </div>
                     <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" invisible="active"/>
                     <field name="active" invisible="1"/>
+                    <field name="image_1920" widget="image" class="oe_avatar"
+                           options="{'preview_image': 'image_128', 'zoom': True}"/>
                     <div class="oe_title">
                         <h1><field name="name" placeholder="e.g. Paracetamol 500mg"/></h1>
                     </div>
@@ -151,32 +153,39 @@
                 <field name="is_prescription_required"/>
                 <templates>
                     <t t-name="card">
-                        <div class="oe_kanban_card oe_kanban_global_click pharma-card"
+                        <div class="oe_kanban_card oe_kanban_global_click pharma-card d-flex"
                              t-att-class="record.has_shortage.raw_value ? 'border-danger' : ''">
-                            <div class="o_kanban_record_top">
-                                <div class="o_kanban_record_title">
-                                    <strong><field name="name"/></strong>
+                            <main class="col-10">
+                                <div class="o_kanban_record_top">
+                                    <div class="o_kanban_record_title">
+                                        <strong><field name="name"/></strong>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="o_kanban_record_body">
-                                <span class="badge text-bg-primary"><field name="sale_price"/></span>
-                                <span class="config-tag" t-if="record.is_prescription_required.raw_value">
-                                    <i class="fa fa-file-text-o" title="Prescription required"/> Rx
-                                </span>
-                            </div>
-                            <div class="o_kanban_record_bottom">
-                                <div class="oe_kanban_bottom_left">
-                                    <span class="config-tag">
-                                        <i class="fa fa-archive"/> <field name="stock_qty_available"/>
-                                    </span>
-                                    <span class="config-tag text-bg-danger" t-if="record.has_shortage.raw_value">
-                                        <i class="fa fa-exclamation-triangle"/> Low Stock
-                                    </span>
-                                    <span class="config-tag text-bg-warning" t-if="record.has_expiring_lots.raw_value">
-                                        <i class="fa fa-hourglass-half"/> Expiring
+                                <div class="o_kanban_record_body">
+                                    <span class="badge text-bg-primary"><field name="sale_price"/></span>
+                                    <span class="config-tag" t-if="record.is_prescription_required.raw_value">
+                                        <i class="fa fa-file-text-o" title="Prescription required"/> Rx
                                     </span>
                                 </div>
-                            </div>
+                                <div class="o_kanban_record_bottom">
+                                    <div class="oe_kanban_bottom_left">
+                                        <span class="config-tag">
+                                            <i class="fa fa-archive"/> <field name="stock_qty_available"/>
+                                        </span>
+                                        <span class="config-tag text-bg-danger" t-if="record.has_shortage.raw_value">
+                                            <i class="fa fa-exclamation-triangle"/> Low Stock
+                                        </span>
+                                        <span class="config-tag text-bg-warning" t-if="record.has_expiring_lots.raw_value">
+                                            <i class="fa fa-hourglass-half"/> Expiring
+                                        </span>
+                                    </div>
+                                </div>
+                            </main>
+                            <aside class="col-2">
+                                <field name="image_128" widget="image"
+                                       options="{'img_class': 'o_image_64_contain mw-100'}"
+                                       alt="Medicine" class="rounded"/>
+                            </aside>
                         </div>
                     </t>
                 </templates>

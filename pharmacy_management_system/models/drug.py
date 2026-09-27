@@ -30,6 +30,11 @@ class PharmacyDrug(models.Model):
 
     name = fields.Char(required=True, tracking=True)
     active = fields.Boolean(default=True)
+    image_1920 = fields.Image(
+        "Medicine Image", max_width=1024, max_height=1024,
+        help="Photo of the medicine packaging, shown on the drug card and in the Point of Sale.",
+    )
+    image_128 = fields.Image("Thumbnail", related='image_1920', widget='image', store=False)
     sale_price = fields.Float(
         string='Sale Price',
         tracking=True,
@@ -102,7 +107,7 @@ class PharmacyDrug(models.Model):
 
     def write(self, vals):
         res = super().write(vals)
-        if 'name' in vals or 'sale_price' in vals:
+        if any(f in vals for f in ('name', 'sale_price', 'image_1920')):
             for drug in self:
                 if drug.product_id:
                     product_vals = {}
@@ -110,6 +115,8 @@ class PharmacyDrug(models.Model):
                         product_vals['name'] = drug.name
                     if 'sale_price' in vals:
                         product_vals['list_price'] = drug.sale_price
+                    if 'image_1920' in vals:
+                        product_vals['image_1920'] = drug.image_1920
                     drug.product_id.sudo().write(product_vals)
         return res
 
@@ -120,7 +127,7 @@ class PharmacyDrug(models.Model):
         category = PosCategory.search([('name', '=', 'Medicines')], limit=1)
         if not category:
             category = PosCategory.create({'name': 'Medicines'})
-        product = self.env['product.template'].sudo().create({
+        product_vals = {
             'name': self.name,
             'list_price': self.sale_price,
             'type': 'consu',
@@ -128,7 +135,10 @@ class PharmacyDrug(models.Model):
             'available_in_pos': True,
             'pos_categ_ids': [(4, category.id)],
             'company_id': self.company_id.id,
-        })
+        }
+        if self.image_1920:
+            product_vals['image_1920'] = self.image_1920
+        product = self.env['product.template'].sudo().create(product_vals)
         self.product_id = product.id
 
     def action_view_product(self):
